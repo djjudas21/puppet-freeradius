@@ -1,5 +1,7 @@
 # Base class to install FreeRADIUS
-class freeradius {
+class freeradius (
+  $control_socket = false,
+) {
   include samba
   include nagios::plugins::radius
 
@@ -28,6 +30,17 @@ class freeradius {
   file { 'clients.d':
     ensure  => directory,
     name    => '/etc/raddb/clients.d',
+    mode    => '0750',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
+  }
+
+  # Set up conf.d style clients for the status server
+  file { 'statusclients.d':
+    ensure  => directory,
+    name    => '/etc/raddb/statusclients.d',
     mode    => '0750',
     owner   => 'root',
     group   => 'radiusd',
@@ -129,7 +142,8 @@ class freeradius {
     mode    => '0640',
     owner   => 'root',
     group   => 'radiusd',
-    source  => 'puppet:///modules/freeradius/proxy.conf',
+#    source  => 'puppet:///modules/freeradius/proxy.conf',
+    content => '',
     require => Package['freeradius'],
     notify  => Service['radiusd'],
   }
@@ -180,20 +194,20 @@ class freeradius {
   }
 
   # Install a few modules required on all FR installations
-  radius::module  { 'always':
+  freeradius::module  { 'always':
     source  => 'puppet:///modules/freeradius/modules/always',
   }
-  radius::module { 'detail':
+  freeradius::module { 'detail':
     source  => 'puppet:///modules/freeradius/modules/detail',
   }
-  radius::module { 'detail.log':
+  freeradius::module { 'detail.log':
     source  => 'puppet:///modules/freeradius/modules/detail.log',
   }
 
- ::radius::module { 'logtosyslog':
+ ::freeradius::module { 'logtosyslog':
    source => 'puppet:///modules/freeradius/modules/logtosyslog',
  }
- ::radius::module { 'logtofile':
+ ::freeradius::module { 'logtofile':
    source => 'puppet:///modules/freeradius/modules/logtofile',
  }
  
@@ -205,11 +219,10 @@ class freeradius {
 
 
   # Install a couple of virtual servers needed on all FR installations
-  radius::site { 'status':
-    source  => 'puppet:///modules/freeradius/sites-enabled/status',
-  }
-  radius::site { 'control-socket':
-    source  => 'puppet:///modules/freeradius/sites-enabled/control-socket',
+  if $control_socket == true {
+    freeradius::site { 'control-socket':
+      source  => 'puppet:///modules/freeradius/sites-enabled/control-socket',
+    }
   }
 
   # Make the cert dir traversable

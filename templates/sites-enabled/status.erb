@@ -37,8 +37,8 @@
 server status {
 	listen {
 		type = status
-		ipaddr = *
-		port = 18120
+		ipaddr = <%= @listen %>
+		port = <%= @port %>
 	}
 
 	#
@@ -54,10 +54,8 @@ server status {
 	#  Do you really want your partners seeing the internal details
 	#  of what your RADIUS server is doing?
 	#
-	client localhost {
-		ipaddr = 127.0.0.1
-		secret = SECRET
-	}
+	
+	$INCLUDE ${confdir}/statusclients.d/
 
 	#
 	#  Simple authorize section.  The "Autz-Type Status-Server"
