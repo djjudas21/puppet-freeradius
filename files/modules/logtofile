@@ -1,0 +1,15 @@
+linelog logtofile {
+        filename = ${logdir}/radiusd-%{%{Virtual-Server}:-DEFAULT}.log
+        auth = yes
+
+	# Default log message
+        format = ""
+
+	# Match packet type to blocks below
+        reference = "logtofile.%{%{reply:Packet-Type}:-format}"
+
+        logtofile {
+		Access-Accept = "%t : Login OK: [%{User-Name}] (from client %C cli %{Calling-Station-Id} port %{Packet-Dst-Port})"
+		Access-Reject = "%t : Login incorrect: [%{User-Name}] (from client %C cli %{Calling-Station-Id} port %{Packet-Dst-Port})"
+        }
+}

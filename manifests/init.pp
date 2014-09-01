@@ -1,41 +1,290 @@
-# == Class: freeradius
-#
-# Full description of class freeradius here.
-#
-# === Parameters
-#
-# Document parameters here.
-#
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
-#
-# === Variables
-#
-# Here you should define a list of variables that this module would require.
-#
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if
-#   it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should be avoided in favor of class parameters as
-#   of Puppet 2.6.)
-#
-# === Examples
-#
-#  class { freeradius:
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
-#  }
-#
-# === Authors
-#
-# Author Name <author@domain.com>
-#
-# === Copyright
-#
-# Copyright 2014 Your name here, unless otherwise noted.
-#
+# Base class to install FreeRADIUS
 class freeradius {
+  include samba
+  include nagios::plugins::radius
+
+  file { 'radiusd.conf':
+    name    => '/etc/raddb/radiusd.conf',
+    mode    => '0640',
+    owner   => 'root',
+    group   => 'radiusd',
+    source  => 'puppet:///modules/freeradius/radiusd.conf',
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
+  }
+
+  # Wipe out static clients.conf as we will be using clients.d
+  file { 'clients.conf':
+    name    => '/etc/raddb/clients.conf',
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'radiusd',
+    content => "# FILE INTENTIONALLY BLANK\n",
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
+  }
+
+  # Set up conf.d style clients
+  file { 'clients.d':
+    ensure  => directory,
+    name    => '/etc/raddb/clients.d',
+    mode    => '0750',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
+  }
+
+  # Set permissions on base dir
+  file { '/etc/raddb':
+     ensure  => directory,
+    mode    => '0750',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+  }
+
+  # Set up conf.d for module instantiation
+  file { '/etc/raddb/instantiate':
+    ensure  => directory,
+    mode    => '0750',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
+  }
+
+  # Set up conf.d for generic config snippets
+  file { '/etc/raddb/conf.d':
+    ensure  => directory,
+    mode    => '0750',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
+  }
+
+  # Set up attr.d for attribute filtering snippets
+  file { '/etc/raddb/attr.d':
+    ensure  => directory,
+    mode    => '0750',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
+  }
+
+  # Set up users.d for static non-EAP user files
+  file { '/etc/raddb/users.d':
+    ensure  => directory,
+    mode    => '0750',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
+  }
+
+  # Set up concat policy file, as there is only one global policy
+  # We also add standard header and footer
+  concat { '/etc/raddb/policy.conf':
+    owner => 'root',
+    group => 'radiusd',
+    mode  => '0640',
+  }
+  concat::fragment { 'policy_header':
+    target  => '/etc/raddb/policy.conf',
+    content => "policy {\n",
+    order   => 10,
+  }
+  concat::fragment { 'policy_footer':
+    target  => '/etc/raddb/policy.conf',
+    content => "}\n",
+    order   => '99',
+  }
+
+  # Set up policy.d for policies
+  file { '/etc/raddb/policy.d':
+    ensure  => directory,
+    mode    => '0750',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
+  }
+
+  # Install scripts directory
+  file { '/etc/raddb/scripts':
+    ensure  => directory,
+    name    => '/etc/raddb/scripts',
+    mode    => '0750',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+  }
+
+  # Define the realms for which we are authoritative
+  file { 'proxy.conf':
+#    ensure  => absent,
+    name    => '/etc/raddb/proxy.conf',
+    mode    => '0640',
+    owner   => 'root',
+    group   => 'radiusd',
+    source  => 'puppet:///modules/freeradius/proxy.conf',
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
+  }
+
+  # Install FreeRADIUS packages from ResNet repo, which is newer than stock CentOS 
+  package { [ 
+    'freeradius',
+    'freeradius-mysql',
+    'freeradius-perl',
+    'freeradius-utils',
+  ]:
+    ensure  => installed,
+    require => Yumrepo['resnet'],
+  }
+
+  package { 'wpa_supplicant':
+    ensure => installed,
+  }
+
+  # radiusd always tests its config before restarting the service, to avoid outage. If the config is not valid, the service
+  # won't get restarted, and the puppet run will fail.
+  service { 'radiusd':
+    ensure     => running,
+    name       => $::operatingsystem ? {
+      /CentOS|Scientific|Fedora/ => 'radiusd',
+      /Ubuntu|Debian/            => 'freeradius',
+      default                    => 'radiusd',
+    },
+    require    => [
+      Exec['radiusd-config-test'],
+      File['radiusd.conf'],
+      User['radiusd'],
+      Package['freeradius'],
+      Service['winbind']
+    ],
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
+  }
+
+  # We don't want to create the radiusd user, just add it to the wbpriv group
+  user { 'radiusd':
+    ensure  => present,
+    uid     => '95',
+    gid     => 'radiusd',
+    groups  => 'wbpriv',
+    require => Package['freeradius', 'samba-winbind'],
+  }
+
+  # Install a few modules required on all FR installations
+  radius::module  { 'always':
+    source  => 'puppet:///modules/freeradius/modules/always',
+  }
+  radius::module { 'detail':
+    source  => 'puppet:///modules/freeradius/modules/detail',
+  }
+  radius::module { 'detail.log':
+    source  => 'puppet:///modules/freeradius/modules/detail.log',
+  }
+
+ ::radius::module { 'logtosyslog':
+   source => 'puppet:///modules/freeradius/modules/logtosyslog',
+ }
+ ::radius::module { 'logtofile':
+   source => 'puppet:///modules/freeradius/modules/logtofile',
+ }
+ 
+  # Syslog rules
+  syslog::rule { 'radiusd-log':
+    command => "if \$programname == \'radiusd\' then /var/log/radius/radius.log\n&~",
+    order   => '12',
+  }
 
 
+  # Install a couple of virtual servers needed on all FR installations
+  radius::site { 'status':
+    source  => 'puppet:///modules/freeradius/sites-enabled/status',
+  }
+  radius::site { 'control-socket':
+    source  => 'puppet:///modules/freeradius/sites-enabled/control-socket',
+  }
+
+  # Make the cert dir traversable
+  file { '/etc/raddb/certs':
+    ensure  => directory,
+    mode    => '0750',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+  }
+
+  # Make the radius log dir traversable
+  file { [
+    '/var/log/radius',
+    '/var/log/radius/radacct',
+  ]:
+    mode    => '0750',
+    require => Package['freeradius'],
+  }
+
+  file { '/var/log/radius/radius.log':
+    owner   => 'radiusd',
+    group   => 'radiusd',
+    seltype => 'radiusd_log_t',
+  }
+
+  # Updated logrotate file to include radiusd-*.log
+  file { '/etc/logrotate.d/radiusd':
+    mode    => '0640',
+    owner   => 'root',
+    group   => 'radiusd',
+    source  => 'puppet:///modules/freeradius/radiusd.logrotate',
+    require => Package['freeradius'],
+  }
+
+  # Generate global SSL parameters
+  exec { 'dh':
+    command => 'openssl dhparam -out /etc/raddb/certs/dh 1024',
+    creates => '/etc/raddb/certs/dh',
+    path    => '/usr/bin',
+  }
+
+  # Generate global SSL parameters
+  exec { 'random':
+    command => 'dd if=/dev/urandom of=/etc/raddb/certs/random count=10 >/dev/null 2>&1',
+    creates => '/etc/raddb/certs/random',
+    path    => '/bin',
+  }
+
+  # This exec tests the radius config and fails if it's bad
+  # It isn't run every time puppet runs, but only when freeradius is to be restarted
+  exec { 'radiusd-config-test':
+    command     => '/usr/bin/sudo /usr/sbin/radiusd -XC | /bin/grep \'Configuration appears to be OK.\' | /usr/bin/wc -l',
+    returns     => 0,
+    refreshonly => true,
+    logoutput   => on_failure,
+  }
+
+  # Blank a couple of default files that will break our config. This is more effective than deleting them
+  # as they won't get overwritten when FR is upgraded from RPM, whereas missing files are replaced.
+  file { [
+    '/etc/raddb/sites-available/default',
+    '/etc/raddb/sites-available/inner-tunnel'
+  ]:
+    content => "# FILE INTENTIONALLY BLANK\n",
+  }
+
+  # Delete *.rpmnew and *.rpmsave files from the radius config dir because
+  # radiusd stupidly reads these files in, and they break the config
+  exec { 'delete-radius-rpmnew':
+    command => '/bin/find /etc/raddb -name *.rpmnew -delete',
+    onlyif  => '/bin/find /etc/raddb -name *.rpmnew | /bin/grep rpmnew',
+  }
+  exec { 'delete-radius-rpmsave':
+    command => '/bin/find /etc/raddb -name *.rpmsave -delete',
+    onlyif  => '/bin/find /etc/raddb -name *.rpmsave | /bin/grep rpmsave',
+  }
 }
