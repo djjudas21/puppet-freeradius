@@ -7,9 +7,30 @@
   "source": "https://github.com/djjudas21/puppet-freeradius",
   "project_page": "https://github.com/djjudas21/puppet-freeradius",
   "issues_url": "https://github.com/djjudas21/puppet-freeradius/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5.0",
+        "6.0"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    }
+  ],
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
+      "version_range": ">= 1.0.0"
+    },
+    {
+      "name": "puppetlabs-concat",
       "version_range": ">= 1.0.0"
     }
   ]
