@@ -26,69 +26,19 @@ class freeradius (
     notify  => Service['radiusd'],
   }
 
-  # Set up conf.d style clients
-  file { 'clients.d':
-    ensure  => directory,
-    name    => '/etc/raddb/clients.d',
-    mode    => '0750',
-    owner   => 'root',
-    group   => 'radiusd',
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
-  }
-
-  # Set up conf.d style clients for the status server
-  file { 'statusclients.d':
-    ensure  => directory,
-    name    => '/etc/raddb/statusclients.d',
-    mode    => '0750',
-    owner   => 'root',
-    group   => 'radiusd',
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
-  }
-
-  # Set permissions on base dir
-  file { '/etc/raddb':
-     ensure  => directory,
-    mode    => '0750',
-    owner   => 'root',
-    group   => 'radiusd',
-    require => Package['freeradius'],
-  }
-
-  # Set up conf.d for module instantiation
-  file { '/etc/raddb/instantiate':
-    ensure  => directory,
-    mode    => '0750',
-    owner   => 'root',
-    group   => 'radiusd',
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
-  }
-
-  # Set up conf.d for generic config snippets
-  file { '/etc/raddb/conf.d':
-    ensure  => directory,
-    mode    => '0750',
-    owner   => 'root',
-    group   => 'radiusd',
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
-  }
-
-  # Set up attr.d for attribute filtering snippets
-  file { '/etc/raddb/attr.d':
-    ensure  => directory,
-    mode    => '0750',
-    owner   => 'root',
-    group   => 'radiusd',
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
-  }
-
-  # Set up users.d for static non-EAP user files
-  file { '/etc/raddb/users.d':
+  # Create various directories
+  file { [
+    '/etc/raddb/clients.d',
+    '/etc/raddb/statusclients.d',
+    '/etc/raddb',
+    '/etc/raddb/instantiate',
+    '/etc/raddb/conf.d',
+    '/etc/raddb/attr.d',
+    '/etc/raddb/users.d',
+    '/etc/raddb/policy.d',
+    '/etc/raddb/scripts',
+    '/etc/raddb/certs',
+  ]:
     ensure  => directory,
     mode    => '0750',
     owner   => 'root',
@@ -113,26 +63,6 @@ class freeradius (
     target  => '/etc/raddb/policy.conf',
     content => "}\n",
     order   => '99',
-  }
-
-  # Set up policy.d for policies
-  file { '/etc/raddb/policy.d':
-    ensure  => directory,
-    mode    => '0750',
-    owner   => 'root',
-    group   => 'radiusd',
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
-  }
-
-  # Install scripts directory
-  file { '/etc/raddb/scripts':
-    ensure  => directory,
-    name    => '/etc/raddb/scripts',
-    mode    => '0750',
-    owner   => 'root',
-    group   => 'radiusd',
-    require => Package['freeradius'],
   }
 
   # Define the realms for which we are authoritative
@@ -223,15 +153,6 @@ class freeradius (
     freeradius::site { 'control-socket':
       source  => 'puppet:///modules/freeradius/sites-enabled/control-socket',
     }
-  }
-
-  # Make the cert dir traversable
-  file { '/etc/raddb/certs':
-    ensure  => directory,
-    mode    => '0750',
-    owner   => 'root',
-    group   => 'radiusd',
-    require => Package['freeradius'],
   }
 
   # Make the radius log dir traversable
