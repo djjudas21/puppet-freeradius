@@ -12,7 +12,7 @@ define freeradius::statusclient (
     owner   => 'root',
     group   => 'radiusd',
     content => template('freeradius/client.conf.erb'),
-    require => File['clients.d'],
+    require => File['/etc/raddb/clients.d'],
     notify  => Service['radiusd'],
   }
 }
