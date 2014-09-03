@@ -1,62 +1,68 @@
 # Base class to install FreeRADIUS
 class freeradius (
   $control_socket = false,
-) {
+  $fr_service = $fr_service,
+) inherits freeradius::params {
+
   include samba
   include nagios::plugins::radius
 
   file { 'radiusd.conf':
-    name    => '/etc/raddb/radiusd.conf',
+    name    => "$fr_basepath/radiusd.conf",
     mode    => '0640',
     owner   => 'root',
     group   => 'radiusd',
     source  => 'puppet:///modules/freeradius/radiusd.conf',
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
+    require => Package[$fr_package],
+    notify  => Service[$fr_service],
   }
 
   # Create various directories
   file { [
-    '/etc/raddb/clients.d',
-    '/etc/raddb/statusclients.d',
-    '/etc/raddb',
-    '/etc/raddb/instantiate',
-    '/etc/raddb/conf.d',
-    '/etc/raddb/attr.d',
-    '/etc/raddb/users.d',
-    '/etc/raddb/policy.d',
-    '/etc/raddb/scripts',
-    '/etc/raddb/certs',
+    "$fr_basepath/clients.d",
+    "$fr_basepath/statusclients.d",
+    "$fr_basepath",
+    "$fr_basepath/instantiate",
+    "$fr_basepath/conf.d",
+    "$fr_basepath/attr.d",
+    "$fr_basepath/users.d",
+    "$fr_basepath/policy.d",
+    "$fr_basepath/scripts",
+    "$fr_basepath/certs",
   ]:
     ensure  => directory,
     mode    => '0750',
     owner   => 'root',
     group   => 'radiusd',
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
+    require => Package[$fr_package],
+    notify  => Service[$fr_service],
   }
 
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
-  concat { '/etc/raddb/policy.conf':
+  concat { "$fr_basepath/policy.conf":
     owner => 'root',
     group => 'radiusd',
     mode  => '0640',
   }
   concat::fragment { 'policy_header':
-    target  => '/etc/raddb/policy.conf',
+    target  => "$fr_basepath/policy.conf",
     content => "policy {\n",
     order   => 10,
   }
   concat::fragment { 'policy_footer':
-    target  => '/etc/raddb/policy.conf',
+    target  => "$fr_basepath/policy.conf",
     content => "}\n",
     order   => '99',
   }
 
   # Install FreeRADIUS packages from ResNet repo, which is newer than stock CentOS 
+  package { 'freeradius':
+    name   => $fr_package,
+    ensure => installed,
+  }
+
   package { [ 
-    'freeradius',
     'freeradius-mysql',
     'freeradius-perl',
     'freeradius-utils',
@@ -73,16 +79,12 @@ class freeradius (
   # won't get restarted, and the puppet run will fail.
   service { 'radiusd':
     ensure     => running,
-    name       => $::operatingsystem ? {
-      /CentOS|Scientific|Fedora/ => 'radiusd',
-      /Ubuntu|Debian/            => 'freeradius',
-      default                    => 'radiusd',
-    },
+    name       => $fr_service,
     require    => [
       Exec['radiusd-config-test'],
       File['radiusd.conf'],
       User['radiusd'],
-      Package['freeradius'],
+      Package[$fr_package],
       Service['winbind']
     ],
     enable     => true,
@@ -96,7 +98,7 @@ class freeradius (
     uid     => '95',
     gid     => 'radiusd',
     groups  => 'wbpriv',
-    require => Package['freeradius', 'samba-winbind'],
+    require => Package[$fr_package, 'samba-winbind'],
   }
 
   # Install a few modules required on all FR installations
@@ -137,7 +139,7 @@ class freeradius (
     '/var/log/radius/radacct',
   ]:
     mode    => '0750',
-    require => Package['freeradius'],
+    require => Package[$fr_package],
   }
 
   file { '/var/log/radius/radius.log':
@@ -152,20 +154,20 @@ class freeradius (
     owner   => 'root',
     group   => 'radiusd',
     source  => 'puppet:///modules/freeradius/radiusd.logrotate',
-    require => Package['freeradius'],
+    require => Package[$fr_package],
   }
 
   # Generate global SSL parameters
   exec { 'dh':
-    command => 'openssl dhparam -out /etc/raddb/certs/dh 1024',
-    creates => '/etc/raddb/certs/dh',
+    command => "openssl dhparam -out $fr_basepath/certs/dh 1024",
+    creates => "$fr_basepath/certs/dh",
     path    => '/usr/bin',
   }
 
   # Generate global SSL parameters
   exec { 'random':
-    command => 'dd if=/dev/urandom of=/etc/raddb/certs/random count=10 >/dev/null 2>&1',
-    creates => '/etc/raddb/certs/random',
+    command => "dd if=/dev/urandom of=$fr_basepath/certs/random count=10 >/dev/null 2>&1",
+    creates => "$fr_basepath/certs/random",
     path    => '/bin',
   }
 
@@ -181,27 +183,27 @@ class freeradius (
   # Blank a couple of default files that will break our config. This is more effective than deleting them
   # as they won't get overwritten when FR is upgraded from RPM, whereas missing files are replaced.
   file { [
-    '/etc/raddb/sites-available/default',
-    '/etc/raddb/sites-available/inner-tunnel',
-    '/etc/raddb/proxy.conf',
-    '/etc/raddb/clients.conf',
+    "$fr_basepath/sites-available/default",
+    "$fr_basepath/sites-available/inner-tunnel",
+    "$fr_basepath/proxy.conf",
+    "$fr_basepath/clients.conf",
   ]:
     content => "# FILE INTENTIONALLY BLANK\n",
     mode    => '0644',
     owner   => 'root',
     group   => 'radiusd',
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
+    require => Package[$fr_package],
+    notify  => Service[$fr_service],
   }
 
   # Delete *.rpmnew and *.rpmsave files from the radius config dir because
   # radiusd stupidly reads these files in, and they break the config
   exec { 'delete-radius-rpmnew':
-    command => '/bin/find /etc/raddb -name *.rpmnew -delete',
-    onlyif  => '/bin/find /etc/raddb -name *.rpmnew | /bin/grep rpmnew',
+    command => "/bin/find $fr_basepath -name *.rpmnew -delete",
+    onlyif  => "/bin/find $fr_basepath -name *.rpmnew | /bin/grep rpmnew",
   }
   exec { 'delete-radius-rpmsave':
-    command => '/bin/find /etc/raddb -name *.rpmsave -delete',
-    onlyif  => '/bin/find /etc/raddb -name *.rpmsave | /bin/grep rpmsave',
+    command => "/bin/find $fr_basepath -name *.rpmsave -delete",
+    onlyif  => "/bin/find $fr_basepath -name *.rpmsave | /bin/grep rpmsave",
   }
 }
