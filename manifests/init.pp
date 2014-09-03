@@ -15,17 +15,6 @@ class freeradius (
     notify  => Service['radiusd'],
   }
 
-  # Wipe out static clients.conf as we will be using clients.d
-  file { 'clients.conf':
-    name    => '/etc/raddb/clients.conf',
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'radiusd',
-    content => "# FILE INTENTIONALLY BLANK\n",
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
-  }
-
   # Create various directories
   file { [
     '/etc/raddb/clients.d',
@@ -63,19 +52,6 @@ class freeradius (
     target  => '/etc/raddb/policy.conf',
     content => "}\n",
     order   => '99',
-  }
-
-  # Define the realms for which we are authoritative
-  file { 'proxy.conf':
-#    ensure  => absent,
-    name    => '/etc/raddb/proxy.conf',
-    mode    => '0640',
-    owner   => 'root',
-    group   => 'radiusd',
-#    source  => 'puppet:///modules/freeradius/proxy.conf',
-    content => '',
-    require => Package['freeradius'],
-    notify  => Service['radiusd'],
   }
 
   # Install FreeRADIUS packages from ResNet repo, which is newer than stock CentOS 
@@ -206,9 +182,16 @@ class freeradius (
   # as they won't get overwritten when FR is upgraded from RPM, whereas missing files are replaced.
   file { [
     '/etc/raddb/sites-available/default',
-    '/etc/raddb/sites-available/inner-tunnel'
+    '/etc/raddb/sites-available/inner-tunnel',
+    '/etc/raddb/proxy.conf',
+    '/etc/raddb/clients.conf',
   ]:
     content => "# FILE INTENTIONALLY BLANK\n",
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'radiusd',
+    require => Package['freeradius'],
+    notify  => Service['radiusd'],
   }
 
   # Delete *.rpmnew and *.rpmsave files from the radius config dir because
