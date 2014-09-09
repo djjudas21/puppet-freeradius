@@ -40,13 +40,19 @@ This module provides several classes and defined types which take parameters.
 
 The `freeradius` class installs the base server. In the early releases, this class does not
 have many parameters as most values are hard-coded. I am working on parameterising more
-of the settings to increase flexibility.
+of the settings to increase flexibility. Patches are welcome.
 
 ### Resources
 
 #### `freeradius::attr`
 
-Install attribute filters
+Install arbitrary attribute filters from a flat flit. These are installed in `/etc/raddb/attr.d`
+
+```
+freeradius::attr { 'eduroamlocal':
+  source => 'puppet:///modules/site_freeradius/eduroamlocal',
+}
+```
 
 #### `freeradius::client`
 
@@ -86,7 +92,11 @@ freeradius::config { 'realm-checks.conf':
 
 #### `freeradius::instantiate`
 
-Instantiate a module
+Instantiate a module that is not automatically instantiated.
+
+```
+freeradius::instantiate { 'mymodule': }
+```
 
 #### `freeradius::module`
 
@@ -112,6 +122,12 @@ freeradius::policy { 'my-policies':
 
 Install a helper script, e.g. which might be called upon by a virtual server. These are
 placed in `/etc/raddb/scripts` and are not automatically included by the server.
+
+```
+freeradius::site { 'myperlscript.pl':
+  source => 'puppet:///modules/site_freeradius/myperlscript.pl',
+}
+```
 
 #### `freeradius::site`
 
@@ -153,6 +169,3 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You may also add any additional sections you feel are
-necessary or important to include here. Please use the `## ` header.
