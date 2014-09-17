@@ -48,7 +48,7 @@ of the settings to increase flexibility. Patches are welcome.
 
 Install arbitrary attribute filters from a flat flit. These are installed in `/etc/raddb/attr.d`
 
-```
+```puppet
 freeradius::attr { 'eduroamlocal':
   source => 'puppet:///modules/site_freeradius/eduroamlocal',
 }
@@ -58,7 +58,7 @@ freeradius::attr { 'eduroamlocal':
 
 Define RADIUS clients as seen in `clients.conf`
 
-```
+```puppet
 freeradius::client { "localhost-${::hostname}-lo":
   ip        => '127.0.0.1',
   secret    => 'testing123',
@@ -84,7 +84,7 @@ freeradius::client { "localhost-${::hostname}-lo":
 
 Install arbitrary config snippets from a flat file. These are installed in `/etc/raddb/conf.d`
 
-```
+```puppet
 freeradius::config { 'realm-checks.conf':
   source => 'puppet:///modules/site_freeradius/realm-checks.conf',
 }
@@ -94,7 +94,7 @@ freeradius::config { 'realm-checks.conf':
 
 Instantiate a module that is not automatically instantiated.
 
-```
+```puppet
 freeradius::instantiate { 'mymodule': }
 ```
 
@@ -102,7 +102,7 @@ freeradius::instantiate { 'mymodule': }
 
 Install a module from a flat file.
 
-```
+```puppet
 freeradius::module { 'buffered-sql':
   source => 'puppet:///modules/site_freeradius/buffered-sql',
 }
@@ -112,7 +112,7 @@ freeradius::module { 'buffered-sql':
 
 Install a policy from a flat file.
 
-```
+```puppet
 freeradius::policy { 'my-policies':
   source => 'puppet:///modules/site_freeradius/my-policies',
 }
@@ -123,7 +123,7 @@ freeradius::policy { 'my-policies':
 Install a helper script, e.g. which might be called upon by a virtual server. These are
 placed in `/etc/raddb/scripts` and are not automatically included by the server.
 
-```
+```puppet
 freeradius::site { 'myperlscript.pl':
   source => 'puppet:///modules/site_freeradius/myperlscript.pl',
 }
@@ -134,7 +134,7 @@ freeradius::site { 'myperlscript.pl':
 Install a virtual server (a.k.a. site) from a flat file. Sites are install directly
 into `/etc/raddb/sites-enabled`
 
-```
+```puppet
 freeradius::site { 'inner-tunnel':
   source => 'puppet:///modules/site_freeradius/inner-tunnel',
 }
