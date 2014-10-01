@@ -26,11 +26,11 @@
   ],
   "dependencies": [
     {
-      "name": "puppetlabs-stdlib",
+      "name": "puppetlabs/stdlib",
       "version_range": ">= 1.0.0"
     },
     {
-      "name": "puppetlabs-concat",
+      "name": "puppetlabs/concat",
       "version_range": ">= 1.0.0"
     }
   ]
