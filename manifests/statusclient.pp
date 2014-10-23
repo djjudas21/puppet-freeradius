@@ -4,7 +4,7 @@ define freeradius::statusclient (
   $ip6=undef,
   $secret,
   $port=undef,
-  $shortname,
+  $shortname=$name,
   $netmask = undef,
 ) {
   $fr_package = $::freeradius::params::fr_package
