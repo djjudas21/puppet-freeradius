@@ -155,10 +155,15 @@ Very similar usage to `freeradius::client` but with fewer options.
 ## Limitations
 
 This module is targeted at FreeRADIUS 2.x running on CentOS 6. It has not been tested
-on other distributions, but might work. It has not been tested on FreeRADIUS 3.x and
-almost certainly won't work without modification.
+on other distributions, but might work. Likely sticking points with other distros are
+the names of packages, services and file paths.
 
-It was written with Puppet 3.6 but should be quite agnostic to new versions of Puppet.
+This module has not been tested on FreeRADIUS 3.x and almost certainly won't work
+without modification. FreeRADIUS 3.x support in this module will come onto the roadmap
+at the same time that my employer decides to start looking FreeRADIUS 3.x.
+
+This module was written for use with Puppet 3.6 and 3.7, but should be quite agnostic
+to new versions of Puppet.
 
 ## Development
 
