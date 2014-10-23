@@ -131,7 +131,7 @@ freeradius::site { 'myperlscript.pl':
 
 #### `freeradius::site`
 
-Install a virtual server (a.k.a. site) from a flat file. Sites are install directly
+Install a virtual server (a.k.a. site) from a flat file. Sites are installed directly
 into `/etc/raddb/sites-enabled`
 
 ```puppet
