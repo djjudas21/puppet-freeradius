@@ -5,7 +5,6 @@ class freeradius (
 ) inherits freeradius::params {
 
   include samba
-  include nagios::plugins::radius
 
   file { 'radiusd.conf':
     name    => "$fr_basepath/radiusd.conf",
