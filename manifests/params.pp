@@ -25,7 +25,8 @@ class freeradius::params {
   # FreeRADIUS user
   $fr_user = $::osfamily ? {
     'RedHat' => 'radiusd',
-    default  => 'radiusd'
+    'Debian' => 'freerad',
+    default  => 'radiusd',
   }
 
 }
