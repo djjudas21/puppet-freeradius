@@ -90,6 +90,16 @@ freeradius::config { 'realm-checks.conf':
 }
 ```
 
+#### `freeradius::dictionary`
+
+Install custom dictionaries without breaking the default FreeRADIUS dictionary. Custom dictionaries are installed in `/etc/raddb/dictionary.d` and automatically included in the global dictionary.
+
+```puppet
+freeradius::dictionary { 'mydict':
+  source => 'puppet:///modules/site_freeradius/dictionary.mydict',
+}
+```
+
 #### `freeradius::instantiate`
 
 Instantiate a module that is not automatically instantiated.

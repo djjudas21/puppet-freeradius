@@ -26,6 +26,7 @@ class freeradius (
     "$fr_basepath/attr.d",
     "$fr_basepath/users.d",
     "$fr_basepath/policy.d",
+    "$fr_basepath/dictionary.d",
     "$fr_basepath/scripts",
     "$fr_basepath/certs",
   ]:
@@ -53,6 +54,24 @@ class freeradius (
     target  => "$fr_basepath/policy.conf",
     content => "}\n",
     order   => '99',
+  }
+
+  # Install a slightly tweaked stock dictionary that includes
+  # our custom dictionaries
+  concat { "$fr_basepath/dictionary":
+    owner => 'root',
+    group => 'radiusd',
+    mode  => '0640',
+  }
+  concat::fragment { 'dictionary_header':
+    target  => "$fr_basepath/dictionary",
+    source  => 'puppet:///modules/freeradius/dictionary.header',
+    order   => 10,
+  }
+  concat::fragment { 'dictionary_footer':
+    target  => "$fr_basepath/dictionary",
+    source  => 'puppet:///modules/freeradius/dictionary.footer',
+    order   => 90,
   }
 
   # Install FreeRADIUS packages from ResNet repo, which is newer than stock CentOS 
