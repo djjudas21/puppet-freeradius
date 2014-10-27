@@ -184,3 +184,8 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.1.0
+
+ * Initial release with support for installing FreeRADIUS and configuring servers, modules, clients and other objects using flat files.
+ * Probably works only with FreeRADIUS 2.x
+ * Only tested with CentOS 6
