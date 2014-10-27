@@ -1,4 +1,4 @@
-# puppet-freeradius
+# freeradius
 
 #### Table of Contents
 
