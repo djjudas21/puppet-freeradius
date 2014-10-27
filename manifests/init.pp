@@ -7,7 +7,7 @@ class freeradius (
   include samba
 
   file { 'radiusd.conf':
-    name    => "$fr_basepath/radiusd.conf",
+    name    => "${fr_basepath}/radiusd.conf",
     mode    => '0640',
     owner   => 'root',
     group   => 'radiusd',
@@ -18,17 +18,17 @@ class freeradius (
 
   # Create various directories
   file { [
-    "$fr_basepath/clients.d",
-    "$fr_basepath/statusclients.d",
-    "$fr_basepath",
-    "$fr_basepath/instantiate",
-    "$fr_basepath/conf.d",
-    "$fr_basepath/attr.d",
-    "$fr_basepath/users.d",
-    "$fr_basepath/policy.d",
-    "$fr_basepath/dictionary.d",
-    "$fr_basepath/scripts",
-    "$fr_basepath/certs",
+    "${fr_basepath}/clients.d",
+    "${fr_basepath}/statusclients.d",
+    $fr_basepath,
+    "${fr_basepath}/instantiate",
+    "${fr_basepath}/conf.d",
+    "${fr_basepath}/attr.d",
+    "${fr_basepath}/users.d",
+    "${fr_basepath}/policy.d",
+    "${fr_basepath}/dictionary.d",
+    "${fr_basepath}/scripts",
+    "${fr_basepath}/certs",
   ]:
     ensure  => directory,
     mode    => '0750',
@@ -40,47 +40,47 @@ class freeradius (
 
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
-  concat { "$fr_basepath/policy.conf":
+  concat { "${fr_basepath}/policy.conf":
     owner => 'root',
     group => 'radiusd',
     mode  => '0640',
   }
   concat::fragment { 'policy_header':
-    target  => "$fr_basepath/policy.conf",
+    target  => "${fr_basepath}/policy.conf",
     content => "policy {\n",
     order   => 10,
   }
   concat::fragment { 'policy_footer':
-    target  => "$fr_basepath/policy.conf",
+    target  => "${fr_basepath}/policy.conf",
     content => "}\n",
     order   => '99',
   }
 
   # Install a slightly tweaked stock dictionary that includes
   # our custom dictionaries
-  concat { "$fr_basepath/dictionary":
+  concat { "${fr_basepath}/dictionary":
     owner => 'root',
     group => 'radiusd',
     mode  => '0640',
   }
   concat::fragment { 'dictionary_header':
-    target  => "$fr_basepath/dictionary",
-    source  => 'puppet:///modules/freeradius/dictionary.header',
-    order   => 10,
+    target => "${fr_basepath}/dictionary",
+    source => 'puppet:///modules/freeradius/dictionary.header',
+    order  => 10,
   }
   concat::fragment { 'dictionary_footer':
-    target  => "$fr_basepath/dictionary",
-    source  => 'puppet:///modules/freeradius/dictionary.footer',
-    order   => 90,
+    target => "${fr_basepath}/dictionary",
+    source => 'puppet:///modules/freeradius/dictionary.footer',
+    order  => 90,
   }
 
   # Install FreeRADIUS packages from ResNet repo, which is newer than stock CentOS 
   package { 'freeradius':
-    name   => $fr_package,
     ensure => installed,
+    name   => $fr_package,
   }
 
-  package { [ 
+  package { [
     'freeradius-mysql',
     'freeradius-perl',
     'freeradius-utils',
@@ -130,13 +130,13 @@ class freeradius (
     source  => 'puppet:///modules/freeradius/modules/detail.log',
   }
 
- ::freeradius::module { 'logtosyslog':
-   source => 'puppet:///modules/freeradius/modules/logtosyslog',
- }
- ::freeradius::module { 'logtofile':
-   source => 'puppet:///modules/freeradius/modules/logtofile',
- }
- 
+  ::freeradius::module { 'logtosyslog':
+    source => 'puppet:///modules/freeradius/modules/logtosyslog',
+  }
+  ::freeradius::module { 'logtofile':
+    source => 'puppet:///modules/freeradius/modules/logtofile',
+  }
+
   # Syslog rules
   syslog::rule { 'radiusd-log':
     command => "if \$programname == \'radiusd\' then /var/log/radius/radius.log\n&~",
@@ -177,15 +177,15 @@ class freeradius (
 
   # Generate global SSL parameters
   exec { 'dh':
-    command => "openssl dhparam -out $fr_basepath/certs/dh 1024",
-    creates => "$fr_basepath/certs/dh",
+    command => "openssl dhparam -out ${fr_basepath}/certs/dh 1024",
+    creates => "${fr_basepath}/certs/dh",
     path    => '/usr/bin',
   }
 
   # Generate global SSL parameters
   exec { 'random':
-    command => "dd if=/dev/urandom of=$fr_basepath/certs/random count=10 >/dev/null 2>&1",
-    creates => "$fr_basepath/certs/random",
+    command => "dd if=/dev/urandom of=${fr_basepath}/certs/random count=10 >/dev/null 2>&1",
+    creates => "${fr_basepath}/certs/random",
     path    => '/bin',
   }
 
@@ -201,10 +201,10 @@ class freeradius (
   # Blank a couple of default files that will break our config. This is more effective than deleting them
   # as they won't get overwritten when FR is upgraded from RPM, whereas missing files are replaced.
   file { [
-    "$fr_basepath/sites-available/default",
-    "$fr_basepath/sites-available/inner-tunnel",
-    "$fr_basepath/proxy.conf",
-    "$fr_basepath/clients.conf",
+    "${fr_basepath}/sites-available/default",
+    "${fr_basepath}/sites-available/inner-tunnel",
+    "${fr_basepath}/proxy.conf",
+    "${fr_basepath}/clients.conf",
   ]:
     content => "# FILE INTENTIONALLY BLANK\n",
     mode    => '0644',
@@ -217,11 +217,11 @@ class freeradius (
   # Delete *.rpmnew and *.rpmsave files from the radius config dir because
   # radiusd stupidly reads these files in, and they break the config
   exec { 'delete-radius-rpmnew':
-    command => "/bin/find $fr_basepath -name *.rpmnew -delete",
-    onlyif  => "/bin/find $fr_basepath -name *.rpmnew | /bin/grep rpmnew",
+    command => "/bin/find ${fr_basepath} -name *.rpmnew -delete",
+    onlyif  => "/bin/find ${fr_basepath} -name *.rpmnew | /bin/grep rpmnew",
   }
   exec { 'delete-radius-rpmsave':
-    command => "/bin/find $fr_basepath -name *.rpmsave -delete",
-    onlyif  => "/bin/find $fr_basepath -name *.rpmsave | /bin/grep rpmsave",
+    command => "/bin/find ${fr_basepath} -name *.rpmsave -delete",
+    onlyif  => "/bin/find ${fr_basepath} -name *.rpmsave | /bin/grep rpmsave",
   }
 }
