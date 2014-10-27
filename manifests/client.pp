@@ -1,10 +1,10 @@
 # Install FreeRADIUS clients (WISMs or testing servers)
 define freeradius::client (
+  $shortname,
+  $secret,
   $ip=undef,
   $ip6=undef,
   $net=undef,
-  $shortname,
-  $secret,
   $server=undef,
   $virtual_server=undef,
   $nastype=undef,

@@ -1,8 +1,8 @@
 # Install FreeRADIUS clients (WISMs or testing servers)
 define freeradius::statusclient (
+  $secret,
   $ip=undef,
   $ip6=undef,
-  $secret,
   $port=undef,
   $shortname=$name,
   $netmask = undef,

@@ -1,7 +1,8 @@
+# Enable status-server
 class freeradius::status_server (
+  $secret,
   $port     = '18121',
   $listen   = '*',
-  $secret,
   $enable   = true,
 ) {
   freeradius::site { 'status':
