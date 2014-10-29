@@ -168,8 +168,8 @@ pidfile = ${run_dir}/${name}.pid
 #  It will join all groups where "user" is a member.  This can allow
 #  for some finer-grained access controls.
 #
-user = radiusd
-group = radiusd
+user = <%= @fr_user%>
+group = <%= @fr_group%>
 
 #  panic_action: Command to execute if the server dies unexpectedly.
 #

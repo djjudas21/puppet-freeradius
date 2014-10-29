@@ -29,4 +29,10 @@ class freeradius::params {
     default  => 'radiusd',
   }
 
+  # FreeRADIUS group
+  $fr_group = $::osfamily ? {
+    'RedHat' => 'radiusd',
+    'Debian' => 'freerad',
+    default  => 'radiusd',
+  }
 }
