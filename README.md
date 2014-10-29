@@ -40,7 +40,11 @@ This module provides several classes and defined types which take parameters.
 
 The `freeradius` class installs the base server. In the early releases, this class does not
 have many parameters as most values are hard-coded. I am working on parameterising more
-of the settings to increase flexibility. Patches are welcome.
+of the global settings to increase flexibility. Patches are welcome.
+
+ * `control_socket` Enable the control-socket virtual server. See also the "radmin" program. Default: `false`
+ * `max_requests` The maximum number of requests which the server keeps track of. This should be 256 multiplied by the number of clients. Default: `4096`
+ * `max_servers` Limit on the total number of servers running. Default: `4096`
 
 ### Resources
 
