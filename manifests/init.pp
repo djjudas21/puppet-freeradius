@@ -1,11 +1,37 @@
 # Base class to install FreeRADIUS
 class freeradius (
   $control_socket = false,
-  $max_servers    = '4096',
-  $max_requests   = '4096',
+  $use_samba = true,
+  $max_servers = '4096',
+  $max_requests = '4096'
 ) inherits freeradius::params {
+  if $use_samba {
+    #    include samba
 
-  include samba
+    # We don't want to create the radiusd user, just add it to the wbpriv group
+    user { $fr_user:
+      ensure  => present,
+      uid     => '95',
+      gid     => 'radiusd',
+      groups  => 'wbpriv',
+      require => Package[$fr_package, 'samba-winbind'],
+    }
+    
+    $radiusd_service_requirements = [
+      Exec['radiusd-config-test'],
+      File['radiusd.conf'],
+      User[$fr_user],
+      Package[$fr_package],
+      Service['winbind']
+    ]
+
+  } else {
+    $radiusd_service_requirements = [
+      Exec['radiusd-config-test'],
+      File['radiusd.conf'],
+      Package[$fr_package]
+    ]
+  }
 
   file { 'radiusd.conf':
     name    => "${fr_basepath}/radiusd.conf",
@@ -99,13 +125,7 @@ class freeradius (
   service { 'radiusd':
     ensure     => running,
     name       => $fr_service,
-    require    => [
-      Exec['radiusd-config-test'],
-      File['radiusd.conf'],
-      User['radiusd'],
-      Package[$fr_package],
-      Service['winbind']
-    ],
+    require    => $radiusd_service_requirements,
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
