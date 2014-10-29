@@ -258,10 +258,7 @@ cleanup_delay = 5
 #
 #  Useful range of values: 256 to infinity
 #
-max_requests = 2048
-
-# JJ had his set to this
-#max_requests = 2048576
+max_requests = <%= @max_requests %>
 
 #  listen: Make the server listen on a particular IP address, and send
 #  replies out from that address. This directive is most useful for
@@ -660,7 +657,7 @@ thread pool {
 	#
 	#  For more information, see 'max_request_time', above.
 	#
-	max_servers = 650
+	max_servers = <%= @max_servers %>
 
 	#  Server-pool size regulation.  Rather than making you guess
 	#  how many servers you need, FreeRADIUS dynamically adapts to

@@ -1,6 +1,8 @@
 # Base class to install FreeRADIUS
 class freeradius (
   $control_socket = false,
+  $max_servers    = '4096',
+  $max_requests   = '4096',
 ) inherits freeradius::params {
 
   include samba
@@ -10,7 +12,7 @@ class freeradius (
     mode    => '0640',
     owner   => 'root',
     group   => 'radiusd',
-    source  => 'puppet:///modules/freeradius/radiusd.conf',
+    content => template('freeradius/radiusd.conf.erb'),
     require => Package[$fr_package],
     notify  => Service[$fr_service],
   }
