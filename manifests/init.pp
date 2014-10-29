@@ -1,7 +1,6 @@
 # Base class to install FreeRADIUS
 class freeradius (
   $control_socket = false,
-  $fr_service = $fr_service,
 ) inherits freeradius::params {
 
   include samba
