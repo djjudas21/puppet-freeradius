@@ -46,6 +46,14 @@ of the global settings to increase flexibility. Patches are welcome.
  * `max_requests` The maximum number of requests which the server keeps track of. This should be 256 multiplied by the number of clients. Default: `4096`
  * `max_servers` Limit on the total number of servers running. Default: `4096`
 
+```puppet
+class { 'freeradius':
+  control_socket => true,
+  max_requests   => 4096,
+  max_servers    => 4096,
+}
+```
+
 ### Resources
 
 #### `freeradius::attr`
