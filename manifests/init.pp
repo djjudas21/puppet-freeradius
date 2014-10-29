@@ -87,7 +87,6 @@ class freeradius (
     'freeradius-utils',
   ]:
     ensure  => installed,
-    require => Yumrepo['resnet'],
   }
 
   package { 'wpa_supplicant':
