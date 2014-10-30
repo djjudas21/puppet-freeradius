@@ -127,11 +127,11 @@ class freeradius (
     hasrestart => true,
   }
 
-  # We don't want to create the radiusd user, just add it to the wbpriv group
+  # We don't want to create the radiusd user, just add it to the
+  # wbpriv group if the user needs winbind support. We depend on
+  # the FreeRADIUS package to be sure that the user has been created
   user { 'radiusd':
     ensure  => present,
-    uid     => '95',
-    gid     => 'radiusd',
     groups  => $winbind_support ? {
       true    => $fr_wbpriv_user,
       default => undef,
