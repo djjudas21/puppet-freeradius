@@ -5,6 +5,18 @@
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
 3. [Usage - Configuration options and additional functionality](#usage)
+    * [Classes](#classes)
+       * [`freeradius`](#freeradius)
+    * [Resources](#resources)
+       * [`freeradius::attr](#freeradius::attr)
+       * [`freeradius::client](#freeradius::client)
+       * [`freeradius::config](#freeradius::config)
+       * [`freeradius::dictionary](#freeradius::dictionary)
+       * [`freeradius::instantiate](#freeradius::instantiate)
+       * [`freeradius::module](#freeradius::module)
+       * [`freeradius::policy](#freeradius::policy)
+       * [`freeradius::site](#freeradius::site)
+       * [`freeradius::statusclient](#freeradius::statusclient)
 4. [Limitations - OS compatibility, etc.](#limitations)
 5. [Development - Guide for contributing to the module](#development)
 6. [Release Notes](#release-notes)
@@ -42,15 +54,32 @@ The `freeradius` class installs the base server. In the early releases, this cla
 have many parameters as most values are hard-coded. I am working on parameterising more
 of the global settings to increase flexibility. Patches are welcome.
 
- * `control_socket` Enable the control-socket virtual server. See also the "radmin" program. Default: `false`
- * `max_requests` The maximum number of requests which the server keeps track of. This should be 256 multiplied by the number of clients. Default: `4096`
- * `max_servers` Limit on the total number of servers running. Default: `4096`
- * `mysql_support` Install support for MySQL. Default: `false`
- * `perl_support` Install support for Perl. Default: `false`
- * `utils_support` Install FreeRADIUS utils. Default: `false`
- * `ldap_support` Install support for LDAP. Default: `false`
- * `wpa_supplicant`. Install wpa_supplicant utility. Default: `false`
- * `winbind_support`. Add the radius user to the winbind privileged group. You must install winbind separately. Default: `false`.
+##### `control_socket`
+Enable the control-socket virtual server. See also the "radmin" program. Default: `false`
+
+##### `max_requests`
+The maximum number of requests which the server keeps track of. This should be 256 multiplied by the number of clients. Default: `4096`
+
+##### `max_servers`
+Limit on the total number of servers running. Default: `4096`
+
+##### `mysql_support`
+Install support for MySQL. Default: `false`
+
+##### `perl_support`
+Install support for Perl. Default: `false`
+
+##### `utils_support`
+Install FreeRADIUS utils. Default: `false`
+
+##### `ldap_support`
+Install support for LDAP. Default: `false`
+
+##### `wpa_supplicant`.
+Install wpa_supplicant utility. Default: `false`
+
+##### `winbind_support`.
+Add the radius user to the winbind privileged group. You must install winbind separately. Default: `false`.
 
 ```puppet
 class { 'freeradius':
@@ -90,18 +119,41 @@ freeradius::client { "localhost-${::hostname}-lo":
   }
 ```
 
- * `ip` Default: `undef`. The IP address of the client.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
- * `ip6` Default: `undef`. The IPv6 address of the client. `ip` and `ip6` are mutually exclusive but one must be supplied.
- * `net` Default: `undef`. The netmask of the client, specified as an integer, e.g. `24`
- * `shortname` required. A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section.
- * `secret` required. The RADIUS shared secret used for communication between the client/NAS and the RADIUS server.
- * `server` Default: `undef`
- * `virtual_server` Default: `undef`. The virtual server that traffic from this client should be sent to.
- * `nastype` Default: `undef`. The nastype attribute is used to tell the checkrad.pl script which NAS-specific method it should use when checking simultaneous use.
- * `netmask` Default: `undef`. The netmask of the client, specified as an integer, e.g. `24`
- * `redirect` Default: `undef`
- * `port` Default: `undef`. The UDP port that this virtual server should listen on. Leave blank if this client is not tied to a virtual server.
- * `srcip` Default: `undef`
+##### `ip`
+Default: `undef`. The IP address of the client.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
+
+##### `ip6`
+Default: `undef`. The IPv6 address of the client. `ip` and `ip6` are mutually exclusive but one must be supplied.
+
+##### `net`
+Default: `undef`. The netmask of the client, specified as an integer, e.g. `24`
+
+##### `shortname`
+required. A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section.
+
+##### `secret`
+required. The RADIUS shared secret used for communication between the client/NAS and the RADIUS server.
+
+##### `server`
+Default: `undef`
+
+##### `virtual_server`
+Default: `undef`. The virtual server that traffic from this client should be sent to.
+
+##### `nastype`
+Default: `undef`. The nastype attribute is used to tell the checkrad.pl script which NAS-specific method it should use when checking simultaneous use.
+
+##### `netmask`
+Default: `undef`. The netmask of the client, specified as an integer, e.g. `24`
+
+##### `redirect`
+Default: `undef`
+
+##### `port`
+Default: `undef`. The UDP port that this virtual server should listen on. Leave blank if this client is not tied to a virtual server.
+
+##### `srcip`
+Default: `undef`
 
 #### `freeradius::config`
 
@@ -178,11 +230,20 @@ freeradius::site { 'inner-tunnel':
 Define RADIUS clients, specifically to connect to the status server for monitoring.
 Very similar usage to `freeradius::client` but with fewer options.
 
- * `ip` Default: `undef`. The IP address of the client.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
- * `ip6` Default: `undef`. The IPv6 address of the client. `ip` and `ip6` are mutually exclusive but one must be supplied.
- * `secret` required. The RADIUS shared secret used for communication between the client/NAS and the RADIUS server.
- * `port` Default: `undef`. The UDP port that this virtual server should listen on. Leave blank if this client is not tied to a virtual server.
- * `shortname` required. A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section.
+##### `ip`
+Default: `undef`. The IP address of the client.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
+
+##### `ip6`
+Default: `undef`. The IPv6 address of the client. `ip` and `ip6` are mutually exclusive but one must be supplied.
+
+##### `secret`
+required. The RADIUS shared secret used for communication between the client/NAS and the RADIUS server.
+
+##### `port`
+Default: `undef`. The UDP port that this virtual server should listen on. Leave blank if this client is not tied to a virtual server.
+
+##### `shortname`
+required. A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section.
 
 
 ## Limitations
