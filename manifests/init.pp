@@ -136,6 +136,8 @@ class freeradius (
     require => Package[$fr_package],
   }
 
+  group { $fr_group: ensure => present }
+
   # Install a few modules required on all FR installations
   freeradius::module  { 'always':
     source  => 'puppet:///modules/freeradius/modules/always',
