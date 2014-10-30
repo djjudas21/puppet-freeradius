@@ -67,7 +67,7 @@ class { 'freeradius':
 
 #### `freeradius::attr`
 
-Install arbitrary attribute filters from a flat flit. These are installed in `/etc/raddb/attr.d`
+Install arbitrary attribute filters from a flat file. These are installed in `/etc/raddb/attr.d`
 
 ```puppet
 freeradius::attr { 'eduroamlocal':
