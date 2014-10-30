@@ -45,12 +45,21 @@ of the global settings to increase flexibility. Patches are welcome.
  * `control_socket` Enable the control-socket virtual server. See also the "radmin" program. Default: `false`
  * `max_requests` The maximum number of requests which the server keeps track of. This should be 256 multiplied by the number of clients. Default: `4096`
  * `max_servers` Limit on the total number of servers running. Default: `4096`
+ * `mysql_support` Install support for MySQL. Default: `false`
+ * `perl_support` Install support for Perl. Default: `false`
+ * `utils_support` Install FreeRADIUS utils. Default: `false`
+ * `ldap_support` Install support for LDAP. Default: `false`
+ * `wpa_supplicant`. Install wpa_supplicant utility. Default: `false`
 
 ```puppet
 class { 'freeradius':
   control_socket => true,
   max_requests   => 4096,
   max_servers    => 4096,
+  mysql_support  => true,
+  perl_support   => true,
+  utils_support  => true,
+  wpa_supplicant => true,
 }
 ```
 

@@ -3,6 +3,11 @@ class freeradius (
   $control_socket = false,
   $max_servers    = '4096',
   $max_requests   = '4096',
+  $mysql_support  = false,
+  $perl_support   = false,
+  $utils_support  = false,
+  $ldap_support   = false,
+  $wpa_supplicant = false,
 ) inherits freeradius::params {
 
   include samba
@@ -75,22 +80,36 @@ class freeradius (
     order  => 90,
   }
 
-  # Install FreeRADIUS packages from ResNet repo, which is newer than stock CentOS 
+  # Install FreeRADIUS packages
   package { 'freeradius':
     ensure => installed,
     name   => $fr_package,
   }
-
-  package { [
-    'freeradius-mysql',
-    'freeradius-perl',
-    'freeradius-utils',
-  ]:
-    ensure  => installed,
+  if $mysql_support {
+    package { 'freeradius-mysql':
+      ensure => installed,
+    }
   }
-
-  package { 'wpa_supplicant':
-    ensure => installed,
+  if $perl_support {
+    package { 'freeradius-perl':
+      ensure => installed,
+    }
+  }
+  if $utils_support {
+    package { 'freeradius-utils':
+      ensure => installed,
+    }
+  }
+  if $ldap_support {
+    package { 'freeradius-ldap':
+      ensure => installed,
+    }
+  }
+  if $wpa_supplicant {
+    package { 'wpa_supplicant':
+      ensure => installed,
+      name   => $fr_wpa_supplicant,
+    }
   }
 
   # radiusd always tests its config before restarting the service, to avoid outage. If the config is not valid, the service

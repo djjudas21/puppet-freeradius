@@ -8,6 +8,13 @@ class freeradius::params {
     default  => 'freeradius',
   }
 
+  # Name of wpa_supplicant package
+  $fr_wpa_supplicant = $::osfamily ? {
+    'RedHat' => 'wpa_supplicant',
+    'Debian' => 'wpasupplicant',
+    default  => 'wpa_supplicant',
+  }
+
   # Name of FreeRADIUS service
   $fr_service = $::osfamily ? {
     'RedHat' => 'radiusd',
