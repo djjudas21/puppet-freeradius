@@ -216,12 +216,19 @@ class freeradius (
 
   # Delete *.rpmnew and *.rpmsave files from the radius config dir because
   # radiusd stupidly reads these files in, and they break the config
-  exec { 'delete-radius-rpmnew':
-    command => "/bin/find ${fr_basepath} -name *.rpmnew -delete",
-    onlyif  => "/bin/find ${fr_basepath} -name *.rpmnew | /bin/grep rpmnew",
-  }
-  exec { 'delete-radius-rpmsave':
-    command => "/bin/find ${fr_basepath} -name *.rpmsave -delete",
-    onlyif  => "/bin/find ${fr_basepath} -name *.rpmsave | /bin/grep rpmsave",
+  # This should be fixed in FreeRADIUS 2.2.0
+  # http://lists.freeradius.org/pipermail/freeradius-users/2012-October/063232.html
+  # Only affects RPM-based systems
+  if $::osfamily == 'RedHat' {
+    exec { 'delete-radius-rpmnew':
+      command => "find ${fr_basepath} -name *.rpmnew -delete",
+      onlyif  => "find ${fr_basepath} -name *.rpmnew | grep rpmnew",
+      path    => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
+    }
+    exec { 'delete-radius-rpmsave':
+      command => "find ${fr_basepath} -name *.rpmsave -delete",
+      onlyif  => "find ${fr_basepath} -name *.rpmsave | grep rpmsave",
+      path    => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
+    }
   }
 }
