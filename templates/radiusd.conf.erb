@@ -62,7 +62,7 @@ exec_prefix = /usr
 sysconfdir = /etc
 localstatedir = /var
 sbindir = /usr/sbin
-logdir = ${localstatedir}/log/radius
+logdir = <%= @fr_logpath %>
 raddbdir = ${sysconfdir}/raddb
 radacctdir = ${logdir}/radacct
 

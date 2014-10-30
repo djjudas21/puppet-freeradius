@@ -29,6 +29,13 @@ class freeradius::params {
     default  => '/etc/raddb',
   }
 
+  # Path for FreeRADIUS logs
+  $fr_logpath = $::osfamily ? {
+    'RedHat' => '/var/log/radius',
+    'Debian' => '/var/log/freeradius',
+    default  => '/var/log/radius',
+  }
+
   # FreeRADIUS user
   $fr_user = $::osfamily ? {
     'RedHat' => 'radiusd',

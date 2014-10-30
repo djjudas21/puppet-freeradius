@@ -158,7 +158,7 @@ class freeradius (
 
   # Syslog rules
   syslog::rule { 'radiusd-log':
-    command => "if \$programname == \'radiusd\' then /var/log/radius/radius.log\n&~",
+    command => "if \$programname == \'radiusd\' then ${fr_logpath}/radius.log\n&~",
     order   => '12',
   }
 
@@ -172,14 +172,14 @@ class freeradius (
 
   # Make the radius log dir traversable
   file { [
-    '/var/log/radius',
-    '/var/log/radius/radacct',
+    $fr_logpath,
+    "${fr_logpath}/radacct",
   ]:
     mode    => '0750',
     require => Package[$fr_package],
   }
 
-  file { '/var/log/radius/radius.log':
+  file { "${fr_logpath}/radius.log":
     owner   => 'radiusd',
     group   => 'radiusd',
     seltype => 'radiusd_log_t',
@@ -190,7 +190,7 @@ class freeradius (
     mode    => '0640',
     owner   => 'root',
     group   => 'radiusd',
-    source  => 'puppet:///modules/freeradius/radiusd.logrotate',
+    content => template('freeradius/radiusd.logrotate.erb'),
     require => Package[$fr_package],
   }
 
