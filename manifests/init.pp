@@ -139,8 +139,8 @@ class freeradius (
   # We don't want to add the radiusd group but it must be defined
   # here so we can depend on it. WE depend on the FreeRADIUS
   # package to be sure that the group has been created.
-  group { $fr_group: 
-    ensure => present,
+  group { $fr_group:
+    ensure  => present,
     require => Package[$fr_package]
   }
 
