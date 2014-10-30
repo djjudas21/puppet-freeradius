@@ -1,17 +1,17 @@
 # Install FreeRADIUS policies
-define freeradius::policy ($source, $order=50) {
-  $fr_package = $::freeradius::params::fr_package
-  $fr_service = $::freeradius::params::fr_service
+define freeradius::policy ($source, $order = 50) {
+  $fr_package  = $::freeradius::params::fr_package
+  $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_user = $::freeradius::params::fr_user
+  $fr_group    = $::freeradius::params::fr_group
 
-  # Install policy in policy.d 
+  # Install policy in policy.d
   file { "${fr_basepath}/policy.d/${name}":
     mode    => '0644',
     owner   => 'root',
-    group   => 'radiusd',
+    group   => $fr_group,
     source  => $source,
-    require => Package[$fr_package],
+    require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
 

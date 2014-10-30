@@ -15,9 +15,9 @@ class freeradius (
     name    => "${fr_basepath}/radiusd.conf",
     mode    => '0640',
     owner   => 'root',
-    group   => 'radiusd',
+    group   => $fr_group,
     content => template('freeradius/radiusd.conf.erb'),
-    require => Package[$fr_package],
+    require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
 
@@ -38,17 +38,18 @@ class freeradius (
     ensure  => directory,
     mode    => '0750',
     owner   => 'root',
-    group   => 'radiusd',
-    require => Package[$fr_package],
+    group   => $fr_group,
+    require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
 
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
   concat { "${fr_basepath}/policy.conf":
-    owner => 'root',
-    group => 'radiusd',
-    mode  => '0640',
+    owner   => 'root',
+    group   => $fr_group,
+    mode    => '0640',
+    require => [Package[$fr_package], Group[$fr_group]],
   }
   concat::fragment { 'policy_header':
     target  => "${fr_basepath}/policy.conf",
@@ -64,9 +65,10 @@ class freeradius (
   # Install a slightly tweaked stock dictionary that includes
   # our custom dictionaries
   concat { "${fr_basepath}/dictionary":
-    owner => 'root',
-    group => 'radiusd',
-    mode  => '0640',
+    owner   => 'root',
+    group   => $fr_group,
+    mode    => '0640',
+    require => [Package[$fr_package], Group[$fr_group]],
   }
   concat::fragment { 'dictionary_header':
     target => "${fr_basepath}/dictionary",
@@ -116,22 +118,17 @@ class freeradius (
   service { 'radiusd':
     ensure     => running,
     name       => $fr_service,
-    require    => [
-      Exec['radiusd-config-test'],
-      File['radiusd.conf'],
-      User['radiusd'],
-      Package[$fr_package],
-    ],
+    require    => [Exec['radiusd-config-test'], File['radiusd.conf'], User[$fr_user], Package[$fr_package],],
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
   }
 
   # We don't want to create the radiusd user, just add it to the wbpriv group
-  user { 'radiusd':
+  user { $fr_user:
     ensure  => present,
     uid     => '95',
-    gid     => 'radiusd',
+    gid     => $fr_group,
     groups  => $winbind_support ? {
       true    => $fr_wbpriv_user,
       default => undef,
@@ -181,18 +178,19 @@ class freeradius (
   }
 
   file { "${fr_logpath}/radius.log":
-    owner   => 'radiusd',
-    group   => 'radiusd',
+    owner   => $fr_user,
+    group   => $fr_group,
     seltype => 'radiusd_log_t',
+    require => [Package[$fr_package], User[$fr_user], Group[$fr_group]],
   }
 
   # Updated logrotate file to include radiusd-*.log
   file { '/etc/logrotate.d/radiusd':
     mode    => '0640',
     owner   => 'root',
-    group   => 'radiusd',
+    group   => $fr_group,
     content => template('freeradius/radiusd.logrotate.erb'),
-    require => Package[$fr_package],
+    require => [Package[$fr_package], Group[$fr_group]],
   }
 
   # Generate global SSL parameters
@@ -230,8 +228,8 @@ class freeradius (
     content => "# FILE INTENTIONALLY BLANK\n",
     mode    => '0644',
     owner   => 'root',
-    group   => 'radiusd',
-    require => Package[$fr_package],
+    group   => $fr_group,
+    require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
 
