@@ -5,13 +5,12 @@ define freeradius::client (
   $ip             = undef,
   $ip6            = undef,
   $net            = undef,
-  $server         = undef,
   $virtual_server = undef,
   $nastype        = undef,
   $netmask        = undef,
   $redirect       = undef,
   $port           = undef,
-  $srcip          = undef,) {
+) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
