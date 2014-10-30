@@ -1,16 +1,17 @@
 # Install FreeRADIUS custom dictionaries
-define freeradius::dictionary ($source, $order=50) {
-  $fr_package = $::freeradius::params::fr_package
-  $fr_service = $::freeradius::params::fr_service
+define freeradius::dictionary ($source, $order = 50) {
+  $fr_package  = $::freeradius::params::fr_package
+  $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
+  $fr_group    = $::freeradius::params::fr_group
 
-  # Install dictionary in dictionary.d 
+  # Install dictionary in dictionary.d
   file { "${fr_basepath}/dictionary.d/dictionary.${name}":
     mode    => '0644',
     owner   => 'root',
-    group   => 'radiusd',
+    group   => $fr_group,
     source  => $source,
-    require => Package[$fr_package],
+    require => [File["${fr_basepath}/dictionary.d"], Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
 
