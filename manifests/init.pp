@@ -1,16 +1,15 @@
 # Base class to install FreeRADIUS
 class freeradius (
-  $control_socket = false,
-  $max_servers    = '4096',
-  $max_requests   = '4096',
-  $mysql_support  = false,
-  $perl_support   = false,
-  $utils_support  = false,
-  $ldap_support   = false,
-  $wpa_supplicant = false,
+  $control_socket  = false,
+  $max_servers     = '4096',
+  $max_requests    = '4096',
+  $mysql_support   = false,
+  $perl_support    = false,
+  $utils_support   = false,
+  $ldap_support    = false,
+  $wpa_supplicant  = false,
+  $winbind_support = false,
 ) inherits freeradius::params {
-
-  include samba
 
   file { 'radiusd.conf':
     name    => "${fr_basepath}/radiusd.conf",
@@ -122,7 +121,6 @@ class freeradius (
       File['radiusd.conf'],
       User['radiusd'],
       Package[$fr_package],
-      Service['winbind']
     ],
     enable     => true,
     hasstatus  => true,
@@ -134,8 +132,11 @@ class freeradius (
     ensure  => present,
     uid     => '95',
     gid     => 'radiusd',
-    groups  => 'wbpriv',
-    require => Package[$fr_package, 'samba-winbind'],
+    groups  => $winbind_support ? {
+      true    => $fr_wbpriv_user,
+      default => undef,
+    },
+    require => Package[$fr_package],
   }
 
   # Install a few modules required on all FR installations

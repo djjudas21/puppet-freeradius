@@ -49,4 +49,11 @@ class freeradius::params {
     'Debian' => 'freerad',
     default  => 'radiusd',
   }
+
+  # Privileged winbind user
+  $fr_wbpriv_user = $::osfamily ? {
+    'RedHat' => 'wbpriv',
+    'Debian' => 'winbindd_priv',
+    default  => 'wbpriv',
+  }
 }
