@@ -30,6 +30,10 @@
       "version_range": ">= 1.0.0"
     },
     {
+      "name": "jgazeley/syslog",
+      "version_range": ">= 0.1.0"
+    },
+    {
       "name": "puppetlabs/concat",
       "version_range": ">= 1.0.0"
     }
