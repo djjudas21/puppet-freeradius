@@ -1,15 +1,16 @@
 # Install FreeRADIUS helper scripts
 define freeradius::script ($source) {
-  $fr_package = $::freeradius::params::fr_package
-  $fr_service = $::freeradius::params::fr_service
+  $fr_package  = $::freeradius::params::fr_package
+  $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_user = $::freeradius::params::fr_user
+  $fr_group    = $::freeradius::params::fr_group
 
   file { "${fr_basepath}/scripts/${name}":
     mode    => '0750',
     owner   => 'root',
-    group   => 'radiusd',
+    group   => $fr_group,
     source  => $source,
-    require => File["${fr_basepath}/scripts"],
+    require => [File["${fr_basepath}/scripts"], Package[$fr_package], Group[$fr_group]],
+    notify  => Service[$fr_service],
   }
 }
