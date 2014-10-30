@@ -51,6 +51,7 @@ of the global settings to increase flexibility. Patches are welcome.
  * `ldap_support` Install support for LDAP. Default: `false`
  * `wpa_supplicant`. Install wpa_supplicant utility. Default: `false`
  * `winbind_support`. Add the radius user to the winbind privileged group. You must install winbind separately. Default: `false`.
+ * `syslog`. Add an syslog rule (using the jgazeley/syslog puppet module). Default: `false`.
 
 ```puppet
 class { 'freeradius':
@@ -62,6 +63,7 @@ class { 'freeradius':
   utils_support   => true,
   wpa_supplicant  => true,
   winbind_support => true,
+  syslog          => true,
 }
 ```
 
