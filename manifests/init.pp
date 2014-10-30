@@ -211,10 +211,11 @@ class freeradius (
   # This exec tests the radius config and fails if it's bad
   # It isn't run every time puppet runs, but only when freeradius is to be restarted
   exec { 'radiusd-config-test':
-    command     => '/usr/bin/sudo /usr/sbin/radiusd -XC | /bin/grep \'Configuration appears to be OK.\' | /usr/bin/wc -l',
+    command     => 'sudo radiusd -XC | grep \'Configuration appears to be OK.\' | wc -l',
     returns     => 0,
     refreshonly => true,
     logoutput   => on_failure,
+    path        => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
   }
 
   # Blank a couple of default files that will break our config. This is more effective than deleting them
