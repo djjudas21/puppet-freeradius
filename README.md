@@ -148,7 +148,7 @@ The `nastype` attribute is used to tell the `checkrad.pl` script which NAS-speci
 The netmask of the client, specified as an integer, e.g. `24`. Default: `undef`.
 
 ##### `port`
-The UDP port that this virtual server should listen on. Leave blank if this client is not tied to a virtual server. Default: `undef`.
+The UDP port that this virtual server should listen on. Leave blank if this client is not tied to a virtual server. Currently the port number is only used to create firewall exceptions and you only need to specify it if you set `firewall => true`. Use port range syntax as in [`puppetlabs-firewall`](https://forge.puppetlabs.com/puppetlabs/firewall). Default: `undef`.
 
 ##### `firewall`
 Create a firewall exception for this virtual server. If this is set to `true`, you must also supply `port` and either `ip` or `ip6`. Default: `false`.
