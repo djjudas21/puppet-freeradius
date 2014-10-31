@@ -115,12 +115,14 @@ freeradius::attr { 'eduroamlocal':
 Define RADIUS clients as seen in `clients.conf`
 
 ```puppet
-freeradius::client { "localhost-${::hostname}-lo":
-  ip        => '127.0.0.1',
+freeradius::client { "wlan-controller01":
+  ip        => '192.168.0.1',
   secret    => 'testing123',
-  shortname => 'localhost',
+  shortname => 'wlc01',
   nastype   => 'other',
-  }
+  port      => '1645-1646',
+  firewall  => true,
+}
 ```
 
 ##### `ip`
