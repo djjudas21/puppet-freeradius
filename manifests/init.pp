@@ -11,6 +11,7 @@ class freeradius (
   $winbind_support = false,
   $syslog          = false,
 ) inherits freeradius::params {
+
   file { 'radiusd.conf':
     name    => "${fr_basepath}/radiusd.conf",
     mode    => '0640',
