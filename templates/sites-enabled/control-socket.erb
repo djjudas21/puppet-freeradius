@@ -53,12 +53,12 @@ listen {
 	#
 	#  Name of user that is allowed to connect to the control socket.
 	#
-	uid = radiusd
+	uid = <%= @fr_user %>
 
 	#
 	#  Name of group that is allowed to connect to the control socket.
 	#
-	gid = radiusd
+	gid = <%= @fr_group %>
 
 	#
 	#  Access mode.
