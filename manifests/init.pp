@@ -9,6 +9,7 @@ class freeradius (
   $ldap_support    = false,
   $wpa_supplicant  = false,
   $winbind_support = false,
+  $syslog          = false,
 ) inherits freeradius::params {
 
   file { 'radiusd.conf':
@@ -163,11 +164,12 @@ class freeradius (
   }
 
   # Syslog rules
-  syslog::rule { 'radiusd-log':
-    command => "if \$programname == \'radiusd\' then ${freeradius::fr_logpath}/radius.log\n&~",
-    order   => '12',
+  if $syslog == true {
+    syslog::rule { 'radiusd-log':
+      command => "if \$programname == \'radiusd\' then ${fr_logpath}/radius.log\n&~",
+      order   => '12',
+    }
   }
-
 
   # Install a couple of virtual servers needed on all FR installations
   if $control_socket == true {
