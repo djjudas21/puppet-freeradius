@@ -10,7 +10,7 @@ class freeradius (
   $wpa_supplicant  = false,
   $winbind_support = false,
   $syslog          = false,
-  ) inherits freeradius::params {
+) inherits freeradius::params {
   file { 'radiusd.conf':
     name    => "${fr_basepath}/radiusd.conf",
     mode    => '0640',
@@ -163,9 +163,6 @@ class freeradius (
   }
 
   # Syslog rules
-  syslog::rule { 'radiusd-log':
-    command => "if \$programname == \'radiusd\' then ${fr_logpath}/radius.log\n&~",
-    order   => '12',
   if $syslog == true {
     syslog::rule { 'radiusd-log':
       command => "if \$programname == \'radiusd\' then ${fr_logpath}/radius.log\n&~",
