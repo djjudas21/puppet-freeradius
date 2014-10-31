@@ -10,6 +10,8 @@ define freeradius::client (
   $netmask        = undef,
   $redirect       = undef,
   $port           = undef,
+  $srcip          = undef,
+  $firewall       = false,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
@@ -23,5 +25,34 @@ define freeradius::client (
     content => template('freeradius/client.conf.erb'),
     require => [File["${fr_basepath}/clients.d"], Group[$fr_group]],
     notify  => Service[$fr_service],
+  }
+
+  if $firewall {
+    if $port {
+      if $ip {
+        firewall { "100-${shortname}-${port}-v4":
+          proto  => 'udp',
+          dport  => $port,
+          action => 'accept',
+          source => $net ? {
+            undef   => $ip,
+            default => "${ip}/${net}",
+          },
+        }
+      } elsif $ip6 {
+        firewall { "100-${shortname}-${port}-v6":
+          proto    => 'udp',
+          dport    => $port,
+          action   => 'accept',
+          provider => 'ip6tables',
+          source   => $net ? {
+            undef   => $ip6,
+            default => "${ip6}/${net}",
+          },
+        }
+      }
+    } else {
+      fail('Must specify $port if you specify $firewall')
+    }
   }
 }
