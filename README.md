@@ -284,6 +284,13 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.1.3
+
+ * Add support for managing firewall rules automatically
+ * Add support for installation certificates & keys
+ * Make syslog support an optional component
+ * Various bugfixes
+
 ### 0.1.2
 
  * Improved modular installs with optional components
