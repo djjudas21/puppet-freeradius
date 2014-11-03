@@ -9,6 +9,7 @@
        * [`freeradius`](#freeradius)
     * [Resources](#resources)
        * [`freeradius::attr`](#freeradiusattr)
+       * [`freeradius::cert`](#freeradiuscert)
        * [`freeradius::client`](#freeradiusclient)
        * [`freeradius::config`](#freeradiusconfig)
        * [`freeradius::dictionary`](#freeradiusdictionary)
@@ -109,6 +110,21 @@ freeradius::attr { 'eduroamlocal':
   source => 'puppet:///modules/site_freeradius/eduroamlocal',
 }
 ```
+
+#### `freeradius::cert`
+
+Install certificates as provided. These are installed in `/etc/raddb/certs`
+
+```puppet
+freeradius::cert { 'mycert.pem':
+  source => 'puppet:///modules/site_freeradius/mycert.pem',
+  type   => 'key',
+}
+```
+
+##### `type`
+
+Set file permissions on the installed certificate differently depending on whether this is a private key or a public certificate. Note that the default is to treat the file as a private key and remove world-readable privileges. Allowable values: `cert`, `key`. Default: `key`.
 
 #### `freeradius::client`
 
