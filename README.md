@@ -281,6 +281,10 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.1.4
+
+ * Fix ambiguity about net/netmask in freeradius::client
+
 ### 0.1.3
 
  * Add support for managing firewall rules automatically
