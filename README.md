@@ -147,9 +147,6 @@ The IP address of the client.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutu
 ##### `ip6`
 The IPv6 address of the client. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
 
-##### `net`
-The netmask of the client, specified as an integer, e.g. `24`. Default: `undef`.
-
 ##### `shortname`
 A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section. Required.
 

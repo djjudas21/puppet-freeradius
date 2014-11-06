@@ -4,7 +4,6 @@ define freeradius::client (
   $secret,
   $ip             = undef,
   $ip6            = undef,
-  $net            = undef,
   $virtual_server = undef,
   $nastype        = undef,
   $netmask        = undef,
@@ -34,9 +33,9 @@ define freeradius::client (
           proto  => 'udp',
           dport  => $port,
           action => 'accept',
-          source => $net ? {
+          source => $netmask ? {
             undef   => $ip,
-            default => "${ip}/${net}",
+            default => "${ip}/${netmask}",
           },
         }
       } elsif $ip6 {
@@ -45,9 +44,9 @@ define freeradius::client (
           dport    => $port,
           action   => 'accept',
           provider => 'ip6tables',
-          source   => $net ? {
+          source   => $netmask ? {
             undef   => $ip6,
-            default => "${ip6}/${net}",
+            default => "${ip6}/${netmask}",
           },
         }
       }
