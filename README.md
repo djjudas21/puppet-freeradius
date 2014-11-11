@@ -65,7 +65,7 @@ The maximum number of requests which the server keeps track of. This should be 2
 Limit on the total number of servers running. Default: `4096`
 
 ##### `mysql_support`
-Install support for MySQL. Default: `false`
+Install support for MySQL. Note this only installs the package. Use `freeradius::sql` to configure SQL support. Default: `false`
 
 ##### `perl_support`
 Install support for Perl. Default: `false`
@@ -235,6 +235,43 @@ into `/etc/raddb/sites-enabled`
 ```puppet
 freeradius::site { 'inner-tunnel':
   source => 'puppet:///modules/site_freeradius/inner-tunnel',
+}
+```
+
+#### `freeradius::sql`
+
+Configure SQL connections. You can define multiple database connections by
+invoking this resource multiple times. If you are using MySQL, don't forget to
+also set `mysql_support => true` in the base `freeradius` class.
+
+##### `database`
+
+Default: `undef`. Required. Specify which FreeRADIUS database driver to use. Choose one of `mysql`, `mssql`, `oracle`, `postgresql`
+
+##### `server`
+
+Default: `localhost`. Specify hostname of IP address of the database server.
+
+##### `login`
+
+Default: `radius`. Username to connect to the databae.
+
+##### `password`
+
+Default: `undef`. Required. Password to connect to the database.
+
+##### `radius_db`
+
+Default: `radius`. Name of the database. Normally you should leave this alone. If you are using Oracle then use this instead:
+`(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=your_sid)))`.
+
+```puppet
+freeradius::sql { 'mydatabase':
+  database  => 'mysql',
+  server    => '192.168.0.1',
+  login     => 'radius',
+  password  => 'topsecret',
+  radius_db => 'radius',
 }
 ```
 
