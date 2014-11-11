@@ -82,7 +82,7 @@ sql {
 	# Setting this to MORE than the number of threads means
 	# that there are more connections than necessary.
 	# 
-	num_sql_socks = ${thread[pool].max_servers}
+	num_sql_socks = <%= @num_sql_socks %> 
 
 	# number of seconds to dely retrying on a failed database
 	# connection (per_socket)

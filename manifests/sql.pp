@@ -5,6 +5,7 @@ define freeradius::sql (
   $server = 'localhost',
   $login = 'radius',
   $radius_db = 'radius',
+  $num_sql_socks = '${thread[pool].max_servers}',
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service

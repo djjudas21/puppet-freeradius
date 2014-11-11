@@ -266,6 +266,14 @@ Default: `undef`. Required. Password to connect to the database.
 Default: `radius`. Name of the database. Normally you should leave this alone. If you are using Oracle then use this instead:
 `(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=your_sid)))`.
 
+##### `num_sql_socks`
+
+Default: same as `max_servers`. Number of sql connections to make to the database server. 
+Setting this to LESS than the number of threads means that some threads may starve, and
+you will see errors like "No connections available and at max connection limit". Setting
+this to MORE than the number of threads means that there are more connections than necessary.
+Leave blank to set it to the same value as the number of threads.
+
 ```puppet
 freeradius::sql { 'mydatabase':
   database  => 'mysql',
