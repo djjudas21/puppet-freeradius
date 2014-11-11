@@ -17,6 +17,7 @@
        * [`freeradius::module`](#freeradiusmodule)
        * [`freeradius::policy`](#freeradiuspolicy)
        * [`freeradius::site`](#freeradiussite)
+       * [`freeradius::sql`](#freeradiussql)
        * [`freeradius::statusclient`](#freeradiusstatusclient)
 4. [Limitations - OS compatibility, etc.](#limitations)
 5. [Development - Guide for contributing to the module](#development)
