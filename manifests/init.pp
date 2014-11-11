@@ -234,6 +234,7 @@ class freeradius (
     "${freeradius::fr_basepath}/sites-available/inner-tunnel",
     "${freeradius::fr_basepath}/proxy.conf",
     "${freeradius::fr_basepath}/clients.conf",
+    "${freeradius::fr_basepath}/sql.conf",
   ]:
     content => "# FILE INTENTIONALLY BLANK\n",
     mode    => '0644',
