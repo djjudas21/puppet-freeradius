@@ -245,6 +245,16 @@ Configure SQL connections. You can define multiple database connections by
 invoking this resource multiple times. If you are using MySQL, don't forget to
 also set `mysql_support => true` in the base `freeradius` class.
 
+```puppet
+freeradius::sql { 'mydatabase':
+  database  => 'mysql',
+  server    => '192.168.0.1',
+  login     => 'radius',
+  password  => 'topsecret',
+  radius_db => 'radius',
+}
+```
+
 ##### `database`
 
 Default: `undef`. Required. Specify which FreeRADIUS database driver to use. Choose one of `mysql`, `mssql`, `oracle`, `postgresql`
@@ -274,15 +284,6 @@ you will see errors like "No connections available and at max connection limit".
 this to MORE than the number of threads means that there are more connections than necessary.
 Leave blank to set it to the same value as the number of threads.
 
-```puppet
-freeradius::sql { 'mydatabase':
-  database  => 'mysql',
-  server    => '192.168.0.1',
-  login     => 'radius',
-  password  => 'topsecret',
-  radius_db => 'radius',
-}
-```
 
 #### `freeradius::statusclient`
 
