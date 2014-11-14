@@ -284,6 +284,16 @@ you will see errors like "No connections available and at max connection limit".
 this to MORE than the number of threads means that there are more connections than necessary.
 Leave blank to set it to the same value as the number of threads.
 
+##### `query_file`
+
+Default: `sql/${database}/dialup.conf`. Relative path to the file which contains your SQL queries. By
+default, points to the `dialup.conf` specific to your database engine, so leave this blank if you are
+using stock queries.
+
+If you need to use custom queries, it is recommended that you deploy your query file using
+`freeradius::script` to install the file into `/etc/raddb/scripts/custom_dialup.conf` and then
+set `query_file` to `scripts/custom_dialup.conf`.
+
 
 #### `freeradius::statusclient`
 

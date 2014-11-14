@@ -111,5 +111,5 @@ sql {
 	nas_table = "nas"
 
 	# Read driver-specific configuration
-	$INCLUDE sql/${database}/dialup.conf
+	$INCLUDE <%= @query_file %>
 }
