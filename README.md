@@ -338,6 +338,10 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.2.0
+
+ * Add support for customising `sql.conf` natively by adding `freeradius::sql`
+
 ### 0.1.4
 
  * Fix ambiguity about net/netmask in freeradius::client
