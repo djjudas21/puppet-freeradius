@@ -1,5 +1,9 @@
 # Install FreeRADIUS custom dictionaries
-define freeradius::dictionary ($source, $order = 50) {
+define freeradius::dictionary (
+  $source,
+  $order = 50,
+  $ensure = present,
+) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
@@ -7,6 +11,7 @@ define freeradius::dictionary ($source, $order = 50) {
 
   # Install dictionary in dictionary.d
   file { "${fr_basepath}/dictionary.d/dictionary.${name}":
+    ensure  => $ensure,
     mode    => '0644',
     owner   => 'root',
     group   => $fr_group,
@@ -17,10 +22,13 @@ define freeradius::dictionary ($source, $order = 50) {
 
   # Reference policy.d in the global includes file
   # If no order priority is given, assume 50
-  concat::fragment { "dictionary.${name}":
-    target  => "${fr_basepath}/dictionary",
-    content => "\$INCLUDE ${fr_basepath}/dictionary.d/dictionary.${name}\n",
-    order   => $order,
-    require => File["${fr_basepath}/dictionary.d/dictionary.${name}"],
+
+  if ($ensure == 'present') {
+    concat::fragment { "dictionary.${name}":
+      target  => "${fr_basepath}/dictionary",
+      content => "\$INCLUDE ${fr_basepath}/dictionary.d/dictionary.${name}\n",
+      order   => $order,
+      require => File["${fr_basepath}/dictionary.d/dictionary.${name}"],
+    }
   }
 }

@@ -1,11 +1,15 @@
 # Install FreeRADIUS helper scripts
-define freeradius::script ($source) {
+define freeradius::script (
+  $source,
+  $ensure = present,
+) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
   file { "${fr_basepath}/scripts/${name}":
+    ensure  => $ensure,
     mode    => '0750',
     owner   => 'root',
     group   => $fr_group,

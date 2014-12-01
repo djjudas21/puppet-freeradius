@@ -11,6 +11,7 @@ define freeradius::client (
   $port           = undef,
   $srcip          = undef,
   $firewall       = false,
+  $ensure         = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
@@ -18,6 +19,7 @@ define freeradius::client (
   $fr_group    = $::freeradius::params::fr_group
 
   file { "${fr_basepath}/clients.d/${shortname}.conf":
+    ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
@@ -26,7 +28,7 @@ define freeradius::client (
     notify  => Service[$fr_service],
   }
 
-  if $firewall {
+  if ($firewall and $ensure == 'present') {
     if $port {
       if $ip {
         firewall { "100-${shortname}-${port}-v4":

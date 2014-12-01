@@ -2,6 +2,7 @@
 define freeradius::cert (
   $source,
   $type = 'key',
+  $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
@@ -9,6 +10,7 @@ define freeradius::cert (
   $fr_group    = $::freeradius::params::fr_group
 
   file { "${fr_basepath}/certs/${name}":
+    ensure  => $ensure,
     mode    => $type ? {
       'key'   => '0640',
       'cert'  => '0644',

@@ -7,6 +7,7 @@ define freeradius::sql (
   $radius_db = 'radius',
   $num_sql_socks = '${thread[pool].max_servers}',
   $query_file = 'sql/${database}/dialup.conf',
+  $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
@@ -20,6 +21,7 @@ define freeradius::sql (
 
   # Generate a module config, based on sql.conf 
   file { "${fr_basepath}/modules/${name}":
+    ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
