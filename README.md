@@ -7,6 +7,7 @@
 3. [Usage - Configuration options and additional functionality](#usage)
     * [Classes](#classes)
        * [`freeradius`](#freeradius)
+       * [`freeradius::status_server`](#freeradiusstatus_server)
     * [Resources](#resources)
        * [`freeradius::attr`](#freeradiusattr)
        * [`freeradius::cert`](#freeradiuscert)
