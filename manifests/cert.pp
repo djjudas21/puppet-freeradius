@@ -9,13 +9,15 @@ define freeradius::cert (
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
+  $permission = $type ? {
+    'key'   => '0640',
+    'cert'  => '0644',
+    default => '0644',
+  }
+
   file { "${fr_basepath}/certs/${name}":
     ensure  => $ensure,
-    mode    => $type ? {
-      'key'   => '0640',
-      'cert'  => '0644',
-      default => '0644',
-    },
+    mode    => $permission,
     owner   => 'root',
     group   => $fr_group,
     source  => $source,
