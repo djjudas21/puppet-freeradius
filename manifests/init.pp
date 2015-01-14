@@ -166,7 +166,7 @@ class freeradius (
   # Syslog rules
   if $syslog == true {
     syslog::rule { 'radiusd-log':
-      command => "if \$programname == \'radiusd\' then ${fr_logpath}/radius.log\n&~",
+      command => "if \$programname == \'radiusd\' then ${freeradius::fr_logpath}/radius.log\n&~",
       order   => '12',
     }
   }
