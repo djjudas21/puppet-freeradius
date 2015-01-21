@@ -1,6 +1,7 @@
 # Install FreeRADIUS certificates
 define freeradius::cert (
-  $source,
+  $source = undef,
+  $content = undef,
   $type = 'key',
   $ensure = present,
 ) {
@@ -16,12 +17,13 @@ define freeradius::cert (
   }
 
   file { "${fr_basepath}/certs/${name}":
-    ensure  => $ensure,
-    mode    => $permission,
-    owner   => 'root',
-    group   => $fr_group,
-    source  => $source,
-    require => [File["${fr_basepath}/certs"], Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    ensure   => $ensure,
+    mode     => $permission,
+    owner    => 'root',
+    group    => $fr_group,
+    source   => $source,
+    content  => $content,
+    require  => [File["${fr_basepath}/certs"], Package[$fr_package], Group[$fr_group]],
+    notify   => Service[$fr_service],
   }
 }

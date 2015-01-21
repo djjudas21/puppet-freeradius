@@ -148,6 +148,13 @@ freeradius::cert { 'mycert.pem':
 }
 ```
 
+```puppet
+freeradius::cert { 'mycert.pem':
+  content => '<your key/cert content here>',
+  type    => 'key',
+}
+```
+
 ##### `type`
 
 Set file permissions on the installed certificate differently depending on whether this is a private key or a public certificate. Note that the default is to treat the file as a private key and remove world-readable privileges. Allowable values: `cert`, `key`. Default: `key`.
