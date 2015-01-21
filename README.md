@@ -211,6 +211,12 @@ freeradius::config { 'realm-checks.conf':
 }
 ```
 
+```puppet
+freeradius::config { 'realm-checks.conf':
+  content => template('your_template),
+}
+```
+
 #### `freeradius::dictionary`
 
 Install custom dictionaries without breaking the default FreeRADIUS dictionary. Custom dictionaries are installed in `/etc/raddb/dictionary.d` and automatically included in the global dictionary.
