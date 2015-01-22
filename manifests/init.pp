@@ -116,7 +116,7 @@ class freeradius (
 
   # radiusd always tests its config before restarting the service, to avoid outage. If the config is not valid, the service
   # won't get restarted, and the puppet run will fail.
-  service { 'radiusd':
+  service { $freeradius::fr_service:
     ensure     => running,
     name       => $freeradius::fr_service,
     require    => [Exec['radiusd-config-test'], File['radiusd.conf'], User[$freeradius::fr_user], Package[$freeradius::fr_package],],
