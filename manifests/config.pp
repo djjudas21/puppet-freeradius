@@ -1,6 +1,7 @@
 # Install FreeRADIUS config snippets
 define freeradius::config (
-  $source,
+  $source = undef,
+  $content = undef,
   $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
@@ -14,6 +15,7 @@ define freeradius::config (
     owner   => 'root',
     group   => $fr_group,
     source  => $source,
+    content => $content,
     require => [File["${fr_basepath}/conf.d"], Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
