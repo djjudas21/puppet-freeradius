@@ -245,6 +245,12 @@ freeradius::module { 'buffered-sql':
 }
 ```
 
+```puppet
+freeradius::module { 'buffered-sql':
+  content => template('some_template.erb)',
+}
+```
+
 #### `freeradius::policy`
 
 Install a policy from a flat file.
