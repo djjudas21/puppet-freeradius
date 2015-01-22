@@ -121,7 +121,7 @@ class freeradius (
     name       => $freeradius::fr_service,
     require    => [Exec['radiusd-config-test'], File['radiusd.conf'], User[$freeradius::fr_user], Package[$freeradius::fr_package],],
     enable     => true,
-    hasstatus  => true,
+    hasstatus  => $freeradius::fr_service_has_status,
     hasrestart => true,
   }
 
