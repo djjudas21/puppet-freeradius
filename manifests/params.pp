@@ -22,6 +22,13 @@ class freeradius::params {
     default  => 'radiusd',
   }
 
+  # Whether the FreeRADIUS init.d startup script has a status setting or not
+  $fr_service_has_status = $::osfamily ? {
+    'RedHat' => true,
+    'Debian' => false,
+    default  => false,
+  }
+
   # Default base path for FreeRADIUS configs
   $fr_basepath = $::osfamily ? {
     'RedHat' => '/etc/raddb',
