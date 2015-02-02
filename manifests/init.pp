@@ -34,9 +34,20 @@ class freeradius (
     "${freeradius::fr_basepath}/policy.d",
     "${freeradius::fr_basepath}/dictionary.d",
     "${freeradius::fr_basepath}/scripts",
-    "${freeradius::fr_basepath}/certs",
   ]:
     ensure  => directory,
+    mode    => '0750',
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service[$freeradius::fr_service],
+  }
+
+  # Create cert directory separately so we can set purge option
+  file { "${freeradius::fr_basepath}/certs":
+    ensure  => directory,
+    purge   => true,
+    recurse => true,
     mode    => '0750',
     owner   => 'root',
     group   => $freeradius::fr_group,
@@ -201,6 +212,12 @@ class freeradius (
     group   => $freeradius::fr_group,
     content => template('freeradius/radiusd.logrotate.erb'),
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+  }
+
+  # Placeholder resource for dh and random as they are dynamically generated, so they
+  # exist in the catalogue and don't get purged
+  file { ["${freeradius::fr_basepath}/certs/dh", "${freeradius::fr_basepath}/certs/random"]:
+    require => Exec['dh', 'random'],
   }
 
   # Generate global SSL parameters
