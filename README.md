@@ -139,7 +139,7 @@ freeradius::attr { 'eduroamlocal':
 
 #### `freeradius::cert`
 
-Install certificates as provided. These are installed in `/etc/raddb/certs`
+Install certificates as provided. These are installed in `/etc/raddb/certs`. Beware that any certificates *not* deployed by Puppet will be purged from this directory.
 
 ```puppet
 freeradius::cert { 'mycert.pem':
