@@ -185,7 +185,7 @@ class freeradius (
   # Install a couple of virtual servers needed on all FR installations
   if $control_socket == true {
     freeradius::site { 'control-socket':
-      source => template('freeradius/sites-enabled/control-socket.erb'),
+      content => template('freeradius/sites-enabled/control-socket.erb'),
     }
   }
 
