@@ -24,7 +24,6 @@ class freeradius (
 
   # Create various directories
   file { [
-    "${freeradius::fr_basepath}/clients.d",
     "${freeradius::fr_basepath}/statusclients.d",
     $freeradius::fr_basepath,
     "${freeradius::fr_basepath}/instantiate",
@@ -43,8 +42,11 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
 
-  # Create cert directory separately so we can set purge option
-  file { "${freeradius::fr_basepath}/certs":
+  # Create these directories separately so we can set purge option
+  file { [
+    "${freeradius::fr_basepath}/certs",
+    "${freeradius::fr_basepath}/clients.d",
+  ]:
     ensure  => directory,
     purge   => true,
     recurse => true,
