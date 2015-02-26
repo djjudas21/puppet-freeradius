@@ -10,6 +10,7 @@
        * [`freeradius::status_server`](#freeradiusstatus_server)
     * [Resources](#resources)
        * [`freeradius::attr`](#freeradiusattr)
+       * [`freeradius::blank`](#freeradiusblank)
        * [`freeradius::cert`](#freeradiuscert)
        * [`freeradius::client`](#freeradiusclient)
        * [`freeradius::config`](#freeradiusconfig)
@@ -135,6 +136,24 @@ Install arbitrary attribute filters from a flat file. These are installed in `/e
 freeradius::attr { 'eduroamlocal':
   source => 'puppet:///modules/site_freeradius/eduroamlocal',
 }
+```
+
+#### `freeradius::blank`
+
+Selectively blank certain stock config files that aren't required. This is preferable to deleting them
+because the package manager will replace certain files next time the package is upgraded, potentially
+causing unexpected behaviour.
+
+The resource title should be the relative path from the FreeRADIUS config directory to the file(s) you
+want to blank. You can pass multiple files in an array.
+
+```puppet
+freeradius::blank { 'sites-enabled/default': }
+
+freeradius::blank { [
+  'sites-enabled/default',
+  'eap.conf',
+]: }
 ```
 
 #### `freeradius::cert`
