@@ -7,6 +7,8 @@ define freeradius::sql (
   $radius_db = 'radius',
   $num_sql_socks = '${thread[pool].max_servers}',
   $query_file = 'sql/${database}/dialup.conf',
+  $lifetime = '0',
+  $max_queries = '0',
   $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package

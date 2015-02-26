@@ -328,6 +328,16 @@ you will see errors like "No connections available and at max connection limit".
 this to MORE than the number of threads means that there are more connections than necessary.
 Leave blank to set it to the same value as the number of threads.
 
+##### `lifetime`
+
+Default: `0`. Lifetime of an SQL socket. If you are having network issues such as TCP sessions expiring, you may need to set the socket
+lifetime. If set to non-zero, any open connections will be closed `$lifetime` seconds after they were first opened.
+
+##### `max_queries`
+
+Default: `0`. Maximum number of queries used by an SQL socket. If you are having issues with SQL sockets lasting "too long", you can
+limit the number of queries performed over one socket. After `$max_qeuries`, the socket will be closed. Use 0 for "no limit".
+
 ##### `query_file`
 
 Default: `sql/${database}/dialup.conf`. Relative path to the file which contains your SQL queries. By
