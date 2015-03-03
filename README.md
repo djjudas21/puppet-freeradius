@@ -326,6 +326,10 @@ Default: `undef`. Required. Specify which FreeRADIUS database driver to use. Cho
 
 Default: `localhost`. Specify hostname of IP address of the database server.
 
+##### `port`
+
+TCP port to connect to the database. Default: `3306`.
+
 ##### `login`
 
 Default: `radius`. Username to connect to the databae.
@@ -367,6 +371,70 @@ If you need to use custom queries, it is recommended that you deploy your query 
 `freeradius::script` to install the file into `/etc/raddb/scripts/custom_dialup.conf` and then
 set `query_file` to `scripts/custom_dialup.conf`.
 
+##### `acct_table1`
+
+If you want both stop and start records logged to the same SQL table, leave this as is.  If you want them in
+different tables, put the start table in `$acct_table1` and stop table in `$acct_table2`. Default : `radacct`
+
+##### `acct_table2`
+
+If you want both stop and start records logged to the same SQL table, leave this as is.  If you want them in
+different tables, put the start table in `$acct_table1` and stop table in `$acct_table2`. Default : `radacct`
+
+##### `postauth_table`
+
+Table for storing data after authentication
+
+##### `authcheck_table`
+
+Default: `radcheck`
+
+##### `authreply_table`
+
+Default: `radreply`
+
+##### `groupcheck_table`
+
+Default: `radgroupcheck`
+
+##### `groupreply_table`
+
+Default: `radgroupreply`
+
+##### `usergroup_table`
+
+Table to keep group info. Default: `radusergroup`
+
+##### `read_groups`
+
+If set to `yes` (default) we read the group tables. If set to `no` the user MUST have `Fall-Through = Yes`
+in the radreply table. Default: `yes`.
+
+##### `deletestalesessions`
+
+Remove stale session if checkrad does not see a double login. Default: `yes`.
+
+##### `sqltrace`
+
+Print all SQL statements when in debug mode (-x). Default: `no`.
+
+##### `sqltracefile`
+
+Location for SQL statements to be stored if `$sqltrace = yes`. Default:
+`${logdir}/sqltrace.sql`
+
+##### `connect_failure_retry_delay`
+
+Number of seconds to dely retrying on a failed database connection (per socket). Default: `60`.
+
+##### `nas_table`
+
+Table to keep radius client info. Default: `nas`.
+
+#### `readclients`
+
+Set to `yes` to read radius clients from the database (`$nas_table`) Clients will ONLY be read on server startup. For performance
+and security reasons, finding clients via SQL queries CANNOT be done "live" while the server is running. Default: `no`.
 
 #### `freeradius::statusclient`
 

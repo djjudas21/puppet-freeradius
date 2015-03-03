@@ -13,7 +13,7 @@ sql <%= @name %> {
 
 	# Connection info:
 	server = "<%= @server %>"
-	#port = 3306
+	port = "<%= @port %>"
 	login = "<%= @login %>"
 	password = "<%= @password %>"
 
@@ -24,31 +24,31 @@ sql <%= @name %> {
 	# same SQL table, leave this as is.  If you want them in
 	# different tables, put the start table in acct_table1
 	# and stop table in acct_table2
-	acct_table1 = "radacct"
-	acct_table2 = "radacct"
+	acct_table1 = "<%= @acct_table1 %>"
+	acct_table2 = "<%= @acct_table2 %>"
 
 	# Allow for storing data after authentication
-	postauth_table = "radpostauth"
+	postauth_table = "<%= @postauth_table %>"
 
-	authcheck_table = "radcheck"
-	authreply_table = "radreply"
+	authcheck_table = "<%= @authcheck_table %>"
+	authreply_table = "<%= @authreply_table %>"
 
-	groupcheck_table = "radgroupcheck"
-	groupreply_table = "radgroupreply"
+	groupcheck_table = "<%= @groupcheck_table %>"
+	groupreply_table = "<%= @groupreply_table %>"
 
 	# Table to keep group info
-	usergroup_table = "radusergroup"
+	usergroup_table = "<%= @usergroup_table %>"
 
 	# If set to 'yes' (default) we read the group tables
 	# If set to 'no' the user MUST have Fall-Through = Yes in the radreply table
-	# read_groups = yes
+	read_groups = <%= @read_groups %>
 
 	# Remove stale session if checkrad does not see a double login
-	deletestalesessions = yes
+	deletestalesessions = <%= @deletestalesessions %>
 
 	# Print all SQL statements when in debug mode (-x)
-	sqltrace = no
-	sqltracefile = ${logdir}/sqltrace.sql
+	sqltrace = <%= @sqltrace %>
+	sqltracefile = <%= @sqltracefile %>
 
 	# number of sql connections to make to server
 	#
@@ -62,7 +62,7 @@ sql <%= @name %> {
 
 	# number of seconds to dely retrying on a failed database
 	# connection (per_socket)
-	connect_failure_retry_delay = 60
+	connect_failure_retry_delay = <%= @connect_failure_retry_delay %>
 
 	# lifetime of an SQL socket.  If you are having network issues
 	# such as TCP sessions expiring, you may need to set the socket
@@ -80,10 +80,10 @@ sql <%= @name %> {
 	# Clients will ONLY be read on server startup.  For performance
 	# and security reasons, finding clients via SQL queries CANNOT
 	# be done "live" while the server is running.
-	#readclients = yes
+	readclients = <%= @readclients %>
 
 	# Table to keep radius client info
-	nas_table = "nas"
+	nas_table = <%= @nas_table %>
 
 	# Read driver-specific configuration
 	$INCLUDE <%= @query_file %>

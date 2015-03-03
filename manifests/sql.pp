@@ -10,6 +10,22 @@ define freeradius::sql (
   $lifetime = '0',
   $max_queries = '0',
   $ensure = present,
+  $acct_table1 = 'radacct',
+  $acct_table2 = 'radacct',
+  $postauth_table = 'radpostauth',
+  $authcheck_table = 'radcheck',
+  $authreply_table = 'radreply',
+  $groupcheck_table = 'radgroupcheck',
+  $groupreply_table = 'radgroupreply',
+  $usergroup_table = 'radusergroup',
+  $deletestalesessions = 'yes',
+  $sqltrace = 'no',
+  $sqltracefile = '${logdir}/sqltrace.sql',
+  $connect_failure_retry_delay = '60',
+  $nas_table = 'nas',
+  $read_groups = 'yes',
+  $port = '3306',
+  $readclients = 'no',
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
