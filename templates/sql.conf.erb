@@ -4,32 +4,11 @@
 ##
 ##	$Id$
 
-######################################################################
-#
-#  Configuration for the SQL module
-#
-#  The database schemas and queries are located in subdirectories:
-#
-#	sql/DB/schema.sql	Schema
-#	sql/DB/dialup.conf	Basic dialup (including policy) queries
-#	sql/DB/counter.conf	counter
-#	sql/DB/ippool.conf	IP Pools in SQL
-#	sql/DB/ippool.sql	schema for IP pools.
-#
-#  Where "DB" is mysql, mssql, oracle, or postgresql.
-#
-
 sql <%= @name %> {
-	#
-	#  Set the database to one of:
-	#
-	#	mysql, mssql, oracle, postgresql
-	#
+	#  Set the database to one of: mysql, mssql, oracle, postgresql
 	database = "<%= @database %>"
 
-	#
-	#  Which FreeRADIUS driver to use.
-	#
+	# Which FreeRADIUS driver to use.
 	driver = "rlm_sql_${database}"
 
 	# Connection info:
@@ -40,8 +19,6 @@ sql <%= @name %> {
 
 	# Database table configuration for everything except Oracle
 	radius_db = "<%= @radius_db %>"
-	# If you are using Oracle then use this instead
-        # radius_db = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=your_sid)))"
 
 	# If you want both stop and start records logged to the
 	# same SQL table, leave this as is.  If you want them in
@@ -81,7 +58,6 @@ sql <%= @name %> {
 	#
 	# Setting this to MORE than the number of threads means
 	# that there are more connections than necessary.
-	# 
 	num_sql_socks = <%= @num_sql_socks %> 
 
 	# number of seconds to dely retrying on a failed database
@@ -104,7 +80,6 @@ sql <%= @name %> {
 	# Clients will ONLY be read on server startup.  For performance
 	# and security reasons, finding clients via SQL queries CANNOT
 	# be done "live" while the server is running.
-	# 
 	#readclients = yes
 
 	# Table to keep radius client info
