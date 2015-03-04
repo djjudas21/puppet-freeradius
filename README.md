@@ -479,6 +479,11 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.3.7
+
+ * Minor linting of code to improve score
+ * Minor linting of metadata to improve score
+
 ### 0.3.6
 
  * Bugfixes and feature improvements in `freeradius::sql`
