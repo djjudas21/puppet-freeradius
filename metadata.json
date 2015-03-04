@@ -3,7 +3,7 @@
   "version": "0.3.6",
   "author": "jgazeley",
   "summary": "Install and configure FreeRADIUS",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "source": "https://github.com/djjudas21/puppet-freeradius",
   "project_page": "https://github.com/djjudas21/puppet-freeradius",
   "issues_url": "https://github.com/djjudas21/puppet-freeradius/issues",
