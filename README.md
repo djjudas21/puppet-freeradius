@@ -479,6 +479,10 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.3.6
+
+ * Bugfixes and feature improvements in `freeradius::sql`
+
 ### 0.3.5
 
  * Add ability to customise SQL socket lifetimes
