@@ -11,6 +11,6 @@ define freeradius::blank {
     group   => $fr_group,
     require => [File[$fr_basepath], Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
-    content => "# This file is intentionally left blank to reduce complexity. Blanking it but leaving it present is safer than deleting it, since the package manager will replace some files if they are deleted, leading to unexpected behaviour!",
+    content => '# This file is intentionally left blank to reduce complexity. Blanking it but leaving it present is safer than deleting it, since the package manager will replace some files if they are deleted, leading to unexpected behaviour!',
   }
 }
