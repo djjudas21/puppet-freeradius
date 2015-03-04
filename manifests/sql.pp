@@ -39,7 +39,7 @@ define freeradius::sql (
   }
 
   # Hostnames
-  unless (is_hostname($server) or is_ip_address($server) {
+  unless (is_hostname($server) or is_ip_address($server)) {
     fail('$server must be a valid hostname or IP address')
   }
 
