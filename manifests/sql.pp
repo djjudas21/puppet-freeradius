@@ -33,11 +33,48 @@ define freeradius::sql (
   $fr_group    = $::freeradius::params::fr_group
 
   # Validate our inputs
-  if ($database != 'mysql' and $database != 'mssql' and $database != 'oracle' and $database != 'postgresql') {
-    error('$database must be one of mysql, mssql, oracle, postgresql')
+  # Validate multiple choice options
+  unless $database in ['mysql', 'mssql', 'oracle', 'postgresql'] {
+    fail('$database must be one of mysql, mssql, oracle, postgresql')
   }
 
-  # Generate a module config, based on sql.conf 
+  # Hostnames
+  unless (is_hostname($server) or is_ip_address($server) {
+    fail('$server must be a valid hostname or IP address')
+  }
+
+  # Validate integers
+  unless is_integer($port) {
+    fail('$port must be an integer')
+  }
+  unless is_integer($num_sql_socks) {
+    fail('$num_sql_socks must be an integer')
+  }
+  unless is_integer($lifetime) {
+    fail('$lifetime must be an integer')
+  }
+  unless is_integer($max_queries) {
+    fail('$max_queries must be an integer')
+  }
+  unless is_integer($connect_failure_retry_delay) {
+    fail('$connect_failure_retry_delay must be an integer')
+  }
+
+  # Fake booleans (FR uses yes/no instead of true/false)
+  unless $deletestalesessions in ['yes', 'no'] {
+    fail('$deletestalesessions must be yes or no')
+  }
+  unless $sqltrace in ['yes', 'no'] {
+    fail('$sqltrace must be yes or no')
+  }
+  unless $read_groups in ['yes', 'no'] {
+    fail('$read_groups must be yes or no')
+  }
+  unless $readclients in ['yes', 'no'] {
+    fail('$readclients must be yes or no')
+  }
+
+  # Generate a module config, based on sql.conf
   file { "${fr_basepath}/modules/${name}":
     ensure  => $ensure,
     mode    => '0640',
