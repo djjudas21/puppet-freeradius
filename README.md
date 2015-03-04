@@ -479,6 +479,29 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.3.5
+
+ * Add ability to customise SQL socket lifetimes
+ * Purge all non-managed clients
+ * Add defined type to blank out unneeded config files without deleting them
+
+### 0.3.4
+
+ * Correctly pass template content to control-socket
+
+### 0.3.3
+
+ * The default behaviour is now to purge anything in ${confdir}/certs that is not managed by Puppet
+
+### 0.3.2
+
+ * Various improvements to support Debian family
+ * Optional content parameters in various resources
+
+### 0.3.1
+
+ * Fix a bug which prevents the module from working properly on Debian/Ubuntu (thanks @diranged)
+
 ### 0.3.0
 
  * Add `ensure` parameter to all defined types
