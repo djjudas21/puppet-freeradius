@@ -286,7 +286,7 @@ Install a helper script, e.g. which might be called upon by a virtual server. Th
 placed in `/etc/raddb/scripts` and are not automatically included by the server.
 
 ```puppet
-freeradius::site { 'myperlscript.pl':
+freeradius::script{ 'myperlscript.pl':
   source => 'puppet:///modules/site_freeradius/myperlscript.pl',
 }
 ```
