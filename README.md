@@ -294,7 +294,8 @@ freeradius::script{ 'myperlscript.pl':
 #### `freeradius::site`
 
 Install a virtual server (a.k.a. site) from a flat file. Sites are installed directly
-into `/etc/raddb/sites-enabled`
+into `/etc/raddb/sites-enabled`. Any files in this directory that are *not* managed by
+Puppet will be removed.
 
 ```puppet
 freeradius::site { 'inner-tunnel':
