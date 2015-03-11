@@ -105,7 +105,8 @@ class { 'freeradius':
 
 #### `freeradius::status_server`
 
-The `freeradius::status_server` class installs support for the [status server](http://wiki.freeradius.org/config/Status).
+The `freeradius::status_server` class enabled the [status server](http://wiki.freeradius.org/config/Status).
+To remove the status server, do not include this class and the server will be removed.
 
 ##### `secret`
 The shared secret for the status server. Required.
@@ -115,9 +116,6 @@ The port to listen for status requests on. Default: `18121`
 
 ##### `listen`
 The address to listen on. Defaults to listen on all addresses but you could set this to `$::ipaddress` or `127.0.0.1`.  Default: `*`
-
-##### `enable`
-Whether to enable the status server. Default: `true`
 
 ```puppet
   # Enable status server
