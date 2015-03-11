@@ -480,6 +480,10 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.3.8
+
+ * Purge all non-managed sites
+
 ### 0.3.7
 
  * Minor linting of code to improve score
