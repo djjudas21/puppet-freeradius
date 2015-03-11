@@ -491,6 +491,7 @@ development effort if the features aren't useful to my employer.
 
  * Move control_socket into its own class and add parameters
  * Improve the way the status_server is added or removed
+ * Delete all unmanaged sites from sites-available
 
 ### 0.3.8
 
