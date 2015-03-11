@@ -12,6 +12,10 @@ class freeradius (
   $syslog          = false,
 ) inherits freeradius::params {
 
+  if $control_socket == true {
+    warn('Use of the control_socket parameter in the freeradius class is deprecated. Please use the freeradius::control_socket class instead.')
+  }
+
   file { 'radiusd.conf':
     name    => "${freeradius::fr_basepath}/radiusd.conf",
     mode    => '0640',
@@ -184,13 +188,6 @@ class freeradius (
     syslog::rule { 'radiusd-log':
       command => "if \$programname == \'radiusd\' then ${freeradius::fr_logpath}/radius.log\n&~",
       order   => '12',
-    }
-  }
-
-  # Install a couple of virtual servers needed on all FR installations
-  if $control_socket == true {
-    freeradius::site { 'control-socket':
-      content => template('freeradius/sites-enabled/control-socket.erb'),
     }
   }
 

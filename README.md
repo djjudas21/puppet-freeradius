@@ -8,6 +8,7 @@
     * [Classes](#classes)
        * [`freeradius`](#freeradius)
        * [`freeradius::status_server`](#freeradiusstatus_server)
+       * [`freeradius::control_socket`](#freeradiuscontrol_socket)
     * [Resources](#resources)
        * [`freeradius::attr`](#freeradiusattr)
        * [`freeradius::blank`](#freeradiusblank)
@@ -125,6 +126,14 @@ Whether to enable the status server. Default: `true`
     secret => 't0pSecret!',
   }
 ```
+
+#### `freeradius::control_socket`
+
+The `freeradius::control_socket` class enables the control socket which can be used with [RADMIN](http://freeradius.org/radiusd/man/radmin.html).
+To remove the control socket, do not include this class and the socket will be removed.
+
+##### `mode`
+Whether the control socket should be read-only or read-write. Choose from `ro`, `rw`. Default: `ro`.
 
 ### Resources
 
