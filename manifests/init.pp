@@ -48,6 +48,7 @@ class freeradius (
     "${freeradius::fr_basepath}/certs",
     "${freeradius::fr_basepath}/clients.d",
     "${freeradius::fr_basepath}/sites-enabled",
+    "${freeradius::fr_basepath}/sites-available",
   ]:
     ensure  => directory,
     purge   => true,
