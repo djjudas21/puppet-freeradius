@@ -30,7 +30,6 @@ class freeradius (
   file { [
     "${freeradius::fr_basepath}/statusclients.d",
     $freeradius::fr_basepath,
-    "${freeradius::fr_basepath}/instantiate",
     "${freeradius::fr_basepath}/conf.d",
     "${freeradius::fr_basepath}/attr.d",
     "${freeradius::fr_basepath}/users.d",
@@ -53,6 +52,7 @@ class freeradius (
     "${freeradius::fr_basepath}/clients.d",
     "${freeradius::fr_basepath}/sites-enabled",
     "${freeradius::fr_basepath}/sites-available",
+    "${freeradius::fr_basepath}/instantiate",
   ]:
     ensure  => directory,
     purge   => true,
