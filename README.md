@@ -487,6 +487,11 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.4.1
+
+ * Cease management of custom logging modules `logtofile` and `logtosyslog` since it does not make sense to manage these globally 
+ * Purge instantiation of unused modules
+
 ### 0.4.0
 
  * Move control_socket into its own class and add parameters

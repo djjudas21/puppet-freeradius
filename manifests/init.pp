@@ -176,13 +176,6 @@ class freeradius (
     source  => 'puppet:///modules/freeradius/modules/detail.log',
   }
 
-  ::freeradius::module { 'logtosyslog':
-    source => 'puppet:///modules/freeradius/modules/logtosyslog',
-  }
-  ::freeradius::module { 'logtofile':
-    source => 'puppet:///modules/freeradius/modules/logtofile',
-  }
-
   # Syslog rules
   if $syslog == true {
     syslog::rule { 'radiusd-log':
