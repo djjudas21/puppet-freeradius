@@ -496,6 +496,10 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.4.2
+
+ * Provide new SQL option custom_query_file
+
 ### 0.4.1
 
  * Cease management of custom logging modules `logtofile` and `logtosyslog` since it does not make sense to manage these globally 
