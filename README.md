@@ -371,6 +371,8 @@ limit the number of queries performed over one socket. After `$max_qeuries`, the
 
 ##### `query_file`
 
+**`query_file` has been deprecated - use `custom_query_file` instead**
+
 Default: `sql/${database}/dialup.conf`. Relative path to the file which contains your SQL queries. By
 default, points to the `dialup.conf` specific to your database engine, so leave this blank if you are
 using stock queries.
@@ -378,6 +380,13 @@ using stock queries.
 If you need to use custom queries, it is recommended that you deploy your query file using
 `freeradius::script` to install the file into `/etc/raddb/scripts/custom_dialup.conf` and then
 set `query_file` to `scripts/custom_dialup.conf`.
+
+##### `custom_query_file`
+
+Default: `null`. Puppet fileserver path to a file which contains your SQL queries, i.e. `dialup.conf`. This
+option is intended to be a replacment for `query_file`, which requires separate deployment of the file. This
+option allows you to specify a Puppet-managed custom `dialup.conf` which is installed and loaded automatically.
+`query_file` must be left blank if you use `custom_query_file`.
 
 ##### `acct_table1`
 

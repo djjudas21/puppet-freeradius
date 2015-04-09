@@ -7,6 +7,7 @@ define freeradius::sql (
   $radius_db = 'radius',
   $num_sql_socks = '${thread[pool].max_servers}',
   $query_file = 'sql/${database}/dialup.conf',
+  $custom_query_file = '',
   $lifetime = '0',
   $max_queries = '0',
   $ensure = present,
@@ -85,4 +86,16 @@ define freeradius::sql (
     notify  => Service[$fr_service],
   }
 
+  # Install custom query file
+  if ($custom_query_file) {
+    file { "${fr_basepath}/sql/${database}/dialup.conf":
+      ensure  => $ensure,
+      mode    => '0640',
+      owner   => 'root',
+      group   => $fr_group,
+      source  => $custom_query_file,
+      require => [Package[$fr_package], Group[$fr_group]],
+      notify  => Service[$fr_service],
+    }
+  }
 }
