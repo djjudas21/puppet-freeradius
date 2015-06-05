@@ -98,4 +98,17 @@ define freeradius::sql (
       notify  => Service[$fr_service],
     }
   }
+
+  # Install rotation for sqltrace if we are using it
+  if ($sqltrace == 'yes') {
+    logrotate::rule { 'sqltrace':
+      path         => "{$freeradius::fr_logpath}/${sqltracefile}",
+      rotate_every => 'week',
+      rotate       => 1,
+      create       => true,
+      compress     => true,
+      missingok    => true,
+      postrotate   => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+    }
+  }
 }
