@@ -496,6 +496,10 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.4.3
+
+ * Manage log rotation with [rodjek/logrotate](https://forge.puppetlabs.com/rodjek/logrotate) instead of deploying flat files
+
 ### 0.4.2
 
  * Provide new SQL option custom_query_file
