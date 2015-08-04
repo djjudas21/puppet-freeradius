@@ -496,6 +496,10 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.4.4
+
+ * Fix bug displaying deprecation notice and update documentation to reflect this
+
 ### 0.4.3
 
  * Manage log rotation with [rodjek/logrotate](https://forge.puppetlabs.com/rodjek/logrotate) instead of deploying flat files
