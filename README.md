@@ -60,7 +60,7 @@ have many parameters as most values are hard-coded. I am working on parameterisi
 of the global settings to increase flexibility. Patches are welcome.
 
 ##### `control_socket`
-Enable the `control-socket` virtual server. See also the `radmin` program. Default: `false`
+Use of the control_socket parameter in the freeradius class is deprecated. Use the `freeradius::control_socket` class instead.
 
 ##### `max_requests`
 The maximum number of requests which the server keeps track of. This should be 256 multiplied by the number of clients. Default: `4096`
