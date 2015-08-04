@@ -13,7 +13,7 @@ class freeradius (
 ) inherits freeradius::params {
 
   if $control_socket == true {
-    warn('Use of the control_socket parameter in the freeradius class is deprecated. Please use the freeradius::control_socket class instead.')
+    warning('Use of the control_socket parameter in the freeradius class is deprecated. Please use the freeradius::control_socket class instead.')
   }
 
   file { 'radiusd.conf':
