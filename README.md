@@ -91,7 +91,6 @@ Add a syslog rule (using the `jgazeley/syslog` module). Default: `false`.
 
 ```puppet
 class { 'freeradius':
-  control_socket  => true,
   max_requests    => 4096,
   max_servers     => 4096,
   mysql_support   => true,
@@ -132,6 +131,13 @@ To remove the control socket, do not include this class and the socket will be r
 
 ##### `mode`
 Whether the control socket should be read-only or read-write. Choose from `ro`, `rw`. Default: `ro`.
+
+```puppet
+  # Enable control socket
+  class { 'freeradius::control_socket':
+    mode => 'ro',
+  }
+```
 
 ### Resources
 
