@@ -212,17 +212,18 @@ class freeradius (
   }
 
   logrotate::rule { 'checkrad':
-    path         => "${freeradius::fr_logpath}/checkrad.log",
-    rotate_every => 'week',
-    rotate       => 1,
-    create       => true,
-    missingok    => true,
-    compress     => true,
-    postrotate   => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+    path          => "${freeradius::fr_logpath}/checkrad.log",
+    rotate_every  => 'week',
+    rotate        => 1,
+    create        => true,
+    missingok     => true,
+    compress      => true,
+    postrotate    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+    sharedscripts => true,
   }
 
   logrotate::rule { 'radiusd':
-    path          => "${freeradius::fr_logpath}/rad*",
+    path          => "${freeradius::fr_logpath}/radius*log",
     rotate_every  => 'week',
     rotate        => 26,
     create        => true,
