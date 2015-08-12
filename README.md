@@ -502,6 +502,10 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 0.4.5
+
+ * Tweak wildcard matching on logrotate config
+
 ### 0.4.4
 
  * Fix bug displaying deprecation notice and update documentation to reflect this
