@@ -223,7 +223,7 @@ class freeradius (
   }
 
   logrotate::rule { 'radiusd':
-    path          => "${freeradius::fr_logpath}/radius*log",
+    path          => "${freeradius::fr_logpath}/radius*.log",
     rotate_every  => 'week',
     rotate        => 26,
     create        => true,
