@@ -203,7 +203,7 @@ class freeradius (
   logrotate::rule { 'radacct':
     path          => "${freeradius::fr_logpath}/radacct/*/*.log",
     rotate_every  => 'day',
-    rotate        => 7,
+    rotate        => '7',
     create        => false,
     missingok     => true,
     compress      => true,
@@ -214,7 +214,7 @@ class freeradius (
   logrotate::rule { 'checkrad':
     path          => "${freeradius::fr_logpath}/checkrad.log",
     rotate_every  => 'week',
-    rotate        => 1,
+    rotate        => '1',
     create        => true,
     missingok     => true,
     compress      => true,
@@ -225,7 +225,7 @@ class freeradius (
   logrotate::rule { 'radiusd':
     path          => "${freeradius::fr_logpath}/radius*.log",
     rotate_every  => 'week',
-    rotate        => 26,
+    rotate        => '26',
     create        => true,
     missingok     => true,
     compress      => true,
