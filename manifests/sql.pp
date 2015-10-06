@@ -32,6 +32,7 @@ define freeradius::sql (
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
+  $fr_logpath  = $::freeradius::params::fr_logpath
 
   # Validate our inputs
   # Validate multiple choice options
@@ -102,7 +103,7 @@ define freeradius::sql (
   # Install rotation for sqltrace if we are using it
   if ($sqltrace == 'yes') {
     logrotate::rule { 'sqltrace':
-      path         => "{$freeradius::fr_logpath}/${sqltracefile}",
+      path         => "${fr_logpath}/${sqltracefile}",
       rotate_every => 'week',
       rotate       => 1,
       create       => true,
