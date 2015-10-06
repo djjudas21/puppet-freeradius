@@ -89,8 +89,13 @@ define freeradius::sql (
   }
 
   # Install custom query file
+  $queryfile = $::freeradius_version ? {
+    /^2\./  => "${fr_basepath}/sql/${database}/dialup.conf",
+    /^3\./  => "${fr_basepath}/sql/queries.conf",
+    default => "${fr_basepath}/sql/queries.conf",
+  }
   if ($custom_query_file) {
-    file { "${fr_basepath}/sql/${database}/dialup.conf":
+    file { $queryfile:
       ensure  => $ensure,
       mode    => '0640',
       owner   => 'root',
