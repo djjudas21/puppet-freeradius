@@ -36,6 +36,13 @@ class freeradius::params {
     default  => '/etc/raddb',
   }
 
+  # Default module path
+  $fr_modulepath = $::freeradius_version ? {
+    /^2\./    => "${fr_basepath}/modules",
+    /^3\./    => "${fr_basepath}/mods-enabled",
+    default => "${fr_basepath}/modules",
+  }
+
   # Path for FreeRADIUS logs
   $fr_logpath = $::osfamily ? {
     'RedHat' => '/var/log/radius',
