@@ -76,7 +76,7 @@ define freeradius::sql (
   }
 
   # Generate a module config, based on sql.conf
-  file { "${fr_basepath}/modules/${name}":
+  file { "${fr_modulepath}/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
