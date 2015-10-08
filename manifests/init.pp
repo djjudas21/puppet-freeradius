@@ -21,7 +21,7 @@ class freeradius (
     mode    => '0640',
     owner   => 'root',
     group   => $freeradius::fr_group,
-    content => template('freeradius/radiusd.conf.erb'),
+    content => template("freeradius/radiusd.conf.fr${::freeradius_maj_version}.erb"),
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
     notify  => Service[$freeradius::fr_service],
   }
