@@ -55,13 +55,13 @@ exec_prefix = /usr
 sysconfdir = /etc
 localstatedir = /var
 sbindir = /usr/sbin
-logdir = ${localstatedir}/log/radius
+logdir = <%= @fr_logpath %>
 raddbdir = ${sysconfdir}/raddb
 radacctdir = ${logdir}/radacct
 
 #
 #  name of the running server.  See also the "-n" command-line option.
-name = radiusd
+name = <%= @fr_service %>
 
 #  Location of config and logfiles.
 confdir = ${raddbdir}
@@ -207,7 +207,7 @@ cleanup_delay = 5
 #
 #  Useful range of values: 256 to infinity
 #
-max_requests = 1024
+max_requests = <%= @max_requests %>
 
 #  hostname_lookups: Log the names of clients or just their IP addresses
 #  e.g., www.freeradius.org (on) or 206.47.27.232 (off).
@@ -414,8 +414,8 @@ security {
 	#  member.  This can allow for some finer-grained access
 	#  controls.
 	#
-	user = radiusd
-	group = radiusd
+	user = <%= @fr_user%>
+	group = <%= @fr_group%>
 
 	#  Core dumps are a bad thing.  This should only be set to
 	#  'yes' if you're debugging a problem with the server.
@@ -555,7 +555,7 @@ thread pool {
 	#
 	#  For more information, see 'max_request_time', above.
 	#
-	max_servers = 32
+	max_servers = <%= @max_servers %>
 
 	#  Server-pool size regulation.  Rather than making you guess
 	#  how many servers you need, FreeRADIUS dynamically adapts to
@@ -667,7 +667,7 @@ modules {
 	#  section, such as authorize, authenticate, accounting,
 	#  pre/post-proxy, etc.
 	#
-	$INCLUDE mods-enabled/
+	$INCLUDE <%= @fr_moduledir %>
 }
 
 # Instantiation
