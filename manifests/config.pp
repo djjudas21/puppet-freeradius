@@ -16,7 +16,7 @@ define freeradius::config (
     group   => $fr_group,
     source  => $source,
     content => $content,
-    require => [File[$fr_moduleconfigpath], Package[$fr_package], Group[$fr_group]],
+    require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
 }
