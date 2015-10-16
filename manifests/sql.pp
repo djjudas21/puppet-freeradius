@@ -77,17 +77,6 @@ define freeradius::sql (
     fail('$readclients must be yes or no')
   }
 
-  # Generate a module config, based on sql.conf
-  file { "${fr_modulepath}/${name}":
-    ensure  => $ensure,
-    mode    => '0640',
-    owner   => 'root',
-    group   => $fr_group,
-    content => template('freeradius/sql.conf.erb'),
-    require => [Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
-  }
-
   # Determine default location of query file
   $queryfile = $::freeradius_version ? {
     /^2\./  => "${fr_basepath}/sql/${database}/dialup.conf",
@@ -102,6 +91,17 @@ define freeradius::sql (
     ::freeradius::config { "$custom_query_file_path":
       source => $custom_query_file,
     }
+  }
+
+  # Generate a module config, based on sql.conf
+  file { "${fr_modulepath}/${name}":
+    ensure  => $ensure,
+    mode    => '0640',
+    owner   => 'root',
+    group   => $fr_group,
+    content => template('freeradius/sql.conf.erb'),
+    require => [Package[$fr_package], Group[$fr_group]],
+    notify  => Service[$fr_service],
   }
 
   # Install rotation for sqltrace if we are using it
