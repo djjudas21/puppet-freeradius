@@ -88,21 +88,18 @@ define freeradius::sql (
     notify  => Service[$fr_service],
   }
 
-  # Install custom query file
+  # Determine default location of query file
   $queryfile = $::freeradius_version ? {
     /^2\./  => "${fr_basepath}/sql/${database}/dialup.conf",
     /^3\./  => "${fr_basepath}/sql/queries.conf",
     default => "${fr_basepath}/sql/queries.conf",
   }
+
+  # Install custom query file
   if ($custom_query_file) {
-    file { $queryfile:
-      ensure  => $ensure,
-      mode    => '0640',
-      owner   => 'root',
-      group   => $fr_group,
-      source  => $custom_query_file,
-      require => [Package[$fr_package], Group[$fr_group]],
-      notify  => Service[$fr_service],
+    ::freeradius::config { "${name}-queries.conf":
+      name   => "${fr_moduleconfigpath}/${title}",
+      source => $custom_query_file,
     }
   }
 
