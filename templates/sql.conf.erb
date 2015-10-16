@@ -86,6 +86,6 @@ sql <%= @name %> {
 	nas_table = <%= @nas_table %>
 
 	# Read driver-specific configuration
-	$INCLUDE <%if @custom_query_file != '' %><%= @custom_query_file %><% else %><%= @query_file %><% end %>
+	$INCLUDE <%if @custom_query_file != '' %><%= @custom_query_file_path %><% else %><%= @query_file %><% end %>
 
 }
