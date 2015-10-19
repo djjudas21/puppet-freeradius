@@ -28,12 +28,13 @@ define freeradius::sql (
   $port = '3306',
   $readclients = 'no',
 ) {
-  $fr_package    = $::freeradius::params::fr_package
-  $fr_service    = $::freeradius::params::fr_service
-  $fr_basepath   = $::freeradius::params::fr_basepath
-  $fr_modulepath = $::freeradius::params::fr_modulepath
-  $fr_group      = $::freeradius::params::fr_group
-  $fr_logpath    = $::freeradius::params::fr_logpath
+  $fr_package          = $::freeradius::params::fr_package
+  $fr_service          = $::freeradius::params::fr_service
+  $fr_basepath         = $::freeradius::params::fr_basepath
+  $fr_modulepath       = $::freeradius::params::fr_modulepath
+  $fr_group            = $::freeradius::params::fr_group
+  $fr_logpath          = $::freeradius::params::fr_logpath
+  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
 
   # Validate our inputs
   # Validate multiple choice options
