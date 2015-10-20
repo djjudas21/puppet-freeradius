@@ -100,7 +100,7 @@ define freeradius::sql (
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
-    content => template('freeradius/sql.conf.erb'),
+    content => template("freeradius/sql.conf.fr${::freeradius_maj_version}.erb"),
     require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
