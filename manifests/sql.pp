@@ -89,7 +89,7 @@ define freeradius::sql (
   if ($custom_query_file != '') {
     $custom_query_file_path = "${fr_moduleconfigpath}/${name}-queries.conf"
 
-    ::freeradius::config { "$custom_query_file_path":
+    ::freeradius::config { "${name}-queries.conf":
       source => $custom_query_file,
     }
   }
