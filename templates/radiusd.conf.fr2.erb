@@ -590,7 +590,6 @@ security {
 #
 proxy_requests  = yes
 $INCLUDE proxy.conf
-# Proxy config now in conf.d and included automatically
 
 
 # CLIENTS CONFIGURATION
@@ -607,10 +606,6 @@ $INCLUDE proxy.conf
 #  information from the old-style configuration files.
 #
 $INCLUDE ${confdir}/clients.d/
-
-
-# CONFIG SNIPPETS
-$INCLUDE ${confdir}/conf.d/
 
 # POLICIES
 #$INCLUDE ${confdir}/policy.d/
@@ -739,7 +734,7 @@ modules {
 	#  referenced in a processing section, such as authorize,
 	#  authenticate, accounting, pre/post-proxy, etc.
 	#
-	$INCLUDE <%= @fr_modulepath %>
+	$INCLUDE <%= @fr_modulepath %>/
 
 	#  Extensible Authentication Protocol
 	#
