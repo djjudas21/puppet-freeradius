@@ -17,6 +17,7 @@
        * [`freeradius::config`](#freeradiusconfig)
        * [`freeradius::dictionary`](#freeradiusdictionary)
        * [`freeradius::instantiate`](#freeradiusinstantiate)
+       * [`freeradius::ldap`](#freeradiusldap)
        * [`freeradius::module`](#freeradiusmodule)
        * [`freeradius::policy`](#freeradiuspolicy)
        * [`freeradius::site`](#freeradiussite)
@@ -266,6 +267,93 @@ Instantiate a module that is not automatically instantiated.
 ```puppet
 freeradius::instantiate { 'mymodule': }
 ```
+
+#### `freeradius::ldap`
+
+Configure LDAP support for FreeRADIUS
+
+##### `identity`
+LDAP account for searching the directory. Required.
+
+##### `password`
+Password for the `identity` account. Required.
+
+##### `basedn`
+Unless overridden in another section, the dn from which all searches will start from. Required.
+
+##### `server`
+Hostname of IP address of the LDAP server. Note that this needs to match the name(s) in the LDAP server
+certificate, if you're using ldaps. Default: `localhost`
+
+##### `port`
+Port to connect to the LDAP server on. Default: `389`
+
+##### `uses`
+How many times the connection can be used before being re-established. This is useful for things
+like load balancers, which may exhibit sticky behaviour without it. `0` is unlimited. Default: `0`
+
+##### `idle`
+Sets the idle time before keepalive probes are sent. Default `60`
+
+This option may not be supported by your LDAP library. If this configuration entry appears in the
+output of `radiusd -X` then it is supported. Otherwise, it is unsupported and changing it will do nothing.
+
+##### `probes`
+Sets the maximum number of keepalive probes TCP should send before dropping the connection. Default: `3`
+
+This option may not be supported by your LDAP library. If this configuration entry appears in the
+output of `radiusd -X` then it is supported. Otherwise, it is unsupported and changing it will do nothing.
+
+##### `interval`
+Setss the interval in seconds between individual keepalive probes. Default: `3`
+
+This option may not be supported by your LDAP library. If this configuration entry appears in the
+output of `radiusd -X` then it is supported. Otherwise, it is unsupported and changing it will do nothing.
+
+##### `timeout`
+Number of seconds to wait for LDAP query to finish. Default: `10`
+
+##### `start`
+Connections to create during module instantiation. If the server cannot create specified number of
+connections during instantiation it will exit. Set to 0 to allow the server to start without the
+directory being available. This option only works with FR3; setting it on FR2 will have no effect.
+Default: `${thread[pool].start_servers}`
+
+##### `min`
+Minimum number of connections to keep open. This option only works with FR3; setting it on FR2 will have no effect.
+Default: `${thread[pool].min_spare_servers}`
+
+##### `max`
+Maximum number of connections. Default: `${thread[pool].max_servers}`
+
+##### `spare`
+Spare connections to be left idle. This option only works with FR3; setting it on FR2 will have no effect.
+Default: `${thread[pool].max_spare_servers}`
+
+##### `starttls`
+Set this to 'yes' to use TLS encrypted connections to the LDAP database by using the StartTLS extended operation.
+The StartTLS operation is supposed to be used with normal ldap connections instead of using ldaps (port 636) connections
+
+Default: `no`
+
+##### `cafile`
+Path to CA cert file for TLS
+
+##### `certfile`
+Path to cert file for TLS
+
+##### `keyfile`
+Path to key file for TLS
+
+##### `requirecert`
+Certificate Verification requirements. Choose from:
+'never' (do not even bother trying)
+'allow' (try, but don't fail if the certificate cannot be verified)
+'demand' (fail if the certificate does not verify)
+'hard'  (similar to 'demand' but fails if TLS cannot negotiate)
+
+Default: `allow`
+
 
 #### `freeradius::module`
 
