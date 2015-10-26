@@ -64,6 +64,12 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
 
+  # Delete some modules which come bundled with the server that we
+  # know break functionality out of the box with this config
+  freeradius::module { 'eap':
+    ensure => absent,
+  }
+
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
   concat { "${freeradius::fr_basepath}/policy.conf":
