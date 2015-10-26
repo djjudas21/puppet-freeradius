@@ -16,10 +16,13 @@
        * [`freeradius::client`](#freeradiusclient)
        * [`freeradius::config`](#freeradiusconfig)
        * [`freeradius::dictionary`](#freeradiusdictionary)
+       * [`freeradius::home_server`](#freeradiushomeserver)
+       * [`freeradius::home_server_pool`](#freeradiushomeserverpool)
        * [`freeradius::instantiate`](#freeradiusinstantiate)
        * [`freeradius::ldap`](#freeradiusldap)
        * [`freeradius::module`](#freeradiusmodule)
        * [`freeradius::policy`](#freeradiuspolicy)
+       * [`freeradius::realm`](#freeradiusrealm)
        * [`freeradius::site`](#freeradiussite)
        * [`freeradius::sql`](#freeradiussql)
        * [`freeradius::statusclient`](#freeradiusstatusclient)
@@ -259,6 +262,84 @@ freeradius::dictionary { 'mydict':
   source => 'puppet:///modules/site_freeradius/dictionary.mydict',
 }
 ```
+#### `freeradius::home_server`
+
+This section defines a "Home Server" which is another RADIUS server that gets sent proxied requests.
+
+##### `secret`
+
+The shared secret use to "encrypt" and "sign" packets between FreeRADIUS and the home server.
+
+##### `type`
+
+Home servers can be sent Access-Request packets or Accounting-Request packets. Allowed values are:
+* `auth` Handles Access-Request packets
+* `acct`  Handles Accounting-Request packets
+* `auth+acct` Handles Access-Request packets at "port" and Accounting-Request packets at "port + 1"
+* `coa` Handles CoA-Request and Disconnect-Request packets.
+
+Default: `auth`
+
+##### `ipaddr`
+
+IPv4 address or hostname of the home server. Specify one of `ipaddr`, `ipv6addr` or `virtual_server`
+
+##### `ipv6addr`
+
+IPv6 address or hostname of the home server. Specify one of `ipaddr`, `ipv6addr` or `virtual_server`
+
+##### `virtual_server`
+
+If you specify a virtual_server here, then requests will be proxied internally to that virtual server.
+These requests CANNOT be proxied again, however. The intent is to have the local server handle packets
+when all home servers are dead. Specify one of `ipaddr`, `ipv6addr` or `virtual_server`
+
+##### `port`
+
+The port to which packets are sent. Usually 1812 for type "auth", and  1813 for type "acct".
+Older servers may use 1645 and 1646. Use 3799 for type "coa" Default: `1812`
+
+##### `proto`
+The transport protocol. If unspecified, defaults to "udp", which is the traditional
+RADIUS transport. It may also be "tcp", in which case TCP will be used to talk to
+this home server. Default: `udp`
+
+
+#### `freeradius::home_server_pool`
+
+##### `home_server`
+
+An array of one or more home servers. The names of the home servers are NOT the hostnames, but the names
+of the sections. (e.g. `home_server foo {...}` has name "foo".
+
+Note that ALL home servers listed here have to be of the same type. i.e. they all have to be "auth", or they all have to
+be "acct", or they all have to be "auth+acct".
+
+
+##### `type`
+
+The type of this pool controls how home servers are chosen.
+
+* `fail-over` the request is sent to the first live home server in the list.  i.e. If the first home server is marked "dead", the second one is chosen, etc.
+* `load-balance` the least busy home server is chosen For non-EAP auth methods, and for acct packets, we recommend using "load-balance". It will ensure the highest availability for your network. 
+* `client-balance` the home server is chosen by hashing the source IP address of the packet. This configuration is most useful to do simple load balancing for EAP sessions
+* `client-port-balance` the home server is chosen by hashing the source IP address and source port of the packet.
+* `keyed-balance` the home server is chosen by hashing (FNV) the contents of the Load-Balance-Key attribute from the control items.
+
+The default type is `fail-over`.
+
+##### `virtual_server`
+
+A `virtual_server` may be specified here.  If so, the "pre-proxy" and "post-proxy" sections are called when
+the request is proxied, and when a response is received.
+
+##### `fallback`
+
+If ALL home servers are dead, then this "fallback" home server is used. If set, it takes precedence over any realm-based
+fallback, such as the DEFAULT realm.
+
+For reasons of stability, this home server SHOULD be a virtual server. Otherwise, the fallback may itself be dead!
+
 
 #### `freeradius::instantiate`
 
@@ -380,6 +461,37 @@ freeradius::policy { 'my-policies':
   source => 'puppet:///modules/site_freeradius/my-policies',
 }
 ```
+
+#### `freeradius::realm`
+
+Define a realm in `proxy.conf`. Realms point to pools of home servers.
+
+##### `virtual_server`
+
+Set this to "proxy" requests internally to a virtual server. The pre-proxy and post-proxy sections are run just as with any
+other kind of home server.  The virtual server then receives the request, and replies, just as with any other packet.
+Once proxied internally like this, the request CANNOT be proxied internally or externally.
+
+##### `auth_pool`
+
+For authentication, the `auth_pool` configuration item should point to a `home_server_pool` that was previously
+defined.  All of the home servers in the `auth_pool` must be of type `auth`.
+
+##### `acct_pool`
+
+For accounting, the `acct_pool` configuration item should point to a `home_server_pool` that was previously
+defined.  All of the home servers in the `acct_pool` must be of type `acct`.
+
+##### `pool`
+
+If you have a `home_server_pool` where all of the home servers are of type `auth+acct`, you can just use the `pool`
+configuration item, instead of specifying both `auth_pool` and `acct_pool`.
+
+##### `nostrip`
+
+Normally, when an incoming User-Name is matched against the realm, the realm name is "stripped" off, and the "stripped"
+user name is used to perform matches.If you do not want this to happen, set this to `true`. Default: `false`.
+
 
 #### `freeradius::script`
 

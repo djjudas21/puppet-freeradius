@@ -71,6 +71,7 @@ class freeradius (
     group   => $freeradius::fr_group,
     mode    => '0640',
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service[$freeradius::fr_service],
   }
   concat::fragment { 'policy_header':
     target  => "${freeradius::fr_basepath}/policy.conf",
@@ -81,6 +82,15 @@ class freeradius (
     target  => "${freeradius::fr_basepath}/policy.conf",
     content => "}\n",
     order   => '99',
+  }
+
+  # Set up concat proxy file
+  concat { "${freeradius::fr_basepath}/proxy.conf":
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    mode    => '0640',
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service[$freeradius::fr_service],
   }
 
   # Install a slightly tweaked stock dictionary that includes
@@ -264,7 +274,6 @@ class freeradius (
   file { [
     "${freeradius::fr_basepath}/sites-available/default",
     "${freeradius::fr_basepath}/sites-available/inner-tunnel",
-    "${freeradius::fr_basepath}/proxy.conf",
     "${freeradius::fr_basepath}/clients.conf",
     "${freeradius::fr_basepath}/sql.conf",
   ]:
