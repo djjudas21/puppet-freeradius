@@ -99,6 +99,16 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
 
+  # Set up attribute filter file
+  concat { "${freeradius::fr_modulepath}/attr_filter":
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    mode    => '0640',
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service[$freeradius::fr_service],
+  }
+
+
   # Install a slightly tweaked stock dictionary that includes
   # our custom dictionaries
   concat { "${freeradius::fr_basepath}/dictionary":
