@@ -4,18 +4,18 @@ define freeradius::attr (
   $ensure = present,
   $key = 'User-Name',
 ) {
-  $fr_package       = $::freeradius::params::fr_package
-  $fr_service       = $::freeradius::params::fr_service
-  $fr_basepath      = $::freeradius::params::fr_basepath
-  $fr_group         = $::freeradius::params::fr_group
-  $fr_modconfigpath = $::freeradius::params::fr_modconfigpath
-  $fr_modulepath    = $::freeradius::params::fr_modulepath
+  $fr_package          = $::freeradius::params::fr_package
+  $fr_service          = $::freeradius::params::fr_service
+  $fr_basepath         = $::freeradius::params::fr_basepath
+  $fr_group            = $::freeradius::params::fr_group
+  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
+  $fr_modulepath       = $::freeradius::params::fr_modulepath
 
   # Decide on location for attribute filters
   $location = $::freeradius_maj_version ? {
     2       => $fr_basepath,
-    3       => $fr_modconfigpath,
-    default => $fr_modconfigpath,
+    3       => "$fr_moduleconfigpath/attr_filter",
+    default => $fr_moduleconfigpath,
   }
 
   # Install the attribute filter snippet
