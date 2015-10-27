@@ -3,6 +3,7 @@ define freeradius::attr (
   $source,
   $ensure = present,
   $key = 'User-Name',
+  $prefix = 'filter',
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service

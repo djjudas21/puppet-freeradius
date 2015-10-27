@@ -148,14 +148,21 @@ Whether the control socket should be read-only or read-write. Choose from `ro`, 
 #### `freeradius::attr`
 
 Install arbitrary attribute filters from a flat file. These are installed in an appropriate module config directory.
+The contents of the `attr_filter` module are automatically updated to reference the filters.
 
 ##### `key`
 
 Specify a RADIUS attribute to be the key for this attribute filter. Enter only the string part of the name.
 
+##### `prefix`
+
+Specify the prefix for the attribute filter name before the dot, e.g. `filter.post_proxy`. This is usually set
+to `filter` on FR2 and `attr_filter` on FR3. Default: `filter`.
+
 ```puppet
 freeradius::attr { 'eduroamlocal':
   key    => 'User-Name',
+  prefix => 'attr_filter',
   source => 'puppet:///modules/site_freeradius/eduroamlocal',
 }
 ```

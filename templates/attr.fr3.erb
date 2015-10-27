@@ -1,4 +1,4 @@
-attr_filter attr_filter.<%= @name %> {
+attr_filter <%= @prefix %>.<%= @name %> {
 	key = "%{<%= @key %>}"
 	filename = ${modconfdir}/${.:name}/<%= @name %>
 }
