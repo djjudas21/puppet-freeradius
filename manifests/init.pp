@@ -108,6 +108,12 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
 
+  # Install default attribute filters
+  concat::fragment { "attr-default":
+    target  => "${fr_modulepath}/attr_filter",
+    content => template("freeradius/attr_default.fr${::freeradius_maj_version}.erb"),
+    order   => 10,
+  }
 
   # Install a slightly tweaked stock dictionary that includes
   # our custom dictionaries

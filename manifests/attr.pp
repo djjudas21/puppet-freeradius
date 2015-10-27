@@ -33,5 +33,6 @@ define freeradius::attr (
   concat::fragment { "attr-${name}":
     target  => "${fr_modulepath}/attr_filter",
     content => template("freeradius/attr.fr${::freeradius_maj_version}.erb"),
+    order   => 20,
   }
 }
