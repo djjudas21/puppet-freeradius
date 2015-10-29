@@ -510,7 +510,7 @@ $INCLUDE proxy.conf
 #  Anything listed in 'clients.conf' will take precedence over the
 #  information from the old-style configuration files.
 #
-$INCLUDE clients.conf
+$INCLUDE ${confdir}/clients.d/
 
 
 # THREAD POOL CONFIGURATION
