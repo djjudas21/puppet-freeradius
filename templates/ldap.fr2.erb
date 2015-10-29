@@ -26,7 +26,7 @@
 #  Setting "Auth-Type = LDAP" is ALMOST ALWAYS WRONG.  We
 #  really can't emphasize this enough.
 #	
-ldap {
+ldap <%= @name %> {
 	#
 	#  Note that this needs to match the name in the LDAP
 	#  server certificate, if you're using ldaps.
