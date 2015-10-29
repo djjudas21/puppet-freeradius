@@ -18,7 +18,7 @@ define freeradius::statusclient (
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
-    content => template('freeradius/client.conf.erb'),
+    content => template("freeradius/client.conf.fr${::freeradius_maj_version}.erb"),
     require => [File["${fr_basepath}/clients.d"], Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
