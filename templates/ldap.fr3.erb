@@ -21,12 +21,12 @@ ldap <%= @name %> {
 #	server = 'ldap.rrdns.example.org'
 
 	#  Port to connect on, defaults to 389, will be ignored for LDAP URIs.
-#	port = <%= @port %>
+	port = <%= @port %>
 
 	#  Administrator account for searching and possibly modifying.
 	#  If using SASL + KRB5 these should be commented out.
-#	identity = '<%= @identity %>'
-#	password = mypass
+	identity = '<%= @identity %>'
+	password = '<%= @password %>'
 
 	#  Unless overridden in another section, the dn from which all
 	#  searches will start from.
@@ -503,11 +503,16 @@ ldap <%= @name %> {
 		# using ldaps (port 636) connections
 		start_tls = <%= @starttls %>
 
-<% if @cafile %>		ca_file	= <%= @cafile %><% end %>
-
+<% if @cafile != '' -%>
+		ca_file	= <%= @cafile %>
+<% end -%>
 #		ca_path	= ${certdir}
-<% if @certfile %>		certificate_file = <%= @certfile %><% end %>
-<% if @keyfile %>		private_key_file = <%= @keyfile %><% end %>
+<% if @certfile != '' -%>
+		certificate_file = <%= @certfile %>
+<% end -%>
+<% if @keyfile != '' -%>
+		private_key_file = <%= @keyfile %>
+<% end -%>
 #		random_file = /dev/urandom
 
 		#  Certificate Verification requirements.  Can be:
