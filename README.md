@@ -712,6 +712,16 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.0.0
+
+ * Support for FreeRADIUS 3
+ * Native support for managing the LDAP module
+ * Native support for configuring realms (via realms, home_server and home_server_pool)
+ * Improved handling of attribute filtering
+ * Improved handling of SQL support
+
+This release retains support for FreeRADIUS 2 but some of the parameters have changed so you will probably need to make changes to the way you use this module. Upgrade on a dev system first!
+
 ### 0.4.5
 
  * Tweak wildcard matching on logrotate config
