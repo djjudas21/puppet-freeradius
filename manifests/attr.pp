@@ -15,7 +15,7 @@ define freeradius::attr (
   # Decide on location for attribute filters
   $location = $::freeradius_maj_version ? {
     2       => $fr_basepath,
-    3       => "$fr_moduleconfigpath/attr_filter",
+    3       => "${fr_moduleconfigpath}/attr_filter",
     default => $fr_moduleconfigpath,
   }
 
