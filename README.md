@@ -33,9 +33,8 @@
 ## Overview
 
 This module installs and configures [FreeRADIUS](http://freeradius.org/) server
-on Linux. This module was written for use with FreeRADIUS 2.x and has not been
-tested with FreeRADIUS 3.x. It was designed with CentOS in mind but should
-work on other distributions.
+on Linux. It supports FreeRADIUS 2.x and 3.x. It was designed with CentOS in mind
+but should work on other distributions.
 
 ## Module Description
 
@@ -694,13 +693,9 @@ required. A short alias that is used in place of the IP address or fully qualifi
 
 ## Limitations
 
-This module is targeted at FreeRADIUS 2.x running on CentOS 6. It has not been tested
-on other distributions, but might work. Likely sticking points with other distros are
-the names of packages, services and file paths.
-
-This module has not been tested on FreeRADIUS 3.x and almost certainly won't work
-without modification. FreeRADIUS 3.x support in this module will come onto the roadmap
-at the same time that my employer decides to start looking FreeRADIUS 3.x.
+This module is targeted at FreeRADIUS 2.x running on CentOS 6 and FreeRADIUS 3.x running
+on CentOS 7. It has not been thoroughly tested on other distributions, but might work.
+Likely sticking points with other distros are the names of packages, services and file paths.
 
 This module was written for use with Puppet 3.6 and 3.7, but should be quite agnostic
 to new versions of Puppet.
@@ -711,6 +706,9 @@ This module was written primarily for internal use - features we haven't needed 
 use probably haven't been written. Please send pull requests with new features and
 bug fixes. You are also welcome to file issues but I make no guarantees of
 development effort if the features aren't useful to my employer.
+
+When contributing code, please ensure your change works on FreeRADIUS 2.x and 3.x - at
+least until this module drops support for 2.x.
 
 ## Release Notes
 
