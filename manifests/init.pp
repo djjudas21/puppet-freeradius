@@ -21,7 +21,7 @@ class freeradius (
     mode    => '0640',
     owner   => 'root',
     group   => $freeradius::fr_group,
-    content => template('freeradius/radiusd.conf.erb'),
+    content => template("freeradius/radiusd.conf.fr${::freeradius_maj_version}.erb"),
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
     notify  => Service[$freeradius::fr_service],
   }
@@ -64,6 +64,12 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
 
+  # Delete some modules which come bundled with the server that we
+  # know break functionality out of the box with this config
+  freeradius::module { 'eap':
+    ensure => absent,
+  }
+
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
   concat { "${freeradius::fr_basepath}/policy.conf":
@@ -71,6 +77,7 @@ class freeradius (
     group   => $freeradius::fr_group,
     mode    => '0640',
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service[$freeradius::fr_service],
   }
   concat::fragment { 'policy_header':
     target  => "${freeradius::fr_basepath}/policy.conf",
@@ -81,6 +88,31 @@ class freeradius (
     target  => "${freeradius::fr_basepath}/policy.conf",
     content => "}\n",
     order   => '99',
+  }
+
+  # Set up concat proxy file
+  concat { "${freeradius::fr_basepath}/proxy.conf":
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    mode    => '0640',
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service[$freeradius::fr_service],
+  }
+
+  # Set up attribute filter file
+  concat { "${freeradius::fr_modulepath}/attr_filter":
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    mode    => '0640',
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service[$freeradius::fr_service],
+  }
+
+  # Install default attribute filters
+  concat::fragment { "attr-default":
+    target  => "${fr_modulepath}/attr_filter",
+    content => template("freeradius/attr_default.fr${::freeradius_maj_version}.erb"),
+    order   => 10,
   }
 
   # Install a slightly tweaked stock dictionary that includes
@@ -166,15 +198,11 @@ class freeradius (
   }
 
   # Install a few modules required on all FR installations
-  freeradius::module  { 'always':
-    source  => 'puppet:///modules/freeradius/modules/always',
-  }
-  freeradius::module { 'detail':
-    source  => 'puppet:///modules/freeradius/modules/detail',
-  }
-  freeradius::module { 'detail.log':
-    source  => 'puppet:///modules/freeradius/modules/detail.log',
-  }
+  # No content is specified, so we accept the package manager default
+  # Defining them here prevents them from being purged
+  freeradius::module  { 'always': }
+  freeradius::module { 'detail': }
+  freeradius::module { 'detail.log': }
 
   # Syslog rules
   if $syslog == true {
@@ -268,7 +296,6 @@ class freeradius (
   file { [
     "${freeradius::fr_basepath}/sites-available/default",
     "${freeradius::fr_basepath}/sites-available/inner-tunnel",
-    "${freeradius::fr_basepath}/proxy.conf",
     "${freeradius::fr_basepath}/clients.conf",
     "${freeradius::fr_basepath}/sql.conf",
   ]:

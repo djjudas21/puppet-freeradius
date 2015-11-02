@@ -28,10 +28,13 @@ define freeradius::sql (
   $port = '3306',
   $readclients = 'no',
 ) {
-  $fr_package  = $::freeradius::params::fr_package
-  $fr_service  = $::freeradius::params::fr_service
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_package          = $::freeradius::params::fr_package
+  $fr_service          = $::freeradius::params::fr_service
+  $fr_basepath         = $::freeradius::params::fr_basepath
+  $fr_modulepath       = $::freeradius::params::fr_modulepath
+  $fr_group            = $::freeradius::params::fr_group
+  $fr_logpath          = $::freeradius::params::fr_logpath
+  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
 
   # Validate our inputs
   # Validate multiple choice options
@@ -75,34 +78,37 @@ define freeradius::sql (
     fail('$readclients must be yes or no')
   }
 
+  # Determine default location of query file
+  $queryfile = $::freeradius_version ? {
+    /^2\./  => "${fr_basepath}/sql/${database}/dialup.conf",
+    /^3\./  => "${fr_basepath}/sql/queries.conf",
+    default => "${fr_basepath}/sql/queries.conf",
+  }
+
+  # Install custom query file
+  if ($custom_query_file != '') {
+    $custom_query_file_path = "${fr_moduleconfigpath}/${name}-queries.conf"
+
+    ::freeradius::config { "${name}-queries.conf":
+      source => $custom_query_file,
+    }
+  }
+
   # Generate a module config, based on sql.conf
-  file { "${fr_basepath}/modules/${name}":
+  file { "${fr_modulepath}/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
-    content => template('freeradius/sql.conf.erb'),
+    content => template("freeradius/sql.conf.fr${::freeradius_maj_version}.erb"),
     require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
-  }
-
-  # Install custom query file
-  if ($custom_query_file) {
-    file { "${fr_basepath}/sql/${database}/dialup.conf":
-      ensure  => $ensure,
-      mode    => '0640',
-      owner   => 'root',
-      group   => $fr_group,
-      source  => $custom_query_file,
-      require => [Package[$fr_package], Group[$fr_group]],
-      notify  => Service[$fr_service],
-    }
   }
 
   # Install rotation for sqltrace if we are using it
   if ($sqltrace == 'yes') {
     logrotate::rule { 'sqltrace':
-      path         => "{$freeradius::fr_logpath}/${sqltracefile}",
+      path         => "${fr_logpath}/${sqltracefile}",
       rotate_every => 'week',
       rotate       => 1,
       create       => true,

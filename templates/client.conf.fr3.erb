@@ -1,0 +1,10 @@
+client <%= @shortname %> {
+	<% if @ip %>ipaddr= <%= @ip %><% end %>
+	<% if @ip6 %>ipv6addr = <%= @ip6 %><% end %>
+	<% if @netmask %>netmask = <%= @netmask %><% end %>
+	shortname = <%= @shortname %>
+	secret = "<%= @secret %>"
+	<% if @virtual_server %>virtual_server = <%= @virtual_server %><% end %>
+	<% if @nastype %>nas_type = <%= @nastype %><% end %>
+	require_message_authenticator = no
+}

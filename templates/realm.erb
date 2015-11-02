@@ -1,0 +1,18 @@
+realm <%= @name %> {
+<% if @virtual_server != '' -%>
+	virtual_server = <%= @virtual_server %>
+<% end -%>
+<% if @auth_pool != '' -%>
+	auth_pool = <%= @auth_pool %>
+<% end -%>
+<% if @acct_pool != '' -%>
+	acct_pool = <%= @acct_pool %>
+<% end -%>
+<% if @pool != '' -%>
+	pool = <%= @pool %>
+<% end %>
+<% if @nostrip -%>
+	nostrip
+<% end -%>
+}
+
