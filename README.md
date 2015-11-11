@@ -712,6 +712,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.0.2
+
+ * Fixed a bug that prevented LDAP from working on any port except 389
+
 ### 1.0.1
 
  * Fixed a bug that caused an error when no proxy config items were defined
