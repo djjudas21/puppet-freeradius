@@ -101,7 +101,7 @@ class freeradius (
   concat::fragment { 'proxy_header':
     target  => "${freeradius::fr_basepath}/proxy.conf",
     content => "# Proxy config\n\n",
-    order   => 10,
+    order   => '05',
   }
 
   # Set up attribute filter file
