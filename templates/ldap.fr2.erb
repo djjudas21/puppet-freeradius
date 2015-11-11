@@ -51,7 +51,7 @@ ldap <%= @name %> {
 	#  Port to connect on, defaults to 389. Setting this to
 	#  636 will enable LDAPS if start_tls (see below) is not
 	#  able to be used.
-	#port = <%= @port %>
+	port = <%= @port %>
 
 	# seconds to wait for LDAP query to finish. default: 20
 	timeout = <%= @timeout %>
