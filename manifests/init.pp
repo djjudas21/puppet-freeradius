@@ -98,6 +98,11 @@ class freeradius (
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
     notify  => Service[$freeradius::fr_service],
   }
+  concat::fragment { 'proxy_header':
+    target  => "${freeradius::fr_basepath}/proxy.conf",
+    content => "# Proxy config\n\n",
+    order   => 10,
+  }
 
   # Set up attribute filter file
   concat { "${freeradius::fr_modulepath}/attr_filter":
