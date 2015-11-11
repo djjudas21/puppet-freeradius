@@ -712,6 +712,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.0.1
+
+ * Fixed a bug that caused an error when no proxy config items were defined
+
 ### 1.0.0
 
  * Support for FreeRADIUS 3
