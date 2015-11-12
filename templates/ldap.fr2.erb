@@ -31,8 +31,8 @@ ldap <%= @name %> {
 	#  Note that this needs to match the name in the LDAP
 	#  server certificate, if you're using ldaps.
 	server = "<%= @server %>"
-	#identity = "<%= @identity %>"
-	#password = <%= @password %>
+	identity = "<%= @identity %>"
+	password = <%= @password %>
 	basedn = "<%= @basedn %>"
 	filter = "(uid=%{%{Stripped-User-Name}:-%{User-Name}})"
 	#base_filter = "(objectclass=radiusprofile)"
