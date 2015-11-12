@@ -87,10 +87,10 @@ ldap <%= @name %> {
 		# using ldaps (port 636) connections
 		start_tls = <%= @starttls %>
 
-<% if @cafile %>		cacertfile	= <%= @cafile %><% end %>
+<% if @cafile -%>		cacertfile	= <%= @cafile %><% end %>
 		# cacertdir	= /path/to/ca/dir/
-<% if @certfile %>		certfile	= <%= @certfile %><% end %>
-<% if @keyfile %>		keyfile		= <%= @keyfile %><% end %>
+<% if @certfile -%>		certfile	= <%= @certfile %><% end %>
+<% if @keyfile -%>		keyfile		= <%= @keyfile %><% end %>
 		# randfile	= /path/to/rnd
 
 		#  Certificate Verification requirements.  Can be:
