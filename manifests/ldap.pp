@@ -16,9 +16,9 @@ define freeradius::ldap (
   $spare       = '${thread[pool].max_spare_servers}',
   $ensure      = 'present',
   $starttls    = 'no',
-  $cafile      = '',
-  $certfile    = '',
-  $keyfile     = '',
+  $cafile      = undef,
+  $certfile    = undef,
+  $keyfile     = undef,
   $requirecert = 'allow',
 ) {
   $fr_package          = $::freeradius::params::fr_package
