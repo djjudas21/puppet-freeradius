@@ -712,6 +712,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.0.3
+
+ * Iron out a couple of issues with LDAP compatibility with Active Directory
+
 ### 1.0.2
 
  * Fixed a bug that prevented LDAP from working on any port except 389
