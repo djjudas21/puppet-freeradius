@@ -712,6 +712,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.0.4
+
+ * Make an educated guess about the version of FR when the fact is unavailable (e.g. on the first Puppet run)
+
 ### 1.0.3
 
  * Iron out a couple of issues with LDAP compatibility with Active Directory

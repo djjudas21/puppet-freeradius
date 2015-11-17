@@ -1,6 +1,6 @@
 {
   "name": "jgazeley-freeradius",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "jgazeley",
   "summary": "Install and configure FreeRADIUS",
   "license": "Apache-2.0",
@@ -11,8 +11,9 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "5.0",
-        "6.0"
+        "5",
+        "6"
+        "7"
       ]
     },
     {
@@ -20,7 +21,8 @@
       "operatingsystemrelease": [
         "5",
         "6",
-        "7"
+        "7",
+        "8"
       ]
     }
   ],
