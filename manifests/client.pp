@@ -17,13 +17,14 @@ define freeradius::client (
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
+  $fr_version  = $::freeradius::params::fr_version
 
   file { "${fr_basepath}/clients.d/${shortname}.conf":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
-    content => template("freeradius/client.conf.fr${::freeradius_maj_version}.erb"),
+    content => template("freeradius/client.conf.fr${fr_version}.erb"),
     require => [File["${fr_basepath}/clients.d"], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
