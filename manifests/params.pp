@@ -1,6 +1,50 @@
 # Default parameters for freeradius
 class freeradius::params {
 
+  # Make an educated guess which version of FR we are running, based on the OS
+  case $::operatingsystem {
+    /RedHat|CentOS/: {
+      $fr_guessversion = $::operatingsystemmajrelease ? {
+        5       => 2,
+        6       => 2,
+        7       => 3,
+        default => 3,
+      }
+    }
+    'Debian': {
+      $fr_guessversion = $::operatingsystemmajrelease ? {
+        6       => 2,
+        7       => 2,
+        8       => 2,
+        default => 2,
+      }
+    }
+    'Fedora': {
+      $fr_guessversion = $::operatingsystemmajrelease ? {
+        21      => 3,
+        22      => 3,
+        23      => 3,
+        default => 3,
+      }
+    }
+    'Ubuntu': {
+      $fr_guessversion = $::operatingsystemmajrelease ? {
+        '14.04' => 2,
+        '14.10' => 2,
+        '15.04' => 2,
+        '15.10' => 2,
+        default => 2,
+      }
+    }
+  }
+
+  # Use the FR version fact if defined, otherwise use our best estimate from above
+  if $::freeradius_maj_version {
+    $fr_version = $::freeradius_maj_version
+  } else {
+    $fr_version = $fr_guessversion
+  }
+
   # Name of FreeRADIUS package
   $fr_package = $::osfamily ? {
     'RedHat' => 'freeradius',
@@ -37,9 +81,9 @@ class freeradius::params {
   }
 
   # Default module dir
-  $fr_moduledir = $::freeradius_version ? {
-    /^2\./    => 'modules',
-    /^3\./    => 'mods-enabled',
+  $fr_moduledir = $fr_version ? {
+    '2'       => 'modules',
+    '3'       => 'mods-enabled',
     default   => 'modules',
   }
 
@@ -47,9 +91,9 @@ class freeradius::params {
   $fr_modulepath = "${fr_basepath}/${fr_moduledir}"
 
   # Default module config dir
-  $fr_modconfigdir = $::freeradius_version ? {
-    /^2\./    => 'conf.d',
-    /^3\./    => 'mods-config',
+  $fr_modconfigdir = $fr_version ? {
+    '2'       => 'conf.d',
+    '3'       => 'mods-config',
     default   => 'conf.d',
   }
 
