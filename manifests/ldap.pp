@@ -3,7 +3,7 @@ define freeradius::ldap (
   $identity,
   $password,
   $basedn,
-  $server      = 'localhost',
+  $server      = ['localhost'],
   $port        = 389,
   $uses        = 0,
   $idle        = 60,

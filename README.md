@@ -374,8 +374,8 @@ Password for the `identity` account. Required.
 Unless overridden in another section, the dn from which all searches will start from. Required.
 
 ##### `server`
-Hostname of IP address of the LDAP server. Note that this needs to match the name(s) in the LDAP server
-certificate, if you're using ldaps. Default: `localhost`
+Array of hostnames or IP addresses of the LDAP server(s). Note that this needs to match the name(s) in the LDAP
+server certificate, if you're using ldaps. Default: [`localhost`]
 
 ##### `port`
 Port to connect to the LDAP server on. Default: `389`

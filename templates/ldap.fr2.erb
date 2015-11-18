@@ -30,7 +30,11 @@ ldap <%= @name %> {
 	#
 	#  Note that this needs to match the name in the LDAP
 	#  server certificate, if you're using ldaps.
-	server = "<%= @server %>"
+	#
+	#
+
+<% @server.each do |srv| -%>	server = "<%= srv %>"
+<% end -%>
 	identity = "<%= @identity %>"
 	password = <%= @password %>
 	basedn = "<%= @basedn %>"
