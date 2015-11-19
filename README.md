@@ -712,6 +712,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.1.0
+
+ * Add support to supply an array of multiple LDAP servers
+
 ### 1.0.4
 
  * Make an educated guess about the version of FR when the fact is unavailable (e.g. on the first Puppet run)
