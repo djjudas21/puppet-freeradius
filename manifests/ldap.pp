@@ -29,8 +29,8 @@ define freeradius::ldap (
 
   # Validate our inputs
   # Hostnames
-  unless (is_domain_name($server) or is_ip_address($server)) {
-    fail('$server must be a valid hostname or IP address')
+  unless is_array($server) {
+    fail('$server must be an array of hostnames or IP addresses')
   }
 
   # Fake booleans (FR uses yes/no instead of true/false)
