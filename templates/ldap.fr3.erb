@@ -16,10 +16,8 @@ ldap <%= @name %> {
 	#  - ldaps:// (LDAP over SSL)
 	#  - ldapi:// (LDAP over Unix socket)
 	#  - ldapc:// (Connectionless LDAP)
-
 <% @server.each do |srv| -%>	server = '<%= srv %>'
 <% end -%>
-#	server = '<%= @server %>'
 #	server = 'ldap.rrdns.example.org'
 #	server = 'ldap.rrdns.example.org'
 
