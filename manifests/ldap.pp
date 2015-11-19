@@ -29,8 +29,8 @@ define freeradius::ldap (
 
   # Validate our inputs
   # Hostnames
-  $server = any2array($server)
-  unless is_array($server) {
+  $serverarray = any2array($server)
+  unless is_array($serverarray) {
     fail('$server must be an array of hostnames or IP addresses')
   }
 
