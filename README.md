@@ -709,6 +709,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.2.0
+
+ * Deprecate `netmask` parameter from `freeradius::client`
+
 ### 1.1.0
 
  * Add support to supply an array of multiple LDAP servers
