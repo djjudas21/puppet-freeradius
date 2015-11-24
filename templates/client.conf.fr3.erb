@@ -1,7 +1,6 @@
 client <%= @shortname %> {
-	<% if @ip %>ipaddr= <%= @ip %><% end %>
-	<% if @ip6 %>ipv6addr = <%= @ip6 %><% end %>
-	<% if @netmask %>netmask = <%= @netmask %><% end %>
+	<% if @ip %>ipaddr= <%= @cidr %><% end %>
+	<% if @ip6 %>ipv6addr = <%= @cidr6 %><% end %>
 	shortname = <%= @shortname %>
 	secret = "<%= @secret %>"
 	<% if @virtual_server %>virtual_server = <%= @virtual_server %><% end %>

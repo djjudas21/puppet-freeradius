@@ -222,10 +222,10 @@ freeradius::client { "wlan-controller01":
 ```
 
 ##### `ip`
-The IP address of the client.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
+The IP address of the client or range in CIDR notation.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
 
 ##### `ip6`
-The IPv6 address of the client. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
+The IPv6 address of the client or range in CIDR notation. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
 
 ##### `shortname`
 A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section. Required.
@@ -238,9 +238,6 @@ The virtual server that traffic from this client should be sent to. Default: `un
 
 ##### `nastype`
 The `nastype` attribute is used to tell the `checkrad.pl` script which NAS-specific method it should use when checking simultaneous use. See [`man clients.conf`](http://freeradius.org/radiusd/man/clients.conf.txt) for a list of all options. Default: `undef`.
-
-##### `netmask`
-The netmask of the client, specified as an integer, e.g. `24`. Default: `undef`.
 
 ##### `port`
 The UDP port that this virtual server should listen on. Leave blank if this client is not tied to a virtual server. Currently the port number is only used to create firewall exceptions and you only need to specify it if you set `firewall => true`. Use port range syntax as in [`puppetlabs-firewall`](https://forge.puppetlabs.com/puppetlabs/firewall). Default: `undef`.
