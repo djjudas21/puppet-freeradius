@@ -30,7 +30,7 @@ define freeradius::client (
     default => "${ip6}/${netmask}",
   }
 
-  if ($netmask) {
+  if ($netmask and $fr_version == 3) {
     warning("netmask field found in client ${shortname} is deprecated, use CIDR notation instead. Please fix your configuration.")
   }
 

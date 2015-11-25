@@ -211,6 +211,7 @@ Set file permissions on the installed certificate differently depending on wheth
 Define RADIUS clients as seen in `clients.conf`
 
 ```puppet
+# Single host example
 freeradius::client { "wlan-controller01":
   ip        => '192.168.0.1',
   secret    => 'testing123',
@@ -221,11 +222,40 @@ freeradius::client { "wlan-controller01":
 }
 ```
 
+```puppet
+# Range example on FreeRADIUS 2
+freeradius::client { "wlan-controllers":
+  ip        => '192.168.0.0',
+  netmask   => '24',
+  secret    => 'testing123',
+  shortname => 'wlc01',
+  nastype   => 'other',
+  port      => '1645-1646',
+  firewall  => true,
+}
+```
+
+```puppet
+# Range example in FreeRADIUS 3
+freeradius::client { "wlan-controllers":
+  ip        => '192.168.0.0/24',
+  secret    => 'testing123',
+  shortname => 'wlc01',
+  nastype   => 'other',
+  port      => '1645-1646',
+  firewall  => true,
+}
+```
+
 ##### `ip`
-The IP address of the client or range in CIDR notation.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
+The IP address of the client or range. For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
+On FreeRADIUS 2, specify the netmask separately. On FreeRADIUS 3, set `ip` in CIDR format. Default: `undef`.
 
 ##### `ip6`
 The IPv6 address of the client or range in CIDR notation. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
+
+##### `netmask`
+The netmask of the client, specified as an integer, e.g. `24`. Only to be set on FreeRADIUS 2. Default: `undef`.
 
 ##### `shortname`
 A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section. Required.
