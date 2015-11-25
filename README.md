@@ -739,6 +739,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.2.2
+
+  * Fix a bug that stops statusclients from working
+
 ### 1.2.1
 
   * Fix a bug that prevent 1.2.0 from working on FreeRADIUS 2
