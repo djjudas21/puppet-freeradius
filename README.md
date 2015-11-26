@@ -739,6 +739,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.2.3
+
+  * Make facts fail gracefully if radiusd is not installed
+
 ### 1.2.2
 
   * Fix a bug that stops statusclients from working
