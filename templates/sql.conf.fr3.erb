@@ -138,10 +138,10 @@ sql <%= @name %> {
 		#  connections during instantiation it will exit.
 		#  Set to 0 to allow the server to start without the
 		#  database being available.
-		start = ${thread[pool].start_servers}
+		start = 1
 
 		#  Minimum number of connections to keep open
-		min = ${thread[pool].min_spare_servers}
+		min = 1
 
 		#  Maximum number of connections
 		#
@@ -160,7 +160,7 @@ sql <%= @name %> {
 		#
 		#  NOTE: Idle connections WILL be closed if "idle_timeout"
 		#  is set.  This should be less than or equal to "max" above.
-		spare = ${thread[pool].max_spare_servers}
+		spare = 1
 
 		#  Number of uses before the connection is closed
 		#
