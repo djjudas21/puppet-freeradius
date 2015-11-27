@@ -154,7 +154,7 @@ sql <%= @name %> {
 		#
 		#  Setting 'max' to MORE than the number of threads means
 		#  that there are more connections than necessary.
-		max = ${thread[pool].max_servers}
+		max = <%= @num_sql_socks %>
 
 		#  Spare connections to be left idle
 		#
