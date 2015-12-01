@@ -739,6 +739,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.2.4
+
+  * Start with just 1 SQL socket by default to avoid overloading the SQL server
+
 ### 1.2.3
 
   * Make facts fail gracefully if radiusd is not installed
