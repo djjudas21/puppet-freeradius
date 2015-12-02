@@ -90,7 +90,7 @@ Install wpa_supplicant utility. Default: `false`
 Add the radius user to the winbind privileged group. You must install winbind separately. Default: `false`.
 
 ##### `syslog`
-Add a syslog rule (using the `jgazeley/syslog` module). Default: `false`.
+Add a syslog rule (using the `saz/rsyslog` module). Default: `false`.
 
 ```puppet
 class { 'freeradius':

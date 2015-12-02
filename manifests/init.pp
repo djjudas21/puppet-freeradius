@@ -211,9 +211,8 @@ class freeradius (
 
   # Syslog rules
   if $syslog == true {
-    syslog::rule { 'radiusd-log':
-      command => "if \$programname == \'radiusd\' then ${freeradius::fr_logpath}/radius.log\n&~",
-      order   => '12',
+    rsyslog::snippet { '12-radiusd-log':
+      content => "if \$programname == \'radiusd\' then ${freeradius::fr_logpath}/radius.log\n&~",
     }
   }
 
