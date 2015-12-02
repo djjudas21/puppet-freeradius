@@ -739,6 +739,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.2.5
+
+  * Switch to use [saz/rsyslog](https://forge.puppetlabs.com/saz/rsyslog) to manage syslog rules
+
 ### 1.2.4
 
   * Start with just 1 SQL socket by default to avoid overloading the SQL server
