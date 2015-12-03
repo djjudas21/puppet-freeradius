@@ -739,6 +739,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.2.6
+
+  * Fix a bug that now enables sqltrace (sqllog) to work on FR3
+
 ### 1.2.5
 
   * Switch to use [saz/rsyslog](https://forge.puppetlabs.com/saz/rsyslog) to manage syslog rules
