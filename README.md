@@ -682,7 +682,7 @@ Print all SQL statements when in debug mode (-x). Default: `no`.
 ##### `sqltracefile`
 
 Location for SQL statements to be stored if `$sqltrace = yes`. Default:
-`${logdir}/sqltrace.sql`
+`${logdir}/sqllog.sql`
 
 ##### `connect_failure_retry_delay`
 

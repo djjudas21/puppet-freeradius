@@ -102,7 +102,9 @@ sql <%= @name %> {
 	# by enabling "logfile" there, or global logging by enabling "logfile" here.
 	#
 	# Per-section logging can be disabled by setting "logfile = ''"
-#	logfile = ${logdir}/sqllog.sql
+	<% if @sqltrace == "yes" -%>
+	logfile = <%= @sqltracefile %>
+	<% end -%>
 
 	#  Set the maximum query duration for rlm_sql_mysql and 
 	#  rlm_sql_cassandra.

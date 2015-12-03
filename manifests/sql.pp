@@ -21,7 +21,7 @@ define freeradius::sql (
   $usergroup_table = 'radusergroup',
   $deletestalesessions = 'yes',
   $sqltrace = 'no',
-  $sqltracefile = '${logdir}/sqltrace.sql',
+  $sqltracefile = '${logdir}/sqllog.sql',
   $connect_failure_retry_delay = '60',
   $nas_table = 'nas',
   $read_groups = 'yes',
