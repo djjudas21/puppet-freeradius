@@ -751,6 +751,10 @@ least until this module drops support for 2.x.
 
 ## Release Notes
 
+### 1.3.0
+
+  * Add support for defining config templates
+
 ### 1.2.6
 
   * Fix a bug that now enables sqltrace (sqllog) to work on FR3
