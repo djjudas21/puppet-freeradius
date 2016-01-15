@@ -90,6 +90,20 @@ class freeradius (
     order   => '99',
   }
 
+  # Set up concat template file
+  concat { "${freeradius::fr_basepath}/template.conf":
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    mode    => '0640',
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service[$freeradius::fr_service],
+  }
+  concat::fragment { 'template_header':
+    target  => "${freeradius::fr_basepath}/template.conf",
+    content => "# Template config\n\n",
+    order   => '05',
+  }
+
   # Set up concat proxy file
   concat { "${freeradius::fr_basepath}/proxy.conf":
     owner   => 'root',
