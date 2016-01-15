@@ -91,7 +91,7 @@ class freeradius (
   }
 
   # Set up concat template file
-  concat { "${freeradius::fr_basepath}/template.conf":
+  concat { "${freeradius::fr_basepath}/templates.conf":
     owner   => 'root',
     group   => $freeradius::fr_group,
     mode    => '0640',
@@ -99,7 +99,7 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
   concat::fragment { 'template_header':
-    target  => "${freeradius::fr_basepath}/template.conf",
+    target  => "${freeradius::fr_basepath}/templates.conf",
     content => "# Template config\n\n",
     order   => '05',
   }

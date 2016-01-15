@@ -7,7 +7,7 @@ define freeradius::template (
 
   # Configure config fragment for this template
   concat::fragment { "template -${name}":
-    target  => "${fr_basepath}/template.conf",
+    target  => "${fr_basepath}/templates.conf",
     source  => $source,
     content => $content,
     order   => 10,
