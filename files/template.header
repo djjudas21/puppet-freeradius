@@ -1,0 +1,33 @@
+# -*- text -*-
+##
+## templates.conf -- configurations to be used in multiple places
+##
+##	$Id: 7b8b44e051c974c1a0a6e27a0cff50e621835df2 $
+ 
+######################################################################
+#
+#  Version 2.0 has a useful new feature called "templates".
+#
+#  Use templates by adding a line in radiusd.conf:
+#
+#	$INCLUDE templates.conf
+#
+#  The goal of the templates is to have common configuration located
+#  in this file, and to list only the *differences* in the individual
+#  sections.  This feature is most useful for sections like "clients"
+#  or "home_servers", where many may be defined, and each one has
+#  similar repeated configuration.
+#
+#  Something similar to templates can be done by putting common
+#  configuration into separate files, and using "$INCLUDE file...",
+#  but this is more flexible, and simpler to understand.  It's also
+#  cheaper for the server, because "$INCLUDE" makes a copy of the
+#  configuration for inclusion, and templates are simply referenced.
+#
+#  The templates are defined in the "templates" section, so that they
+#  do not affect the rest of the server configuration.
+#
+#  A section can reference a template by using "$template name"
+#
+templates {
+

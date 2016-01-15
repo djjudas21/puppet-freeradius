@@ -26,6 +26,7 @@
        * [`freeradius::site`](#freeradiussite)
        * [`freeradius::sql`](#freeradiussql)
        * [`freeradius::statusclient`](#freeradiusstatusclient)
+       * [`freeradius::template`](#freeradiustemplate)
 4. [Limitations - OS compatibility, etc.](#limitations)
 5. [Development - Guide for contributing to the module](#development)
 6. [Release Notes](#release-notes)
@@ -717,6 +718,17 @@ Default: `undef`. The UDP port that this virtual server should listen on. Leave 
 ##### `shortname`
 required. A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section.
 
+#### `freeradius::template`
+
+Define template items that can be referred to in other config items
+
+##### `source`
+
+Provide source to a file with the template item. Specify only one of `source` or `content`.
+
+##### `content`
+
+Provide content of template item. Specify only one of `source` or `content`.
 
 ## Limitations
 
