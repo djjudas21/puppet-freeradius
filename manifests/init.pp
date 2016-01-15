@@ -99,10 +99,16 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
   concat::fragment { 'template_header':
-    target  => "${freeradius::fr_basepath}/templates.conf",
-    content => "# Template config\n\n",
-    order   => '05',
+    target => "${freeradius::fr_basepath}/templates.conf",
+    source => 'puppet:///modules/freeradius/template.header',
+    order  => '05',
   }
+  concat::fragment { 'template_footer':
+    target  => "${freeradius::fr_basepath}/templates.conf",
+    content => "}\n",
+    order   => '95',
+  }
+
 
   # Set up concat proxy file
   concat { "${freeradius::fr_basepath}/proxy.conf":
