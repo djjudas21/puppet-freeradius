@@ -1,7 +1,7 @@
 # Configure a template snippet
 define freeradius::template (
-  $source,
-  $content,
+  $source = undef,
+  $content = undef,
 ) {
   $fr_basepath = $::freeradius::params::fr_basepath
 
