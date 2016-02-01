@@ -21,7 +21,7 @@ class freeradius (
     mode    => '0640',
     owner   => 'root',
     group   => $freeradius::fr_group,
-    content => template("freeradius/radiusd.conf.fr${freeradius::fr_version}.erb"),
+    content => template("freeradius/radiusd.conf.erb"),
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
     notify  => Service[$freeradius::fr_service],
   }
@@ -136,7 +136,7 @@ class freeradius (
   # Install default attribute filters
   concat::fragment { "attr-default":
     target  => "${freeradius::fr_modulepath}/attr_filter",
-    content => template("freeradius/attr_default.fr${freeradius::fr_version}.erb"),
+    content => template("freeradius/attr_default.erb"),
     order   => 10,
   }
 
