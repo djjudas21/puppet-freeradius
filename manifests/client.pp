@@ -39,7 +39,7 @@ define freeradius::client (
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
-    content => template("freeradius/client.conf.fr${fr_version}.erb"),
+    content => template('freeradius/client.conf.erb'),
     require => [File["${fr_basepath}/clients.d"], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
