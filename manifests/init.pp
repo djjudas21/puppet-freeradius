@@ -12,6 +12,10 @@ class freeradius (
   $syslog          = false,
 ) inherits freeradius::params {
 
+  if ($fr_version != 3) {
+    fail('This module is only compatible with FreeRADIUS 3')
+  }
+
   if $control_socket == true {
     warning('Use of the control_socket parameter in the freeradius class is deprecated. Please use the freeradius::control_socket class instead.')
   }

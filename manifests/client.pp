@@ -17,7 +17,6 @@ define freeradius::client (
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
-  $fr_version  = $::freeradius::params::fr_version
 
   # Calculate CIDR format IP now that FreeRADIUS has obsoleted use of separate netmask.
   # This workaround means no syntax change is necessary, although we print a warning.
@@ -30,7 +29,7 @@ define freeradius::client (
     default => "${ip6}/${netmask}",
   }
 
-  if ($netmask and $fr_version == 3) {
+  if ($netmask) {
     warning("netmask field found in client ${shortname} is deprecated, use CIDR notation instead. Please fix your configuration.")
   }
 
