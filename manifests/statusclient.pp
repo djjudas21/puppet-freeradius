@@ -5,26 +5,12 @@ define freeradius::statusclient (
   $ip6 = undef,
   $port = undef,
   $shortname = $name,
-  $netmask = undef,
   $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
-
-  $cidr = $netmask ? {
-    undef   => $ip,
-    default => "${ip}/${netmask}",
-  }
-  $cidr6 = $netmask ? {
-    undef   => $ip6,
-    default => "${ip6}/${netmask}",
-  }
-
-  if ($netmask) {
-    warning("netmask field found in client ${shortname} is deprecated, use CIDR notation instead. Please fix your configuration.")
-  }
 
   file { "${fr_basepath}/statusclients.d/${name}.conf":
     ensure  => $ensure,

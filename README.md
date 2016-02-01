@@ -224,20 +224,7 @@ freeradius::client { "wlan-controller01":
 ```
 
 ```puppet
-# Range example on FreeRADIUS 2
-freeradius::client { "wlan-controllers":
-  ip        => '192.168.0.0',
-  netmask   => '24',
-  secret    => 'testing123',
-  shortname => 'wlc01',
-  nastype   => 'other',
-  port      => '1645-1646',
-  firewall  => true,
-}
-```
-
-```puppet
-# Range example in FreeRADIUS 3
+# Range example
 freeradius::client { "wlan-controllers":
   ip        => '192.168.0.0/24',
   secret    => 'testing123',
@@ -249,14 +236,11 @@ freeradius::client { "wlan-controllers":
 ```
 
 ##### `ip`
-The IP address of the client or range. For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
-On FreeRADIUS 2, specify the netmask separately. On FreeRADIUS 3, set `ip` in CIDR format. Default: `undef`.
+The IP address of the client or range in CIDR format. For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
+On FreeRADIUS 2, specify the netmask separately. Default: `undef`.
 
 ##### `ip6`
-The IPv6 address of the client or range in CIDR notation. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
-
-##### `netmask`
-The netmask of the client, specified as an integer, e.g. `24`. Only to be set on FreeRADIUS 2. Default: `undef`.
+The IPv6 address of the client or range in CIDR format. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
 
 ##### `shortname`
 A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section. Required.
@@ -704,10 +688,10 @@ Define RADIUS clients, specifically to connect to the status server for monitori
 Very similar usage to `freeradius::client` but with fewer options.
 
 ##### `ip`
-Default: `undef`. The IP address of the client.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
+Default: `undef`. The IP address of the client in CIDR format.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
 
 ##### `ip6`
-Default: `undef`. The IPv6 address of the client. `ip` and `ip6` are mutually exclusive but one must be supplied.
+Default: `undef`. The IPv6 address of the client in CIDR format. `ip` and `ip6` are mutually exclusive but one must be supplied.
 
 ##### `secret`
 required. The RADIUS shared secret used for communication between the client/NAS and the RADIUS server.

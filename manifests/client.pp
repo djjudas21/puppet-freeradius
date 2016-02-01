@@ -6,7 +6,6 @@ define freeradius::client (
   $ip6            = undef,
   $virtual_server = undef,
   $nastype        = undef,
-  $netmask        = undef,
   $redirect       = undef,
   $port           = undef,
   $srcip          = undef,
@@ -17,21 +16,6 @@ define freeradius::client (
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
-
-  # Calculate CIDR format IP now that FreeRADIUS has obsoleted use of separate netmask.
-  # This workaround means no syntax change is necessary, although we print a warning.
-  $cidr = $netmask ? {
-    undef   => $ip,
-    default => "${ip}/${netmask}",
-  }
-  $cidr6 = $netmask ? {
-    undef   => $ip6,
-    default => "${ip6}/${netmask}",
-  }
-
-  if ($netmask) {
-    warning("netmask field found in client ${shortname} is deprecated, use CIDR notation instead. Please fix your configuration.")
-  }
 
   file { "${fr_basepath}/clients.d/${shortname}.conf":
     ensure  => $ensure,
@@ -50,7 +34,7 @@ define freeradius::client (
           proto  => 'udp',
           dport  => $port,
           action => 'accept',
-          source => $cidr,
+          source => $ip,
         }
       } elsif $ip6 {
         firewall { "100-${shortname}-${port}-v6":
@@ -58,7 +42,7 @@ define freeradius::client (
           dport    => $port,
           action   => 'accept',
           provider => 'ip6tables',
-          source   => $cidr6,
+          source   => $ip6,
         }
       }
     } else {
