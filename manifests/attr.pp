@@ -26,7 +26,7 @@ define freeradius::attr (
   # Reference all attribute snippets in one file
   concat::fragment { "attr-${name}":
     target  => "${fr_modulepath}/attr_filter",
-    content => template("freeradius/attr.erb"),
+    content => template('freeradius/attr.erb'),
     order   => 20,
   }
 }

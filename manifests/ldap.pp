@@ -69,7 +69,7 @@ define freeradius::ldap (
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
-    content => template("freeradius/ldap.erb"),
+    content => template('freeradius/ldap.erb'),
     require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }

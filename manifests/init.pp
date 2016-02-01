@@ -12,7 +12,7 @@ class freeradius (
   $syslog          = false,
 ) inherits freeradius::params {
 
-  if ($fr_version != 3) {
+  if ($::fr_version != 3) {
     fail('This module is only compatible with FreeRADIUS 3')
   }
 
@@ -25,7 +25,7 @@ class freeradius (
     mode    => '0640',
     owner   => 'root',
     group   => $freeradius::fr_group,
-    content => template("freeradius/radiusd.conf.erb"),
+    content => template('freeradius/radiusd.conf.erb'),
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
     notify  => Service[$freeradius::fr_service],
   }
@@ -138,9 +138,9 @@ class freeradius (
   }
 
   # Install default attribute filters
-  concat::fragment { "attr-default":
+  concat::fragment { 'attr-default':
     target  => "${freeradius::fr_modulepath}/attr_filter",
-    content => template("freeradius/attr_default.erb"),
+    content => template('freeradius/attr_default.erb'),
     order   => 10,
   }
 
