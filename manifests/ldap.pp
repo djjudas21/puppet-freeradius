@@ -25,7 +25,6 @@ define freeradius::ldap (
   $fr_service          = $::freeradius::params::fr_service
   $fr_modulepath       = $::freeradius::params::fr_modulepath
   $fr_group            = $::freeradius::params::fr_group
-  $fr_version          = $::freeradius::params::fr_version
 
   # Validate our inputs
   # Hostnames
@@ -70,7 +69,7 @@ define freeradius::ldap (
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
-    content => template("freeradius/ldap.fr${fr_version}.erb"),
+    content => template("freeradius/ldap.erb"),
     require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
