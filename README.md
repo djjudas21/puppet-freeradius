@@ -37,6 +37,12 @@ This module installs and configures [FreeRADIUS](http://freeradius.org/) server
 on Linux. It supports FreeRADIUS 3.x only. It was designed with CentOS in mind
 but should work on other distributions.
 
+| `jgazeley/freeradius` | FreeRADIUS  |
+| --------------------- | ----------- |
+| 2.x                   | 3.x         |
+| 1.x                   | 2.x and 3.x |
+| 0.x                   | 2.x         |
+
 ## Module Description
 
 This module installs FreeRADIUS from a distro-provided package and installs a
