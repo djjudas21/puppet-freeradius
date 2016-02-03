@@ -35,7 +35,10 @@
 
 This module installs and configures [FreeRADIUS](http://freeradius.org/) server
 on Linux. It supports FreeRADIUS 3.x only. It was designed with CentOS in mind
-but should work on other distributions.
+but should work on other distributions. Please note that at this time, current
+versions of Debian and Ubuntu still package FreeRADIUS 2.2.x which is end-of-life.
+If you use Debian or Ubuntu, you will need to use version 1.x of this module,
+which itself is no longer maintained.
 
 | `jgazeley/freeradius` | FreeRADIUS  |
 | --------------------- | ----------- |
