@@ -11,17 +11,9 @@ define freeradius::attr (
   $fr_group            = $::freeradius::params::fr_group
   $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
   $fr_modulepath       = $::freeradius::params::fr_modulepath
-  $fr_version          = $::freeradius::params::fr_version
-
-  # Decide on location for attribute filters
-  $location = $fr_version ? {
-    2       => $fr_basepath,
-    3       => "${fr_moduleconfigpath}/attr_filter",
-    default => $fr_moduleconfigpath,
-  }
 
   # Install the attribute filter snippet
-  file { "${location}/${name}":
+  file { "${fr_moduleconfigpath}/attr_filter/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
@@ -34,7 +26,7 @@ define freeradius::attr (
   # Reference all attribute snippets in one file
   concat::fragment { "attr-${name}":
     target  => "${fr_modulepath}/attr_filter",
-    content => template("freeradius/attr.fr${fr_version}.erb"),
+    content => template('freeradius/attr.erb'),
     order   => 20,
   }
 }

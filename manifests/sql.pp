@@ -6,7 +6,7 @@ define freeradius::sql (
   $login = 'radius',
   $radius_db = 'radius',
   $num_sql_socks = '${thread[pool].max_servers}',
-  $query_file = 'sql/${database}/dialup.conf',
+  $query_file = 'sql/${database}/queries.conf',
   $custom_query_file = '',
   $lifetime = '0',
   $max_queries = '0',
@@ -35,7 +35,6 @@ define freeradius::sql (
   $fr_group            = $::freeradius::params::fr_group
   $fr_logpath          = $::freeradius::params::fr_logpath
   $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
-  $fr_version          = $::freeradius::params::fr_version
 
   # Validate our inputs
   # Validate multiple choice options
@@ -80,11 +79,7 @@ define freeradius::sql (
   }
 
   # Determine default location of query file
-  $queryfile = $fr_version ? {
-    '2'     => "${fr_basepath}/sql/${database}/dialup.conf",
-    '3'     => "${fr_basepath}/sql/queries.conf",
-    default => "${fr_basepath}/sql/queries.conf",
-  }
+  $queryfile = "${fr_basepath}/sql/queries.conf"
 
   # Install custom query file
   if ($custom_query_file != '') {
@@ -101,7 +96,7 @@ define freeradius::sql (
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
-    content => template("freeradius/sql.conf.fr${fr_version}.erb"),
+    content => template('freeradius/sql.conf.erb'),
     require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }

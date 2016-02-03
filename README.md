@@ -34,8 +34,14 @@
 ## Overview
 
 This module installs and configures [FreeRADIUS](http://freeradius.org/) server
-on Linux. It supports FreeRADIUS 2.x and 3.x. It was designed with CentOS in mind
+on Linux. It supports FreeRADIUS 3.x only. It was designed with CentOS in mind
 but should work on other distributions.
+
+| `jgazeley/freeradius` | FreeRADIUS  |
+| --------------------- | ----------- |
+| 2.x                   | 3.x         |
+| 1.x                   | 2.x and 3.x |
+| 0.x                   | 2.x         |
 
 ## Module Description
 
@@ -224,20 +230,7 @@ freeradius::client { "wlan-controller01":
 ```
 
 ```puppet
-# Range example on FreeRADIUS 2
-freeradius::client { "wlan-controllers":
-  ip        => '192.168.0.0',
-  netmask   => '24',
-  secret    => 'testing123',
-  shortname => 'wlc01',
-  nastype   => 'other',
-  port      => '1645-1646',
-  firewall  => true,
-}
-```
-
-```puppet
-# Range example in FreeRADIUS 3
+# Range example
 freeradius::client { "wlan-controllers":
   ip        => '192.168.0.0/24',
   secret    => 'testing123',
@@ -249,14 +242,11 @@ freeradius::client { "wlan-controllers":
 ```
 
 ##### `ip`
-The IP address of the client or range. For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
-On FreeRADIUS 2, specify the netmask separately. On FreeRADIUS 3, set `ip` in CIDR format. Default: `undef`.
+The IP address of the client or range in CIDR format. For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
+Default: `undef`.
 
 ##### `ip6`
-The IPv6 address of the client or range in CIDR notation. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
-
-##### `netmask`
-The netmask of the client, specified as an integer, e.g. `24`. Only to be set on FreeRADIUS 2. Default: `undef`.
+The IPv6 address of the client or range in CIDR format. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
 
 ##### `shortname`
 A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section. Required.
@@ -436,19 +426,16 @@ Number of seconds to wait for LDAP query to finish. Default: `10`
 ##### `start`
 Connections to create during module instantiation. If the server cannot create specified number of
 connections during instantiation it will exit. Set to 0 to allow the server to start without the
-directory being available. This option only works with FR3; setting it on FR2 will have no effect.
-Default: `${thread[pool].start_servers}`
+directory being available. Default: `${thread[pool].start_servers}`
 
 ##### `min`
-Minimum number of connections to keep open. This option only works with FR3; setting it on FR2 will have no effect.
-Default: `${thread[pool].min_spare_servers}`
+Minimum number of connections to keep open. Default: `${thread[pool].min_spare_servers}`
 
 ##### `max`
 Maximum number of connections. Default: `${thread[pool].max_servers}`
 
 ##### `spare`
-Spare connections to be left idle. This option only works with FR3; setting it on FR2 will have no effect.
-Default: `${thread[pool].max_spare_servers}`
+Spare connections to be left idle. Default: `${thread[pool].max_spare_servers}`
 
 ##### `starttls`
 Set this to 'yes' to use TLS encrypted connections to the LDAP database by using the StartTLS extended operation.
@@ -704,10 +691,10 @@ Define RADIUS clients, specifically to connect to the status server for monitori
 Very similar usage to `freeradius::client` but with fewer options.
 
 ##### `ip`
-Default: `undef`. The IP address of the client.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
+Default: `undef`. The IP address of the client in CIDR format.  For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
 
 ##### `ip6`
-Default: `undef`. The IPv6 address of the client. `ip` and `ip6` are mutually exclusive but one must be supplied.
+Default: `undef`. The IPv6 address of the client in CIDR format. `ip` and `ip6` are mutually exclusive but one must be supplied.
 
 ##### `secret`
 required. The RADIUS shared secret used for communication between the client/NAS and the RADIUS server.
@@ -732,9 +719,10 @@ Provide content of template item. Specify only one of `source` or `content`.
 
 ## Limitations
 
-This module is targeted at FreeRADIUS 2.x running on CentOS 6 and FreeRADIUS 3.x running
-on CentOS 7. It has not been thoroughly tested on other distributions, but might work.
-Likely sticking points with other distros are the names of packages, services and file paths.
+This module is targeted at FreeRADIUS 3.x running on CentOS 7. It will not work on
+FreeRADIUS 2.x. It has not been thoroughly tested on other distributions, but
+might work. Likely sticking points with other distros are the names of packages,
+services and file paths.
 
 This module was written for use with Puppet 3.6 and 3.7, but should be quite agnostic
 to new versions of Puppet.
@@ -745,9 +733,6 @@ This module was written primarily for internal use - features we haven't needed 
 use probably haven't been written. Please send pull requests with new features and
 bug fixes. You are also welcome to file issues but I make no guarantees of
 development effort if the features aren't useful to my employer.
-
-When contributing code, please ensure your change works on FreeRADIUS 2.x and 3.x - at
-least until this module drops support for 2.x.
 
 ## Release Notes
 
