@@ -55,6 +55,7 @@ class freeradius (
     "${freeradius::fr_basepath}/certs",
     "${freeradius::fr_basepath}/clients.d",
     "${freeradius::fr_basepath}/sites-enabled",
+    "${freeradius::fr_basepath}/sites-available",
     "${freeradius::fr_basepath}/instantiate",
   ]:
     ensure  => directory,
@@ -71,13 +72,6 @@ class freeradius (
   # know break functionality out of the box with this config
   freeradius::module { 'eap':
     ensure => absent,
-  }
-
-  # Create symlink to enable tls-cache server
-  # This is not harmful to enable globally
-  file { "${freeradius::fr_basepath}/sites-enabled/tls-cache":
-    ensure => link,
-    target => "${freeradius::fr_basepath}/sites-available/tls-cache",
   }
 
   # Set up concat policy file, as there is only one global policy
