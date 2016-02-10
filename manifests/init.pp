@@ -73,11 +73,10 @@ class freeradius (
     ensure => absent,
   }
 
-  # Create symlink to enable tls-cache server
-  # This is not harmful to enable globally
-  file { "${freeradius::fr_basepath}/sites-enabled/tls-cache":
-    ensure => link,
-    target => "${freeradius::fr_basepath}/sites-available/tls-cache",
+  # Install tls-cache from packaged file. This should be available in the RPM
+  #  when FR 3.1.x is released. This is not harmful to enable globally.
+  freeradius::site { 'tls-cache':
+    source => 'puppet:///modules/freeradius/tls-cache',
   }
 
   # Set up concat policy file, as there is only one global policy
