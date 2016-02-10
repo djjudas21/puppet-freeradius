@@ -78,9 +78,6 @@ class freeradius (
   freeradius::site { 'tls-cache':
     source => 'puppet:///modules/freeradius/tls-cache',
   }
-  freeradius::module { 'cache_tls':
-    source => 'puppet:///modules/freeradius/cache_tls',
-  }
 
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
