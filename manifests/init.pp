@@ -55,7 +55,6 @@ class freeradius (
     "${freeradius::fr_basepath}/certs",
     "${freeradius::fr_basepath}/clients.d",
     "${freeradius::fr_basepath}/sites-enabled",
-    "${freeradius::fr_basepath}/sites-available",
     "${freeradius::fr_basepath}/instantiate",
   ]:
     ensure  => directory,
@@ -322,8 +321,6 @@ class freeradius (
   # Blank a couple of default files that will break our config. This is more effective than deleting them
   # as they won't get overwritten when FR is upgraded from RPM, whereas missing files are replaced.
   file { [
-    "${freeradius::fr_basepath}/sites-available/default",
-    "${freeradius::fr_basepath}/sites-available/inner-tunnel",
     "${freeradius::fr_basepath}/clients.conf",
     "${freeradius::fr_basepath}/sql.conf",
   ]:
