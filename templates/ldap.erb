@@ -10,24 +10,24 @@ ldap <%= @name %> {
 	#  certificate, if you're using ldaps.  See OpenLDAP documentation
 	#  for the behavioral semantics of specifying more than one host.
 	#
-	#  Depending on the libldap in use, server may be an LDAP URI.
-	#  In the case of OpenLDAP this allows additional the following
+	#  Depending on the libldap in use, server may be specified as an LDAP
+	#  URI.  In the case of OpenLDAP this allows additional the following
 	#  additional schemes:
-	#  - ldaps:// (LDAP over SSL)
-	#  - ldapi:// (LDAP over Unix socket)
-	#  - ldapc:// (Connectionless LDAP)
-<% @serverarray.each do |srv| -%>	server = '<%= srv %>'
+	#
+	#    - ldaps:// (LDAP over SSL)
+	#    - ldapi:// (LDAP over Unix socket)
+	#    - ldapc:// (Connectionless LDAP)
+	#
+<% @serverarray.each do |srv| -%>       server = '<%= srv %>'
 <% end -%>
-#	server = 'ldap.rrdns.example.org'
-#	server = 'ldap.rrdns.example.org'
 
 	#  Port to connect on, defaults to 389, will be ignored for LDAP URIs.
 	port = <%= @port %>
 
 	#  Administrator account for searching and possibly modifying.
 	#  If using SASL + KRB5 these should be commented out.
-	identity = '<%= @identity %>'
-	password = '<%= @password %>'
+        identity = '<%= @identity %>'
+        password = '<%= @password %>'
 
 	#  Unless overridden in another section, the dn from which all
 	#  searches will start from.
@@ -72,13 +72,13 @@ ldap <%= @name %> {
 	#  mapped attributes.
 	#
 	#  Values should be in the format:
-	#  	<radius attr> <op> <value>
+	#  	<fr attr> <op> <value>
 	#
 	#  Where:
-	#  	<radius attr>:	Is the attribute you wish to create
+	#  	<fr attr>:	Is the attribute you wish to create,
 	# 			with any valid list and request qualifiers.
 	#  	<op>: 		Is any assignment operator (=, :=, +=, -=).
-	#  	<value>:	Is the value to parse into the new valuepair.
+	#  	<value>:	Is the value to parse into the new attribute.
 	# 			If the value is wrapped in double quotes it
 	#			will be xlat expanded.
 #	valuepair_attribute = 'radiusAttribute'
@@ -92,10 +92,10 @@ ldap <%= @name %> {
 	#  unlang constructs in module configuration files.
 	#
 	#  Configuration items are in the format:
-	# 	<radius attr> <op> <ldap attr>
+	# 	<fr attr> <op> <ldap attr>
 	#
 	#  Where:
-	#  	<radius attr>:	Is the destination RADIUS attribute
+	#  	<fr attr>:	Is the destination RADIUS attribute
 	# 			with any valid list and request qualifiers.
 	#  	<op>: 		Is any assignment attribute (=, :=, +=, -=).
 	#  	<ldap attr>:	Is the attribute associated with user or
@@ -103,13 +103,13 @@ ldap <%= @name %> {
 	# 			If the attribute name is wrapped in double
 	# 			quotes it will be xlat expanded.
 	#
-	#  Request and list qualifiers may also be placed after the 'update'
-	#  section name to set defaults destination requests/lists
-	#  for unqualified RADIUS attributes.
+	#  Request and list qualifiers may be placed after the 'update'
+	#  section name to set default destination requests/lists
+	#  for <fr attr>s with no list qualifiers.
 	#
 	#  Note: LDAP attribute names should be single quoted unless you want
-	#  the name value to be derived from an xlat expansion, or an
-	#  attribute ref.
+	#  the name to be derived from an xlat expansion, or an attribute ref.
+	#
 	update {
 		control:Password-With-Header	+= 'userPassword'
 #		control:NT-Password		:= 'ntPassword'
@@ -121,9 +121,9 @@ ldap <%= @name %> {
 		#  Where only a list is specified as the RADIUS attribute,
 		#  the value of the LDAP attribute is parsed as a valuepair
 		#  in the same format as the 'valuepair_attribute' (above).
-		#control:			+= 'radiusControlAttribute'
-		#request:			+= 'radiusRequestAttribute'
-		#reply:				+= 'radiusReplyAttribute'
+		control:			+= 'radiusControlAttribute'
+		request:			+= 'radiusRequestAttribute'
+		reply:				+= 'radiusReplyAttribute'
 	}
 
 	#  Set to yes if you have eDirectory and want to use the universal
@@ -182,15 +182,19 @@ ldap <%= @name %> {
 
 		#  Server side result sorting
 		#
-		#  A list of space delimited attributes to order the result
-		#  set by, if the filter matches multiple objects.
-		#  Only the first result in the set will be processed.
+		#  A list of space delimited attributes to order the result set by.
+		#
+		#  If the filter matches multiple objects only the first
+		#  result will be processed.
 		#
 		#  If the attribute name is prefixed with a hyphen '-' the
 		#  sorting order will be reversed for that attribute.
 		#
 		#  If sort_by is set, and the server does not support sorting
 		#  the search will fail.
+		#
+		#  If a search returns multiple user objects and sort_by is not
+		#  set, the search will fail.
 #		sort_by = '-uid'
 
 		#  If this is undefined, anyone is authorised.
@@ -209,8 +213,8 @@ ldap <%= @name %> {
 		#  'no' and the access_attribute is present, then
 		#  access will not be allowed.
 		#
-		#  If the value of the access_attribute is 'false', it
-		#  will negate the result.
+		#  If the value of the retrieved access_attribute is
+		#  'false', it will negate the result.
 		#
 		#  e.g.
 		#    access_positive = yes
@@ -505,9 +509,9 @@ ldap <%= @name %> {
 		start_tls = <%= @starttls %>
 
 <% if @cafile != '' -%>
-		ca_file	= <%= @cafile %>
+		ca_file = <%= @cafile %>
 <% end -%>
-#		ca_path	= ${certdir}
+#               ca_path = ${certdir}
 <% if @certfile != '' -%>
 		certificate_file = <%= @certfile %>
 <% end -%>
@@ -526,7 +530,7 @@ ldap <%= @name %> {
  		#
 		#  The default is libldap's default, which varies based
 		#  on the contents of ldap.conf.
-		require_cert	= '<%= @requirecert %>'
+		require_cert    = '<%= @requirecert %>'
 	}
 
 	#  As of version 3.0, the 'pool' section has replaced the
