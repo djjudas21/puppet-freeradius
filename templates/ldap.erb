@@ -508,14 +508,14 @@ ldap <%= @name %> {
 		# using ldaps (port 636) connections
 		start_tls = <%= @starttls %>
 
-<% if @cafile != '' -%>
+<% if @cafile -%>
 		ca_file = <%= @cafile %>
 <% end -%>
 #               ca_path = ${certdir}
-<% if @certfile != '' -%>
+<% if @certfile -%>
 		certificate_file = <%= @certfile %>
 <% end -%>
-<% if @keyfile != '' -%>
+<% if @keyfile -%>
 		private_key_file = <%= @keyfile %>
 <% end -%>
 #		random_file = /dev/urandom
