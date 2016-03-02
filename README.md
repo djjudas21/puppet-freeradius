@@ -87,6 +87,9 @@ Install support for MySQL. Note this only installs the package. Use `freeradius:
 ##### `perl_support`
 Install support for Perl. Default: `false`
 
+##### `preserve_mods`
+Leave recommended stock modules enabled. Default: `true`
+
 ##### `utils_support`
 Install FreeRADIUS utils. Default: `false`
 

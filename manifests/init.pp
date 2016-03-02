@@ -10,6 +10,7 @@ class freeradius (
   $wpa_supplicant  = false,
   $winbind_support = false,
   $syslog          = false,
+  $preserve_mods   = true,
 ) inherits freeradius::params {
 
   if ($freeradius::fr_version != 3) {
@@ -75,37 +76,39 @@ class freeradius (
   }
 
   # Preserve some stock modules
-  freeradius::module { [
-    'always',
-    'cache_eap',
-    'chap',
-    'detail',
-    'detail.log',
-    'dhcp',
-    'digest',
-    'dynamic_clients',
-    'echo',
-    'exec',
-    'expiration',
-    'expr',
-    'files',
-    'linelog',
-    'logintime',
-    'mschap',
-    'ntlm_auth',
-    'pap',
-    'passwd',
-    'preprocess',
-    'radutmp',
-    'realm',
-    'replicate',
-    'soh',
-    'sradutmp',
-    'unix',
-    'unpack',
-    'utf8',
-  ]:
-    preserve => true,
+  if ($preserve_mods) {
+    freeradius::module { [
+      'always',
+      'cache_eap',
+      'chap',
+      'detail',
+      'detail.log',
+      'dhcp',
+      'digest',
+      'dynamic_clients',
+      'echo',
+      'exec',
+      'expiration',
+      'expr',
+      'files',
+      'linelog',
+      'logintime',
+      'mschap',
+      'ntlm_auth',
+      'pap',
+      'passwd',
+      'preprocess',
+      'radutmp',
+      'realm',
+      'replicate',
+      'soh',
+      'sradutmp',
+      'unix',
+      'unpack',
+      'utf8',
+    ]:
+      preserve => true,
+    }
   }
 
 
