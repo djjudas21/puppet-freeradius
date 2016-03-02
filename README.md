@@ -739,6 +739,14 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 2.0.1
+
+  * Fix up LDAP template to allow better compatibility with FreeRADIUS 3.1.x
+
+### 2.0.0
+
+  * Drop support for FreeRADIUS 2.x, enabling us to keep the codebase tidier
+
 ### 1.3.0
 
   * Add support for defining config templates
