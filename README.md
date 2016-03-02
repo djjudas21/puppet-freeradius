@@ -751,6 +751,10 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 2.1.0
+
+  * Various changes to preserve stock modules in a FreeRADIUS installation and be able to toggle them
+
 ### 2.0.1
 
   * Fix up LDAP template to allow better compatibility with FreeRADIUS 3.1.x
