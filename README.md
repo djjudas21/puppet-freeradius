@@ -467,15 +467,24 @@ Default: `allow`
 
 #### `freeradius::module`
 
-Install a module from a flat file.
+Install a module from a flat file, or enable a stock module that came with your distribution of FreeRADIUS.
 
 ```puppet
+# Enable a stock module
+freeradius::module { 'pap':
+  preserve => true,
+}
+```
+
+```puppet
+# Install a custom module from a flat file
 freeradius::module { 'buffered-sql':
   source => 'puppet:///modules/site_freeradius/buffered-sql',
 }
 ```
 
 ```puppet
+# Install a custom module from a template
 freeradius::module { 'buffered-sql':
   content => template('some_template.erb)',
 }

@@ -55,6 +55,7 @@ class freeradius (
     "${freeradius::fr_basepath}/certs",
     "${freeradius::fr_basepath}/clients.d",
     "${freeradius::fr_basepath}/sites-enabled",
+    "${freeradius::fr_basepath}/mods-enabled",
     "${freeradius::fr_basepath}/instantiate",
   ]:
     ensure  => directory,
@@ -72,6 +73,41 @@ class freeradius (
   freeradius::module { 'eap':
     ensure => absent,
   }
+
+  # Preserve some stock modules
+  freeradius::module { [
+    'always',
+    'cache_eap',
+    'chap',
+    'detail',
+    'detail.log',
+    'dhcp',
+    'digest',
+    'dynamic_clients',
+    'echo',
+    'exec',
+    'expiration',
+    'expr',
+    'files',
+    'linelog',
+    'logintime',
+    'mschap',
+    'ntlm_auth',
+    'pap',
+    'passwd',
+    'preprocess',
+    'radutmp',
+    'realm',
+    'replicate',
+    'soh',
+    'sradutmp',
+    'unix',
+    'unpack',
+    'utf8',
+  ]:
+    preserve => true,
+  }
+
 
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
