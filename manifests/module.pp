@@ -15,7 +15,7 @@ define freeradius::module (
     # Symlink to mods-available for stock modules
     file { "${fr_modulepath}/${name}":
       ensure => link,
-      target => "${fr_basepath}/mods-available/${name}",
+      target => "../mods-available/${name}",
     }
   } else {
     # Deploy actual module to sites-enabled
