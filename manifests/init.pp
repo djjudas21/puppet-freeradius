@@ -69,12 +69,6 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
 
-  # Delete some modules which come bundled with the server that we
-  # know break functionality out of the box with this config
-  freeradius::module { 'eap':
-    ensure => absent,
-  }
-
   # Preserve some stock modules
   if ($preserve_mods) {
     freeradius::module { [
