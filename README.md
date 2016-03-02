@@ -87,6 +87,9 @@ Install support for MySQL. Note this only installs the package. Use `freeradius:
 ##### `perl_support`
 Install support for Perl. Default: `false`
 
+##### `preserve_mods`
+Leave recommended stock modules enabled. Default: `true`
+
 ##### `utils_support`
 Install FreeRADIUS utils. Default: `false`
 
@@ -467,15 +470,24 @@ Default: `allow`
 
 #### `freeradius::module`
 
-Install a module from a flat file.
+Install a module from a flat file, or enable a stock module that came with your distribution of FreeRADIUS.
 
 ```puppet
+# Enable a stock module
+freeradius::module { 'pap':
+  preserve => true,
+}
+```
+
+```puppet
+# Install a custom module from a flat file
 freeradius::module { 'buffered-sql':
   source => 'puppet:///modules/site_freeradius/buffered-sql',
 }
 ```
 
 ```puppet
+# Install a custom module from a template
 freeradius::module { 'buffered-sql':
   content => template('some_template.erb)',
 }

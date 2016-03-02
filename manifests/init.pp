@@ -10,6 +10,7 @@ class freeradius (
   $wpa_supplicant  = false,
   $winbind_support = false,
   $syslog          = false,
+  $preserve_mods   = true,
 ) inherits freeradius::params {
 
   if ($freeradius::fr_version != 3) {
@@ -55,6 +56,7 @@ class freeradius (
     "${freeradius::fr_basepath}/certs",
     "${freeradius::fr_basepath}/clients.d",
     "${freeradius::fr_basepath}/sites-enabled",
+    "${freeradius::fr_basepath}/mods-enabled",
     "${freeradius::fr_basepath}/instantiate",
   ]:
     ensure  => directory,
@@ -67,11 +69,42 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
 
-  # Delete some modules which come bundled with the server that we
-  # know break functionality out of the box with this config
-  freeradius::module { 'eap':
-    ensure => absent,
+  # Preserve some stock modules
+  if ($preserve_mods) {
+    freeradius::module { [
+      'always',
+      'cache_eap',
+      'chap',
+      'detail',
+      'detail.log',
+      'dhcp',
+      'digest',
+      'dynamic_clients',
+      'echo',
+      'exec',
+      'expiration',
+      'expr',
+      'files',
+      'linelog',
+      'logintime',
+      'mschap',
+      'ntlm_auth',
+      'pap',
+      'passwd',
+      'preprocess',
+      'radutmp',
+      'realm',
+      'replicate',
+      'soh',
+      'sradutmp',
+      'unix',
+      'unpack',
+      'utf8',
+    ]:
+      preserve => true,
+    }
   }
+
 
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
@@ -224,13 +257,6 @@ class freeradius (
     ensure  => present,
     require => Package[$freeradius::fr_package]
   }
-
-  # Install a few modules required on all FR installations
-  # No content is specified, so we accept the package manager default
-  # Defining them here prevents them from being purged
-  freeradius::module  { 'always': }
-  freeradius::module { 'detail': }
-  freeradius::module { 'detail.log': }
 
   # Syslog rules
   if $syslog == true {
