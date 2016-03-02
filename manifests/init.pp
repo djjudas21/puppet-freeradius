@@ -261,13 +261,6 @@ class freeradius (
     require => Package[$freeradius::fr_package]
   }
 
-  # Install a few modules required on all FR installations
-  # No content is specified, so we accept the package manager default
-  # Defining them here prevents them from being purged
-  freeradius::module  { 'always': }
-  freeradius::module { 'detail': }
-  freeradius::module { 'detail.log': }
-
   # Syslog rules
   if $syslog == true {
     rsyslog::snippet { '12-radiusd-log':
