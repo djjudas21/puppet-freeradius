@@ -751,6 +751,10 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 2.1.1
+
+  * Fix bug with the facts not reporting version numbers accurately
+
 ### 2.1.0
 
   * Various changes to preserve stock modules in a FreeRADIUS installation and be able to toggle them
