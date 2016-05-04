@@ -18,8 +18,7 @@ ldap <%= @name %> {
 	#    - ldapi:// (LDAP over Unix socket)
 	#    - ldapc:// (Connectionless LDAP)
 	#
-<% @serverarray.each do |srv| -%>       server = '<%= srv %>'
-<% end -%>
+	server =<% @serverarray.each do |srv| -%> <%= srv %><% end -%>
 
 	#  Port to connect on, defaults to 389, will be ignored for LDAP URIs.
 	port = <%= @port %>
