@@ -751,6 +751,9 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 2.1.2
+  * Write out ldap config with different syntax for FreeRADIUS 3.0.x and 3.1.x when using multiple servers
+
 ### 2.1.1
 
   * Fix bug with the facts not reporting version numbers accurately
