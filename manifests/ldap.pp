@@ -33,6 +33,15 @@ define freeradius::ldap (
     fail('$server must be an array of hostnames or IP addresses')
   }
 
+  # FR3.0 format server = 'ldap1.example.com, ldap1.example.com, ldap1.example.com'
+  # FR3.1 format server = 'ldap1.example.com'
+  #              server = 'ldap2.example.com'
+  #              server = 'ldap3.example.com'
+  $serverconcatarray = $::freeradius_version ? {
+    /^3\.0\./ => any2array(join($serverarray, ',')),
+    default   => $serverarray,
+  }
+
   # Fake booleans (FR uses yes/no instead of true/false)
   unless $starttls in ['yes', 'no'] {
     fail('$starttls must be yes or no')
