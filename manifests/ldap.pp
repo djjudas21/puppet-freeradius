@@ -37,7 +37,7 @@ define freeradius::ldap (
   # FR3.1 format server = 'ldap1.example.com'
   #              server = 'ldap2.example.com'
   #              server = 'ldap3.example.com'
-  $serverconcatarray = $::freeradiusversion ? {
+  $serverconcatarray = $::freeradius_version ? {
     /^3\.0\./ => join($serverarray, ','),
     default   => $serverarray,
   }
