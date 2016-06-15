@@ -39,7 +39,7 @@ class freeradius::params {
   }
 
   # Use the FR version fact if defined, otherwise use our best estimate from above
-  if $::freeradius_maj_version {
+  if getvar('::freeradius_maj_version') {
     $fr_version = $::freeradius_maj_version
   } else {
     $fr_version = $fr_guessversion
