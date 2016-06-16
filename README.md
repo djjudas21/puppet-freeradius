@@ -751,6 +751,9 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 2.1.4
+  * Fix compatibility with Puppet 4
+
 ### 2.1.3
   * Fix compatibility with Puppet 4
 
