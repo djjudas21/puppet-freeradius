@@ -5,35 +5,35 @@ class freeradius::params {
   case $::operatingsystem {
     /RedHat|CentOS/: {
       $fr_guessversion = $::operatingsystemmajrelease ? {
-        5       => 2,
-        6       => 2,
-        7       => 3,
-        default => 3,
+        5       => '2',
+        6       => '2',
+        7       => '3',
+        default => '3',
       }
     }
     'Debian': {
       $fr_guessversion = $::operatingsystemmajrelease ? {
-        6       => 2,
-        7       => 2,
-        8       => 2,
-        default => 2,
+        6       => '2',
+        7       => '2',
+        8       => '2',
+        default => '2',
       }
     }
     'Fedora': {
       $fr_guessversion = $::operatingsystemmajrelease ? {
-        21      => 3,
-        22      => 3,
-        23      => 3,
-        default => 3,
+        21      => '3',
+        22      => '3',
+        23      => '3',
+        default => '3',
       }
     }
     'Ubuntu': {
       $fr_guessversion = $::operatingsystemmajrelease ? {
-        '14.04' => 2,
-        '14.10' => 2,
-        '15.04' => 2,
-        '15.10' => 2,
-        default => 2,
+        '14.04' => '2',
+        '14.10' => '2',
+        '15.04' => '2',
+        '15.10' => '2',
+        default => '2',
       }
     }
   }
