@@ -28,6 +28,7 @@ describe 'freeradius' do
       #:perl_support => false,
       #:utils_support => false,
       #:ldap_support => false,
+      #:krb5_support => false,
       #:wpa_supplicant => false,
       #:winbind_support => false,
       #:syslog => false,
@@ -328,6 +329,12 @@ describe 'freeradius' do
   end
   it do
     is_expected.to contain_package('freeradius-ldap')
+      .with(
+        'ensure' => 'installed'
+      )
+  end
+  it do
+    is_expected.to contain_package('freeradius-krb5')
       .with(
         'ensure' => 'installed'
       )

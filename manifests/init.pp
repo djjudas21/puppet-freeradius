@@ -7,6 +7,7 @@ class freeradius (
   $perl_support    = false,
   $utils_support   = false,
   $ldap_support    = false,
+  $krb5_support    = false,
   $wpa_supplicant  = false,
   $winbind_support = false,
   $syslog          = false,
@@ -215,6 +216,11 @@ class freeradius (
   }
   if $ldap_support {
     package { 'freeradius-ldap':
+      ensure => installed,
+    }
+  }
+  if $krb5_support {
+    package { 'freeradius-krb5':
       ensure => installed,
     }
   }
