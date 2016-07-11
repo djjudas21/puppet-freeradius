@@ -11,6 +11,7 @@ shared_context :global_hiera_data do
        #"freeradius::control_socket" => '',
        #"freeradius::control_socket::mode" => '',
        #"freeradius::ldap_support" => '',
+       #"freeradius::krb5_support" => '',
        #"freeradius::max_requests" => '',
        #"freeradius::max_servers" => '',
        #"freeradius::mysql_support" => '',

@@ -20,6 +20,7 @@
        * [`freeradius::home_server_pool`](#freeradiushomeserverpool)
        * [`freeradius::instantiate`](#freeradiusinstantiate)
        * [`freeradius::ldap`](#freeradiusldap)
+       * [`freeradius::krb5`](#freeradiuskrb5)
        * [`freeradius::module`](#freeradiusmodule)
        * [`freeradius::policy`](#freeradiuspolicy)
        * [`freeradius::realm`](#freeradiusrealm)
@@ -95,6 +96,9 @@ Install FreeRADIUS utils. Default: `false`
 
 ##### `ldap_support`
 Install support for LDAP. Default: `false`
+
+##### `krb5_support`
+Install support for Kerberos. Default: `false`
 
 ##### `wpa_supplicant`
 Install wpa_supplicant utility. Default: `false`
@@ -467,6 +471,28 @@ Certificate Verification requirements. Choose from:
 
 Default: `allow`
 
+#### `freeradius::krb5`
+Configure Kerberos support for FreeRADIUS
+
+##### `keytab`
+Full path to the Kerberos keytab file
+
+##### `principal`
+Name of the service principal
+
+##### `start`
+Connections to create during module instantiation. If the server cannot create specified number of
+connections during instantiation it will exit. Set to 0 to allow the server to start without the
+directory being available. Default: `${thread[pool].start_servers}`
+
+##### `min`
+Minimum number of connections to keep open. Default: `${thread[pool].min_spare_servers}`
+
+##### `max`
+Maximum number of connections. Default: `${thread[pool].max_servers}`
+
+##### `spare`
+Spare connections to be left idle. Default: `${thread[pool].max_spare_servers}`
 
 #### `freeradius::module`
 
