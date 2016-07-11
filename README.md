@@ -777,6 +777,9 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 2.2.0
+  * Add support to configure the krb5 module
+
 ### 2.1.4
   * Fix compatibility with Puppet 4
 
