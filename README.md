@@ -802,6 +802,9 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 2.3.0
+  * Add support to configure virtual modules for fail-over and load-balancing
+
 ### 2.2.0
   * Add support to configure the krb5 module
 
