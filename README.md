@@ -764,21 +764,22 @@ Provide content of template item. Specify only one of `source` or `content`.
 Define a virtual module which consists of one or more other modules, for failover or
 load-balancing purposes.
 
-##### `name`
 ##### `submodules`
+
+Provide an array of submodules which will be loaded into this virtual module. Required.
+
 ##### `type`
 
+Select the type of virtual module from `redundant`, `load-balance`, `redundant-load-balance`
+or `group`. See [virtual modules](http://wiki.freeradius.org/config/Fail-over#virtual-modules)
+and [load-balancing](http://wiki.freeradius.org/config/load-balancing) for more details.
+
+
 ```puppet
+# Load virtual module myldap
 freeradius::virtual_module { 'myldap':
   submodules => ['ldap1', 'ldap2'],
   type       => 'redundant-load-balance',
-}
-```
-yields
-```
-redundant-load-balance myldap {
-	ldap1
-	ldap2
 }
 ```
 
