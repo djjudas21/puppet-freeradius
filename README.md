@@ -28,6 +28,7 @@
        * [`freeradius::sql`](#freeradiussql)
        * [`freeradius::statusclient`](#freeradiusstatusclient)
        * [`freeradius::template`](#freeradiustemplate)
+       * [`freeradius::virtual_module`](#freeradiusvirtual_module)
 4. [Limitations - OS compatibility, etc.](#limitations)
 5. [Development - Guide for contributing to the module](#development)
 6. [Release Notes](#release-notes)
@@ -757,6 +758,29 @@ Provide source to a file with the template item. Specify only one of `source` or
 ##### `content`
 
 Provide content of template item. Specify only one of `source` or `content`.
+
+#### `freeradius::virtual_module`
+
+Define a virtual module which consists of one or more other modules, for failover or
+load-balancing purposes.
+
+##### `name`
+##### `submodules`
+##### `type`
+
+```puppet
+freeradius::virtual_module { 'myldap':
+  submodules => ['ldap1', 'ldap2'],
+  type       => 'redundant-load-balance',
+}
+```
+yields
+```
+redundant-load-balance myldap {
+	ldap1
+	ldap2
+}
+```
 
 ## Limitations
 
