@@ -20,7 +20,6 @@ define freeradius::virtual_module (
   ])
 
   # Make sure $submodules is a non-zero array
-  $submodules = any2array($submodules)
   validate_array($submodules)
   if count($submodules) < 1 {
     fail('Must specify at least one $submodule')
