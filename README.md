@@ -110,6 +110,9 @@ Add the radius user to the winbind privileged group. You must install winbind se
 ##### `syslog`
 Add a syslog rule (using the `saz/rsyslog` module). Default: `false`.
 
+##### `log_auth`
+Log authentication requests (yes/no). Default: `no`.
+
 ```puppet
 class { 'freeradius':
   max_requests    => 4096,
@@ -120,6 +123,7 @@ class { 'freeradius':
   wpa_supplicant  => true,
   winbind_support => true,
   syslog          => true,
+  log_auth        => 'yes',
 }
 ```
 

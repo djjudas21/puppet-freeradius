@@ -32,6 +32,7 @@ describe 'freeradius' do
       #:wpa_supplicant => false,
       #:winbind_support => false,
       #:syslog => false,
+      #:log_auth => 'no',
     }
   end
   # add these two lines in a single test block to enable puppet and hiera debug mode
