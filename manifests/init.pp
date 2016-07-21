@@ -11,6 +11,7 @@ class freeradius (
   $wpa_supplicant  = false,
   $winbind_support = false,
   $syslog          = false,
+  $log_auth        = 'no',
   $preserve_mods   = true,
 ) inherits freeradius::params {
 
