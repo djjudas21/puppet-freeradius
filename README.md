@@ -806,6 +806,9 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 2.3.1
+  * Fix bug with log rotation throwing errors when radiusd is not running
+
 ### 2.3.0
   * Add support to configure virtual modules for fail-over and load-balancing
 
