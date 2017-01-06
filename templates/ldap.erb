@@ -112,6 +112,10 @@ ldap <%= @name %> {
 	#
 	update {
 		control:Password-With-Header	+= 'userPassword'
+<% if @nthashattr -%>
+    control:NT-Password  := '<%= @nthashattr %>'
+<% end -%>
+#		control:NT-Password		:= 'ntPassword'
 #		control:NT-Password		:= 'ntPassword'
 #		reply:Reply-Message		:= 'radiusReplyMessage'
 #		reply:Tunnel-Type		:= 'radiusTunnelType'

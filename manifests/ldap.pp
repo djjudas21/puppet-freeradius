@@ -19,6 +19,7 @@ define freeradius::ldap (
   $cafile      = undef,
   $certfile    = undef,
   $keyfile     = undef,
+  $nthashattr  = undef,
   $requirecert = 'allow',
 ) {
   $fr_package          = $::freeradius::params::fr_package
