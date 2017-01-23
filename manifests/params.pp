@@ -127,4 +127,10 @@ class freeradius::params {
     'Debian' => 'winbindd_priv',
     default  => 'wbpriv',
   }
+
+  $fr_libdir = $::osfamily ? {
+    'RedHat' => '/usr/lib64/freeradius',
+    'Debian' => '/usr/lib/freeradius',
+    default  => '/usr/lib64/freeradius',
+  }
 }
