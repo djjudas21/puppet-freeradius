@@ -10,12 +10,16 @@ class freeradius (
   $krb5_support    = false,
   $wpa_supplicant  = false,
   $winbind_support = false,
+  $log_destination = 'files',
   $syslog          = false,
   $log_auth        = 'no',
   $preserve_mods   = true,
 ) inherits freeradius::params {
 
   validate_re($freeradius::fr_version, '^3', 'This module is only compatible with FreeRADIUS 3')
+
+  validate_re($log_destination, '^(files|syslog|stdout|stderr)$',
+    "log_destination value (${log_destination}) is not a valid value")
 
   if $control_socket == true {
     warning('Use of the control_socket parameter in the freeradius class is deprecated. Please use the freeradius::control_socket class instead.')
