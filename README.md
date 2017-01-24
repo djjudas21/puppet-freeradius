@@ -351,6 +351,10 @@ The transport protocol. If unspecified, defaults to "udp", which is the traditio
 RADIUS transport. It may also be "tcp", in which case TCP will be used to talk to
 this home server. Default: `udp`
 
+##### `status_check`
+Type of check to see if the home_server is dead or alive. Valid values are `none`, `status-server`
+and `request`. Default: `undef`.
+
 
 #### `freeradius::home_server_pool`
 

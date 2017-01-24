@@ -12,5 +12,8 @@ home_server <%= @name %> {
 	port = <%= @port %>
 	proto = <%= @proto %>
 	secret = <%= @secret %>
+<%- if @status_check -%>
+  status_check = <%= @status_check %>
+<%- end -%>
 }
 

@@ -7,6 +7,7 @@ define freeradius::home_server (
   $virtual_server = '',
   $port = 1812,
   $proto = 'udp',
+  $status_check = undef,
 ) {
   $fr_basepath = $::freeradius::params::fr_basepath
 
@@ -21,6 +22,12 @@ define freeradius::home_server (
   # Validate integers
   unless is_integer($port) {
     fail('$port must be an integer')
+  }
+
+  if $status_check {
+    unless $status_check in ['none', 'status-server', 'request'] {
+      fail('$status_check must be one of none, status-server, request')
+    }
   }
 
   # Configure config fragment for this home server
