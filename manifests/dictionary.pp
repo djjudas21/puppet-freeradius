@@ -1,6 +1,7 @@
 # Install FreeRADIUS custom dictionaries
 define freeradius::dictionary (
-  $source,
+  $source = undef,
+  $content = undef,
   $order = 50,
   $ensure = present,
 ) {
@@ -9,6 +10,10 @@ define freeradius::dictionary (
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
+  if !$source and !$content {
+    fail('source or content parameter should be provided')
+  }
+
   # Install dictionary in dictionary.d
   file { "${fr_basepath}/dictionary.d/dictionary.${name}":
     ensure  => $ensure,
@@ -16,6 +21,7 @@ define freeradius::dictionary (
     owner   => 'root',
     group   => $fr_group,
     source  => $source,
+    content => $content,
     require => [File["${fr_basepath}/dictionary.d"], Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
