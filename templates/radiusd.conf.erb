@@ -243,7 +243,7 @@ log {
 	#  The command-line option "-X" over-rides this option, and forces
 	#  logging to go to stdout.
 	#
-	destination = files
+  destination = <%= @log_destination %>
 
 	#
 	#  Highlight important messages sent to stderr and stdout.

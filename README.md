@@ -107,6 +107,9 @@ Install wpa_supplicant utility. Default: `false`
 ##### `winbind_support`
 Add the radius user to the winbind privileged group. You must install winbind separately. Default: `false`.
 
+##### `log_destination`
+Configure destination of log messages. Valid values are `files`, `syslog`, `stdout` and `stderr`. Default: `files`.
+
 ##### `syslog`
 Add a syslog rule (using the `saz/rsyslog` module). Default: `false`.
 
