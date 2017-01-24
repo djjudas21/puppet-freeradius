@@ -6,4 +6,15 @@ client <%= @shortname %> {
 	<% if @virtual_server %>virtual_server = <%= @virtual_server %><% end %>
 	<% if @nastype %>nas_type = <%= @nastype %><% end %>
 	require_message_authenticator = no
+  <%- if !@attributes.empty? -%>
+    <%- if @attributes.respond_to?('join') -%>
+  <%= @attributes.join("\n  ") %>
+    <%- elsif @attributes.is_a?(Hash) -%>
+      <%- @attributes.sort.each do |k, v| -%>
+  <%= k %> = <%= v %>
+      <%- end -%>
+    <%- else -%>
+  <%= @attributes %>
+    <%- end -%>
+  <%- end -%>
 }

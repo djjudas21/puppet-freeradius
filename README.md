@@ -284,6 +284,9 @@ The UDP port that this virtual server should listen on. Leave blank if this clie
 ##### `firewall`
 Create a firewall exception for this virtual server. If this is set to `true`, you must also supply `port` and either `ip` or `ip6`. Default: `false`.
 
+##### `attributes`
+Array of attributes to assign to this client. Default: empty.
+
 #### `freeradius::config`
 
 Install arbitrary config snippets from a flat file. These are installed in `/etc/raddb/conf.d`
