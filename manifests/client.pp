@@ -11,6 +11,7 @@ define freeradius::client (
   $srcip          = undef,
   $firewall       = false,
   $ensure         = present,
+  $attributes     = [],
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
