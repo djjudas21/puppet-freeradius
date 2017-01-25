@@ -278,6 +278,34 @@ The virtual server that traffic from this client should be sent to. Default: `un
 ##### `nastype`
 The `nastype` attribute is used to tell the `checkrad.pl` script which NAS-specific method it should use when checking simultaneous use. See [`man clients.conf`](http://freeradius.org/radiusd/man/clients.conf.txt) for a list of all options. Default: `undef`.
 
+##### `proto`
+Transport protocol used by the client. If unspecified, defaults to "udp", which is the traditional RADIUS transport. Valid values are `udp`, `tcp` or `*` for both of them. Default: `undef`.
+
+##### `require_message_authenticator`
+Old-style clients do not send a Message-Authenticator in an Access-Request.  RFC 5080 suggests that all clients SHOULD include it in an Access-Request. Valid values are `yes` and `no`. Default: `no`.
+
+##### `login`
+Login used by checkrad.pl when querying the NAS for simultaneous use. Default: `undef`.
+
+##### `password`
+Password used by checkrad.pl when querying the NAS for simultaneous use. Default: `undef`.
+
+##### `coa_server`
+A pointer to the "home_server_pool" OR a "home_server" section that contains the CoA configuration for this client. Default: `undef`.
+
+##### `response_window`
+Response window for proxied packets. Default: `undef`.
+
+##### `max_connections`
+Limit the number of simultaneous TCP connections from a client. It is ignored for clients sending UDP traffic. Default: `undef`.
+
+##### `lifetime`
+The lifetime, in seconds, of a TCP connection. It is ignored for clients sending UDP traffic. Default: `undef`.
+
+##### `idle_timeout`
+The idle timeout, in seconds, of a TCP connection. It is ignored for clients sending UDP traffic. Default: `undef`.
+
+
 ##### `port`
 The UDP port that this virtual server should listen on. Leave blank if this client is not tied to a virtual server. Currently the port number is only used to create firewall exceptions and you only need to specify it if you set `firewall => true`. Use port range syntax as in [`puppetlabs-firewall`](https://forge.puppetlabs.com/puppetlabs/firewall). Default: `undef`.
 

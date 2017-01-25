@@ -1,11 +1,23 @@
 client <%= @shortname %> {
 	<% if @ip %>ipaddr = <%= @ip %><% end %>
 	<% if @ip6 %>ipv6addr = <%= @ip6 %><% end %>
+  <% if @proto %>proto = <%= @proto %><% end %>
 	shortname = <%= @shortname %>
 	secret = "<%= @secret %>"
 	<% if @virtual_server %>virtual_server = <%= @virtual_server %><% end %>
 	<% if @nastype %>nas_type = <%= @nastype %><% end %>
-	require_message_authenticator = no
+  require_message_authenticator = <%= @require_message_authenticator %>
+  <% if @login %>login = <%= @login %><% end %>
+  <% if @password %>password = <%= @password %><% end %>
+  <% if @coa_server %>coa_server = <%= @coa_server %><% end %>
+  <% if @response_window %>response_window = <%= @response_window %><% end %>
+  <%- if @lifetime or @idle_timeout or @max_connections -%>
+  limit {
+    <% if @max_connections %>max_connections = <%= @max_connections %><% end %>
+    <% if @lifetime %>lifetime = <%= @lifetime %><% end %>
+    <% if @idle_timeout %>idle_timeout = <%= @idle_timeout %><% end %>
+  }
+  <%- end -%>
   <%- if !@attributes.empty? -%>
     <%- if @attributes.respond_to?('join') -%>
   <%= @attributes.join("\n  ") %>
