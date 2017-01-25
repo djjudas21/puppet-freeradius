@@ -2,21 +2,47 @@
 define freeradius::client (
   $shortname,
   $secret,
-  $ip             = undef,
-  $ip6            = undef,
-  $virtual_server = undef,
-  $nastype        = undef,
-  $redirect       = undef,
-  $port           = undef,
-  $srcip          = undef,
-  $firewall       = false,
-  $ensure         = present,
-  $attributes     = [],
+  $ip                            = undef,
+  $ip6                           = undef,
+  $proto                         = undef,
+  $require_message_authenticator = 'no',
+  $virtual_server                = undef,
+  $nastype                       = undef,
+  $login                         = undef,
+  $password                      = undef,
+  $coa_server                    = undef,
+  $response_window               = undef,
+  $max_connections               = undef,
+  $lifetime                      = undef,
+  $idle_timeout                  = undef,
+  $redirect                      = undef,
+  $port                          = undef,
+  $srcip                         = undef,
+  $firewall                      = false,
+  $ensure                        = present,
+  $attributes                    = [],
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
+
+  if $proto {
+    unless $proto in ['*', 'udp', 'tcp'] {
+      fail('$proto must be one of udp, tcp or *')
+    }
+  }
+
+  unless $require_message_authenticator in ['yes', 'no'] {
+    fail('$require_message_authenticator must be one of yes or no')
+  }
+
+  if $nastype {
+    unless $nastype in ['cisco', 'computone', 'livingston', 'juniper', 'max40xx',
+    'multitech', 'netserver', 'pathras', 'patton', 'portslave', 'tc', 'usrhiper', 'other'] {
+      fail('$nastype must be one of cisco, computone, livingston, juniper, max40xx, multitech, netserver, pathras, patton, portslave, tc, usrhiper, other')
+    }
+  }
 
   file { "${fr_basepath}/clients.d/${shortname}.conf":
     ensure  => $ensure,
