@@ -136,7 +136,7 @@ pidfile = ${run_dir}/${name}.pid
 #
 #  $ grep '\\\\' $(find raddb -type f -print)
 #
-correct_escapes = true
+correct_escapes = <%= @correct_escapes %>
 
 #  panic_action: Command to execute if the server dies unexpectedly.
 #
