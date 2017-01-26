@@ -14,6 +14,7 @@ class freeradius (
   $syslog          = false,
   $log_auth        = 'no',
   $preserve_mods   = true,
+  $correct_escapes = true,
 ) inherits freeradius::params {
 
   validate_re($freeradius::fr_version, '^3', 'This module is only compatible with FreeRADIUS 3')
