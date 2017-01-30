@@ -1,25 +1,66 @@
 # Configure LDAP support for FreeRADIUS
 define freeradius::module::ldap (
-  $identity,
-  $password,
-  $basedn,
-  $server      = ['localhost'],
-  $port        = 389,
-  $uses        = 0,
-  $idle        = 60,
-  $probes      = 3,
-  $interval    = 3,
-  $timeout     = 10,
-  $start       = '${thread[pool].start_servers}',
-  $min         = '${thread[pool].min_spare_servers}',
-  $max         = '${thread[pool].max_servers}',
-  $spare       = '${thread[pool].max_spare_servers}',
-  $ensure      = 'present',
-  $starttls    = 'no',
-  $cafile      = undef,
-  $certfile    = undef,
-  $keyfile     = undef,
-  $requirecert = 'allow',
+  String $basedn,
+  Enum['present','absent'] $ensure                                    = 'present',
+  $server                                                             = ['localhost'],
+  Integer $port                                                       = 389,
+  Optional[String] $identity                                          = undef,
+  Optional[String] $password                                          = undef,
+  Optional[Freeradius::Sasl] $sasl                                    = {},
+  Optional[String] $valuepair_attribute                               = undef,
+  Optional[Array[String]] $update                                     = undef,
+  Optional[Freeradius::Boolean] $edir                                 = undef,
+  Optional[Freeradius::Boolean] $edir_autz                            = undef,
+  String $user_base_dn                                                = "\${..base_dn}",
+  String $user_filter                                                 = '(uid=%{%{Stripped-User-Name}:-%{User-Name}})',
+  Optional[Freeradius::Sasl] $user_sasl                               = {},
+  Optional[Freeradius::Scope] $user_scope                             = undef,
+  Optional[String] $user_sort_by                                      = undef,
+  Optional[String] $user_access_attribute                             = undef,
+  Optional[Freeradius::Boolean] $user_access_positive                 = undef,
+  String $group_base_dn                                               = "\${..base_dn}",
+  String $group_filter                                                = '(objectClass=posixGroup)',
+  Optional[Freeradius::Scope] $group_scope                            = undef,
+  Optional[String] $group_name_attribute                              = undef,
+  Optional[String] $group_membership_filter                           = undef,
+  String $group_membership_attribute                                  = 'memberOf',
+  Optional[Freeradius::Boolean] $group_cacheable_name                 = undef,
+  Optional[Freeradius::Boolean] $group_cacheable_dn                   = undef,
+  Optional[String] $group_cache_attribute                             = undef,
+  Optional[String] $group_attribute                                   = undef,
+  Optional[String] $profile_filter                                    = undef,
+  Optional[String] $profile_default                                   = undef,
+  Optional[String] $profile_attribute                                 = undef,
+  String $client_base_dn                                              = "\${..base_dn}",
+  String $client_filter                                               = '(objectClass=radiusClient)',
+  Optional[Freeradius::Boolean] $client_scope                         = undef,
+  Optional[Freeradius::Boolean] $read_clients                         = undef,
+  Optional[Enum['never','searching','finding','always']] $dereference = undef,
+  Freeradius::Boolean $chase_referrals                                = 'yes',
+  Freeradius::Boolean $rebind                                         = 'yes',
+  Freeradius::Boolean $use_referral_credentials                       = 'no',
+  Optional[Freeradius::Boolean] $session_tracking                     = undef,
+  Integer $timeout                                                    = 10,
+  Integer $timelimit                                                  = 3,
+  Integer $idle                                                       = 60,
+  Integer $probes                                                     = 3,
+  Integer $interval                                                   = 3,
+  String $ldap_debug                                                  = '0x0028',
+  Freeradius::Boolean $starttls                                       = 'no',
+  Optional[String] $cafile                                            = undef,
+  Optional[String] $certfile                                          = undef,
+  Optional[String] $keyfile                                           = undef,
+  Optional[String] $random_file                                       = undef,
+  Enum['never','allow','demand','hard'] $requirecert                  = 'allow',
+  Freeradius::Integer $start                                          = '${thread[pool].start_servers}',
+  Freeradius::Integer $min                                            = '${thread[pool].min_spare_servers}',
+  Freeradius::Integer $max                                            = '${thread[pool].max_servers}',
+  Freeradius::Integer $spare                                          = '${thread[pool].max_spare_servers}',
+  Integer $uses                                                       = 0,
+  Integer $retry_delay                                                = 30,
+  Integer $lifetime                                                   = 0,
+  Integer $idle_timeout                                               = 60,
+  Float $connect_timeout                                              = 3.0,
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service
@@ -40,36 +81,6 @@ define freeradius::module::ldap (
   $serverconcatarray = $::freeradius_version ? {
     /^3\.0\./ => any2array(join($serverarray, ',')),
     default   => $serverarray,
-  }
-
-  # Fake booleans (FR uses yes/no instead of true/false)
-  unless $starttls in ['yes', 'no'] {
-    fail('$starttls must be yes or no')
-  }
-
-  # Validate multiple choice options
-  unless $requirecert in ['never', 'allow', 'demand', 'hard'] {
-    fail('$requirecert must be one of never, allow, demand, hard')
-  }
-
-  # Validate integers
-  unless is_integer($port) {
-    fail('$port must be an integer')
-  }
-  unless is_integer($uses) {
-    fail('$uses must be an integer')
-  }
-  unless is_integer($idle) {
-    fail('$idle must be an integer')
-  }
-  unless is_integer($probes) {
-    fail('$probes must be an integer')
-  }
-  unless is_integer($interval) {
-    fail('$interval must be an integer')
-  }
-  unless is_integer($timeout) {
-    fail('$timeout must be an integer')
   }
 
   # Generate a module config, based on ldap.conf

@@ -26,8 +26,12 @@ ldap <%= @name %> {
 
 	#  Administrator account for searching and possibly modifying.
 	#  If using SASL + KRB5 these should be commented out.
-        identity = '<%= @identity %>'
-        password = '<%= @password %>'
+<%- if @identity -%>
+  identity = '<%= @identity %>'
+<%- end -%>
+<%- if @password -%>
+  password = <%= @password %>
+<%- end -%>
 
 	#  Unless overridden in another section, the dn from which all
 	#  searches will start from.
@@ -56,12 +60,21 @@ ldap <%= @name %> {
 	sasl {
 		# SASL mechanism
 #		mech = 'PLAIN'
+<%- if @sasl.has_key?('mech') -%>
+    mech = '<%= @sasl['mech'] %>'
+<%- end -%>
 
 		# SASL authorisation identity to proxy.
 #		proxy = 'autz_id'
+<%- if @sasl.has_key?('proxy') -%>
+    proxy = '<%= @sasl['proxy'] %>'
+<%- end -%>
 
 		# SASL realm. Used for kerberos.
 #		realm = 'example.org'
+<%- if @sasl.has_key?('realm') -%>
+    realm = '<%= @sasl['realm'] %>'
+<%- end -%>
 	}
 
 	#
@@ -82,6 +95,9 @@ ldap <%= @name %> {
 	# 			If the value is wrapped in double quotes it
 	#			will be xlat expanded.
 #	valuepair_attribute = 'radiusAttribute'
+<%- if @valuepair_attribute -%>
+  valuepair_attribute = <%= @valuepair_attribute %>
+<%- end -%>
 
 	#
 	#  Mapping of LDAP directory attributes to RADIUS dictionary attributes.
@@ -110,6 +126,11 @@ ldap <%= @name %> {
 	#  Note: LDAP attribute names should be single quoted unless you want
 	#  the name to be derived from an xlat expansion, or an attribute ref.
 	#
+<%- if @update -%>
+  update {
+    <%= @update.join("\n    ") %>
+  }
+<%- else -%>
 	update {
 		control:Password-With-Header	+= 'userPassword'
 #		control:NT-Password		:= 'ntPassword'
@@ -125,15 +146,22 @@ ldap <%= @name %> {
 		request:			+= 'radiusRequestAttribute'
 		reply:				+= 'radiusReplyAttribute'
 	}
+<%- end -%>
 
 	#  Set to yes if you have eDirectory and want to use the universal
 	#  password mechanism.
 #	edir = no
+<%- if @edir -%>
+  edir = <%= @edir %>
+<%- end -%>
 
 	#  Set to yes if you want to bind as the user after retrieving the
 	#  Cleartext-Password. This will consume the login grace, and
 	#  verify user authorization.
 #	edir_autz = no
+<%- if @edir_autz -%>
+  edir_autz = <%= @edir_autz %>
+<%- end -%>
 
 	#  Note: set_auth_type was removed in v3.x.x
 	#  Equivalent functionality can be achieved by adding the following
@@ -151,11 +179,11 @@ ldap <%= @name %> {
 	#
 	user {
 		#  Where to start searching in the tree for users
-		base_dn = "${..base_dn}"
+    base_dn = "<%= @user_base_dn %>"
 
 		#  Filter for user objects, should be specific enough
 		#  to identify a single user object.
-		filter = "(uid=%{%{Stripped-User-Name}:-%{User-Name}})"
+    filter = "<%= @user_filter %>"
 
 		#  SASL parameters to use for user binds
 		#
@@ -169,16 +197,28 @@ ldap <%= @name %> {
 		sasl {
 			# SASL mechanism
 #			mech = 'PLAIN'
+      <%- if @user_sasl.has_key?('mech') -%>
+      mech = '<%= @user_sasl['mech'] %>'
+      <%- end -%>
 
 			# SASL authorisation identity to proxy.
 #			proxy = &User-Name
+      <%- if @user_sasl.has_key?('proxy') -%>
+      proxy = '<%= @user_sasl['proxy'] %>'
+      <%- end -%>
 
 			# SASL realm. Used for kerberos.
 #			realm = 'example.org'
+      <%- if @user_sasl.has_key?('realm') -%>
+      realm = '<%= @user_sasl['realm'] %>'
+      <%- end -%>
 		}
 
 		#  Search scope, may be 'base', 'one', sub' or 'children'
 #		scope = 'sub'
+<%- if @user_scope -%>
+    scope = '<%= @user_scope %>'
+<%- end -%>
 
 		#  Server side result sorting
 		#
@@ -196,11 +236,17 @@ ldap <%= @name %> {
 		#  If a search returns multiple user objects and sort_by is not
 		#  set, the search will fail.
 #		sort_by = '-uid'
+<%- if @user_sort_by -%>
+    sort_by = '<%= @user_sort_by %>'
+<%- end -%>
 
 		#  If this is undefined, anyone is authorised.
 		#  If it is defined, the contents of this attribute
 		#  determine whether or not the user is authorised
 #		access_attribute = 'dialupAccess'
+<%- if @user_access_attribute -%>
+    access_attribute = '<%= @user_access_attribute %>'
+<%- end -%>
 
 		#  Control whether the presence of 'access_attribute'
 		#  allows access, or denys access.
@@ -225,6 +271,9 @@ ldap <%= @name %> {
 		#
 		#  Will result in the user being locked out.
 #		access_positive = yes
+<%- if @user_access_positive -%>
+    access_positive = <%= @user_access_positive %>
+<%- end -%>
 	}
 
 	#
@@ -232,24 +281,33 @@ ldap <%= @name %> {
 	#
 	group {
 		#  Where to start searching in the tree for groups
-		base_dn = "${..base_dn}"
+    base_dn = "<%= @group_base_dn %>"
 
 		#  Filter for group objects, should match all available
 		#  group objects a user might be a member of.
-		filter = '(objectClass=posixGroup)'
+    filter = "<%= @group_filter %>"
 
 		# Search scope, may be 'base', 'one', sub' or 'children'
 #		scope = 'sub'
+<%- if @group_scope -%>
+    scope = '<%= @group_scope %>'
+<%- end -%>
 
 		#  Attribute that uniquely identifies a group.
 		#  Is used when converting group DNs to group
 		#  names.
 #		name_attribute = cn
+<%- if @group_name_attribute -%>
+    name_attribute = <%= @group_name_attribute %>
+<%- end -%>
 
 		#  Filter to find group objects a user is a member of.
 		#  That is, group objects with attributes that
 		#  identify members (the inverse of membership_attribute).
 #		membership_filter = "(|(member=%{control:Ldap-UserDn})(memberUid=%{%{Stripped-User-Name}:-%{User-Name}}))"
+<%- if @group_membership_filter -%>
+    membership_filter = "<%= @group_membership_filter %>"
+<%- end -%>
 
 		#  The attribute in user objects which contain the names
 		#  or DNs of groups a user is a member of.
@@ -257,7 +315,7 @@ ldap <%= @name %> {
 		#  Unless a conversion between group name and group DN is
 		#  needed, there's no requirement for the group objects
 		#  referenced to actually exist.
-		membership_attribute = 'memberOf'
+    membership_attribute = '<%= @group_membership_attribute %>'
 
 		#  If cacheable_name or cacheable_dn are enabled,
 		#  all group information for the user will be
@@ -274,17 +332,29 @@ ldap <%= @name %> {
 		#  i.e. if your groups are specified as DNs then enable
 		#  cacheable_dn else enable cacheable_name.
 #		cacheable_name = 'no'
+<%- if @group_cacheable_name -%>
+    cacheable_name = '<%= @group_cacheable_name %>'
+<%- end -%>
 #		cacheable_dn = 'no'
+<%- if @group_cacheable_dn -%>
+    cacheable_dn = '<%= @group_cacheable_dn %>'
+<%- end -%>
 
 		#  Override the normal cache attribute (<inst>-LDAP-Group or
 		#  LDAP-Group if using the default instance) and create a
 		#  custom attribute.  This can help if multiple module instances
 		#  are used in fail-over.
 #		cache_attribute = 'LDAP-Cached-Membership'
+<%- if @group_cache_attribute -%>
+    cache_attribute = '<%= @group_cache_attribute %>'
+<%- end -%>
 
 		#  Override the normal group comparison attribute name
 		#  (<inst>-LDAP-Group or LDAP-Group if using the default instance) .
 #		group_attribute = "${.:instance}-${.:name}-Group"
+<%- if @group_attribute -%>
+    group_attribute = '<%= @group_attribute %>'
+<%- end -%>
 	}
 
 	#
@@ -295,6 +365,9 @@ ldap <%= @name %> {
 	profile {
 		#  Filter for RADIUS profile objects
 #		filter = '(objectclass=radiusprofile)'
+<%- if @profile_filter -%>
+    filter = '<%= @profile_filter %>'
+<%- end -%>
 
 		#  The default profile.  This may be a DN or an attribute
 		#  reference.
@@ -302,6 +375,9 @@ ldap <%= @name %> {
 		#  &User-Profile attribute to specify the default profile,
 		#  set this to &control:User-Profile.
 #		default = 'cn=radprofile,dc=example,dc=org'
+<%- if @profile_default -%>
+    default = '<%= @profile_default %>'
+<%- end -%>
 
 		#  The LDAP attribute containing profile DNs to apply
 		#  in addition to the default profile above.  These are
@@ -309,6 +385,9 @@ ldap <%= @name %> {
 		#  attributes from the update section, are are applied
 		#  if authorization is successful.
 #		attribute = 'radiusProfileDn'
+<%- if @profile_default -%>
+    attribute = '<%= @profile_attribute %>'
+<%- end -%>
 	}
 
 	#
@@ -316,15 +395,18 @@ ldap <%= @name %> {
 	#
 	client {
 		#   Where to start searching in the tree for clients
-		base_dn = "${..base_dn}"
+    base_dn = "<%= @client_base_dn %>"
 
 		#
 		#  Filter to match client objects
 		#
-		filter = '(objectClass=radiusClient)'
+    filter = '<%= @client_filter %>'
 
 		# Search scope, may be 'base', 'one', 'sub' or 'children'
 #		scope = 'sub'
+<%- if @client_scope -%>
+    scope = '<%= @client_scope %>'
+<%- end -%>
 
 		#
 		#  Sets default values (not obtained from LDAP) for new client entries
@@ -367,6 +449,9 @@ ldap <%= @name %> {
 
 	#  Load clients on startup
 #	read_clients = no
+<%- if @read_clients -%>
+  read_clients = <%= @read_clients %>
+<%- end -%>
 
 	#
 	#  Modify user object on receiving Accounting-Request
@@ -433,6 +518,9 @@ ldap <%= @name %> {
 		#
 		#  LDAP_OPT_DEREF is set to this value.
 #		dereference = 'always'
+<%- if @dereference -%>
+    dereference = '<%= @dereference %>'
+<%- end -%>
 
 		#
 		#  The following two configuration items control whether the
@@ -441,15 +529,15 @@ ldap <%= @name %> {
 		#  If you set these to 'no', then searches will likely return
 		#  'operations error', instead of a useful result.
 		#
-		chase_referrals = yes
-		rebind = yes
+    chase_referrals = <%= @chase_referrals %>
+    rebind = <%= @rebind %>
 
 		#
 		#  On rebind, use the credentials from the rebind url instead
 		#  of admin credentials used during the initial bind.
 		#  Default 'no'
 		#
-		use_referral_credentials = no
+    use_referral_credentials = <%= @use_referral_credentials %>
 
 		#
 		#  If 'yes', then include draft-wahl-ldap-session tracking
@@ -461,6 +549,9 @@ ldap <%= @name %> {
 		#  Default 'no'.
 		#
 #		session_tracking = yes
+<%- if @session_tracking -%>
+    session_tracking = <%= @session_tracking %>
+<%- end -%>
 
 		#  Seconds to wait for LDAP query to finish. default: 20
 		res_timeout = <%= @timeout %>
@@ -469,7 +560,7 @@ ldap <%= @name %> {
 		#  time limit). default: 20
 		#
 		#  LDAP_OPT_TIMELIMIT is set to this value.
-		srv_timelimit = 3
+    srv_timelimit = <%= @timelimit %>
 
 		#  LDAP_OPT_X_KEEPALIVE_IDLE
 		idle = <%= @idle %>
@@ -487,7 +578,7 @@ ldap <%= @name %> {
 		#
 		#	default: 0x0000 (no debugging messages)
 		#	Example:(LDAP_DEBUG_FILTER+LDAP_DEBUG_CONNS)
-		ldap_debug = 0x0028
+    ldap_debug = <%= @ldap_debug %>
 	}
 
 	#
@@ -519,6 +610,9 @@ ldap <%= @name %> {
 		private_key_file = <%= @keyfile %>
 <% end -%>
 #		random_file = /dev/urandom
+<%- if @random_file -%>
+    random_file = <%= @random_file %>
+<%- end -%>
 
 		#  Certificate Verification requirements.  Can be:
 		#    'never' (do not even bother trying)
@@ -581,19 +675,19 @@ ldap <%= @name %> {
 		#  The number of seconds to wait after the server tries
 		#  to open a connection, and fails.  During this time,
 		#  no new connections will be opened.
-		retry_delay = 30
+    retry_delay = <%= @retry_delay %>
 
 		#  The lifetime (in seconds) of the connection
-		lifetime = 0
+    lifetime = <%= @lifetime %>
 
 		#  Idle timeout (in seconds).  A connection which is
 		#  unused for this length of time will be closed.
-		idle_timeout = 60
+    idle_timeout = <%= @idle_timeout %>
 
 		#  Connection timeout (in seconds).  The maximum amount of
 		#  time to wait for a new connection to be established.
 		#  Sets LDAP_OPT_NETWORK_TIMEOUT in libldap.
-		connect_timeout = 3.0
+    connect_timeout = <%= @connect_timeout %>
 
 		#  NOTE: All configuration settings are enforced.  If a
 		#  connection is closed because of 'idle_timeout',
