@@ -201,6 +201,20 @@ class freeradius (
     order  => 90,
   }
 
+  # Install a huntgroups file
+  concat { "${freeradius::fr_basepath}/huntgroups":
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    mode    => '0640',
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+  }
+  concat::fragment { 'huntgroups_header':
+    target => "${freeradius::fr_basepath}/huntgroups",
+    source => 'puppet:///modules/freeradius/huntgroups.header',
+    order  => 10,
+  }
+
+
   # Install FreeRADIUS packages
   package { 'freeradius':
     ensure => installed,
