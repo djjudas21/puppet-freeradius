@@ -1,0 +1,120 @@
+# This file is managed by Puppet. DO NOT EDIT.
+#
+listen {
+  #  Type of packets to listen for.
+  #  Allowed values are:
+  #  auth  listen for authentication packets
+  #  acct  listen for accounting packets
+  #  proxy   IP to use for sending proxied packets
+  #  detail  Read from the detail file.  For examples, see
+  #               raddb/sites-available/copy-acct-to-home-server
+  #  status  listen for Status-Server packets.  For examples,
+  #    see raddb/sites-available/status
+  #  coa     listen for CoA-Request and Disconnect-Request
+  #    packets.  For examples, see the file
+  #    raddb/sites-available/coa
+  #
+  type = <%= @type %>
+
+  #  Note: "type = proxy" lets you control the source IP used for
+  #        proxying packets, with some limitations:
+  #
+  #    * A proxy listener CANNOT be used in a virtual server section.
+  #    * You should probably set "port = 0".
+  #    * Any "clients" configuration will be ignored.
+  #
+  #  See also proxy.conf, and the "src_ipaddr" configuration entry
+  #  in the sample "home_server" section.  When you specify the
+  #  source IP address for packets sent to a home server, the
+  #  proxy listeners are automatically created.
+
+  #  IP address on which to listen.
+  #  Allowed values are:
+  #  dotted quad (1.2.3.4)
+  #       hostname    (radius.example.com)
+  #       wildcard    (*)
+<%- if !@ip6 and @ip -%>
+  ipaddr = <%= @ip %>
+<%- elsif !@ip6 -%>
+  ipaddr = *
+<%- end -%>
+
+  #  OR, you can use an IPv6 address, but not both
+  #  at the same time.
+#  ipv6addr = ::  # any.  ::1 == localhost
+<%- if !@ip and @ip6 -%>
+  ipv6addr = <%= @ip6 %>
+<%- end -%>
+
+  #  Port on which to listen.
+  #  Allowed values are:
+  #  integer port number (1812)
+  #  0 means "use /etc/services for the proper port"
+  port = <%= @port %>
+
+  #  Some systems support binding to an interface, in addition
+  #  to the IP address.  This feature isn't strictly necessary,
+  #  but for sites with many IP addresses on one interface,
+  #  it's useful to say "listen on all addresses for eth0".
+  #
+  #  If your system does not support this feature, you will
+  #  get an error if you try to use it.
+  #
+#  interface = eth0
+<%- if @interface -%>
+  interface = <%= @interface %>
+<%- end -%>
+
+  #  Per-socket lists of clients.  This is a very useful feature.
+  #
+  #  The name here is a reference to a section elsewhere in
+  #  radiusd.conf, or clients.conf.  Having the name as
+  #  a reference allows multiple sockets to use the same
+  #  set of clients.
+  #
+  #  If this configuration is used, then the global list of clients
+  #  is IGNORED for this "listen" section.  Take care configuring
+  #  this feature, to ensure you don't accidentally disable a
+  #  client you need.
+  #
+  #  See clients.conf for the configuration of "per_socket_clients".
+  #
+#  clients = per_socket_clients
+<%- if !@clients.empty? -%>
+  clients = <%= @clients.join(',') %>
+<%- end -%>
+
+  #
+  #  Connection limiting for sockets with "proto = tcp".
+  #
+  #  This section is ignored for other kinds of sockets.
+  #
+  limit {
+        #
+        #  Limit the number of simultaneous TCP connections to the socket
+        #
+        #  The default is 16.
+        #  Setting this to 0 means "no limit"
+        max_connections = <%= @max_connections %>
+
+        #  The per-socket "max_requests" option does not exist.
+
+        #
+        #  The lifetime, in seconds, of a TCP connection.  After
+        #  this lifetime, the connection will be closed.
+        #
+        #  Setting this to 0 means "forever".
+        lifetime = <%= @lifetime %>
+
+        #
+        #  The idle timeout, in seconds, of a TCP connection.
+        #  If no packets have been received over the connection for
+        #  this time, the connection will be closed.
+        #
+        #  Setting this to 0 means "no timeout".
+        #
+        #  We STRONGLY RECOMMEND that you set an idle timeout.
+        #
+        idle_timeout = <%= @idle_timeout %>
+  }
+}

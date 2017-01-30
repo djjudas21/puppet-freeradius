@@ -770,6 +770,15 @@ policy {
 
 ######################################################################
 #
+# Listen directives not directly associated to any virtual server.
+# This way you could configure more than one virtual server sharing
+# ports.
+#
+#
+$INCLUDE listen.d/
+
+######################################################################
+#
 #	Load virtual servers.
 #
 #	This next $INCLUDE line loads files in the directory that
