@@ -42,6 +42,10 @@ versions of Debian and Ubuntu still package FreeRADIUS 2.2.x which is end-of-lif
 If you use Debian or Ubuntu, you will need to use version 1.x of this module,
 which itself is no longer maintained.
 
+This module requires Puppet 4.0.0 or greater. Puppet 3.x was
+[discontinued](https://puppet.com/misc/puppet-enterprise-lifecycle) at
+the end of 2016.
+
 | `jgazeley/freeradius` | FreeRADIUS  |
 | --------------------- | ----------- |
 | 2.x                   | 3.x         |
