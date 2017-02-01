@@ -202,14 +202,14 @@ class freeradius (
   }
 
   # Install a huntgroups file
-  concat { "${freeradius::fr_basepath}/huntgroups":
+  concat { "${freeradius::fr_basepath}/mods-config/preprocess/huntgroups":
     owner   => 'root',
     group   => $freeradius::fr_group,
     mode    => '0640',
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
   }
   concat::fragment { 'huntgroups_header':
-    target => "${freeradius::fr_basepath}/huntgroups",
+    target => "${freeradius::fr_basepath}/mods-config/preprocess/huntgroups",
     source => 'puppet:///modules/freeradius/huntgroups.header',
     order  => 10,
   }
