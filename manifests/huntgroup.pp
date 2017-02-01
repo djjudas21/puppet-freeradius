@@ -9,7 +9,7 @@ define freeradius::huntgroup (
 
   $conditionals = join($conditions, ", ")
 
-  $content    = "${huntgroup}\t${conditionals}\n\n"
+  $content    = "${huntgroup}\t${conditionals}\n"
 
   concat::fragment { "huntgroup.${title}":
     ensure  => $ensure,
