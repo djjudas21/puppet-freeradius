@@ -1,7 +1,7 @@
 # Install FreeRADIUS clients (WISMs or testing servers)
 define freeradius::client (
-  $shortname,
   $secret,
+  $shortname                     = $title,
   $ip                            = undef,
   $ip6                           = undef,
   $proto                         = undef,

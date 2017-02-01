@@ -42,6 +42,10 @@ versions of Debian and Ubuntu still package FreeRADIUS 2.2.x which is end-of-lif
 If you use Debian or Ubuntu, you will need to use version 1.x of this module,
 which itself is no longer maintained.
 
+This module requires Puppet 4.0.0 or greater. Puppet 3.x was
+[discontinued](https://puppet.com/misc/puppet-enterprise-lifecycle) at
+the end of 2016.
+
 | `jgazeley/freeradius` | FreeRADIUS  |
 | --------------------- | ----------- |
 | 2.x                   | 3.x         |
@@ -76,6 +80,9 @@ of the global settings to increase flexibility. Patches are welcome.
 
 ##### `control_socket`
 Use of the control_socket parameter in the freeradius class is deprecated. Use the `freeradius::control_socket` class instead.
+
+##### `correct_escapes`
+Use correct backslash escaping in unlang. Default: `true`
 
 ##### `max_requests`
 The maximum number of requests which the server keeps track of. This should be 256 multiplied by the number of clients. Default: `4096`
@@ -267,7 +274,7 @@ Default: `undef`.
 The IPv6 address of the client or range in CIDR format. `ip` and `ip6` are mutually exclusive but one must be supplied. Default: `undef`.
 
 ##### `shortname`
-A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section. Required.
+A short alias that is used in place of the IP address or fully qualified hostname provided in the first line of the section. Defaults to resource name.
 
 ##### `secret`
 The RADIUS shared secret used for communication between the client/NAS and the RADIUS server. Required.
