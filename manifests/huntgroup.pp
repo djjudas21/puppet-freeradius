@@ -6,6 +6,7 @@ define freeradius::huntgroup (
   $order       = 50,
 ) {
   $fr_basepath = $::freeradius::params::fr_basepath
+  $fr_service  = $::freeradius::params::fr_service
 
   $conditionals = join($conditions, ", ")
 
@@ -16,5 +17,6 @@ define freeradius::huntgroup (
     target  => "${fr_basepath}/mods-config/preprocess/huntgroups",
     content => $content,
     order   => $order,
+    notify  => Service[$fr_service],
   }
 }
