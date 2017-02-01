@@ -140,10 +140,10 @@ sql <%= @name %> {
 		#  connections during instantiation it will exit.
 		#  Set to 0 to allow the server to start without the
 		#  database being available.
-		start = 1
+    start = <%= @pool_start %>
 
 		#  Minimum number of connections to keep open
-		min = 1
+    min = <%= @pool_min %>
 
 		#  Maximum number of connections
 		#
@@ -162,7 +162,7 @@ sql <%= @name %> {
 		#
 		#  NOTE: Idle connections WILL be closed if "idle_timeout"
 		#  is set.  This should be less than or equal to "max" above.
-		spare = 1
+    spare = <%= @pool_spare %>
 
 		#  Number of uses before the connection is closed
 		#
@@ -179,7 +179,7 @@ sql <%= @name %> {
 
 		#  idle timeout (in seconds).  A connection which is
 		#  unused for this length of time will be closed.
-		idle_timeout = 60
+    idle_timeout = <%= @pool_idle_timeout %>
 
 		#  Connection timeout (in seconds).  The maximum amount of
 		#  time to wait for a new connection to be established.
@@ -188,7 +188,7 @@ sql <%= @name %> {
 		#    rlm_sql_oracle - Not possible.
 		#    rlm_sql_postgresql - Should be set via the radius_db string instead.
 		#
-		connect_timeout = 3.0
+    connect_timeout = <%= @pool_connect_timeout %>
 
 		#  NOTE: All configuration settings are enforced.  If a
 		#  connection is closed because of "idle_timeout",

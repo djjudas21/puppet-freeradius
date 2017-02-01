@@ -776,6 +776,28 @@ Table to keep radius client info. Default: `nas`.
 Set to `yes` to read radius clients from the database (`$nas_table`) Clients will ONLY be read on server startup. For performance
 and security reasons, finding clients via SQL queries CANNOT be done "live" while the server is running. Default: `no`.
 
+##### `pool_start`
+
+Connections to create during module instantiation. Default: 1.
+
+##### `pool_min`
+
+Minimum number of connnections to keep open. Default: 1.
+
+##### `pool_spare`
+
+Spare connections to be left idle. Default: 1.
+
+##### `pool_idle_timeout`
+
+Idle timeout (in seconds). A connection which is unused for this length of time will
+be closed. Default: 60.
+
+##### `pool_connect_timeout`
+
+Connection timeout (in seconds). The maximum amount of time to wait for a new
+connection to be established. Default: '3.0'.
+
 #### `freeradius::statusclient`
 
 Define RADIUS clients, specifically to connect to the status server for monitoring.

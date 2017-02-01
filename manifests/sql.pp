@@ -2,31 +2,36 @@
 define freeradius::sql (
   $database,
   $password,
-  $server = 'localhost',
-  $login = 'radius',
-  $radius_db = 'radius',
-  $num_sql_socks = '${thread[pool].max_servers}',
-  $query_file = 'sql/${database}/queries.conf',
-  $custom_query_file = '',
-  $lifetime = '0',
-  $max_queries = '0',
-  $ensure = present,
-  $acct_table1 = 'radacct',
-  $acct_table2 = 'radacct',
-  $postauth_table = 'radpostauth',
-  $authcheck_table = 'radcheck',
-  $authreply_table = 'radreply',
-  $groupcheck_table = 'radgroupcheck',
-  $groupreply_table = 'radgroupreply',
-  $usergroup_table = 'radusergroup',
-  $deletestalesessions = 'yes',
-  $sqltrace = 'no',
-  $sqltracefile = '${logdir}/sqllog.sql',
+  $server                      = 'localhost',
+  $login                       = 'radius',
+  $radius_db                   = 'radius',
+  $num_sql_socks               = '${thread[pool].max_servers}',
+  $query_file                  = 'sql/${database}/queries.conf',
+  $custom_query_file           = '',
+  $lifetime                    = '0',
+  $max_queries                 = '0',
+  $ensure                      = present,
+  $acct_table1                 = 'radacct',
+  $acct_table2                 = 'radacct',
+  $postauth_table              = 'radpostauth',
+  $authcheck_table             = 'radcheck',
+  $authreply_table             = 'radreply',
+  $groupcheck_table            = 'radgroupcheck',
+  $groupreply_table            = 'radgroupreply',
+  $usergroup_table             = 'radusergroup',
+  $deletestalesessions         = 'yes',
+  $sqltrace                    = 'no',
+  $sqltracefile                = '${logdir}/sqllog.sql',
   $connect_failure_retry_delay = '60',
-  $nas_table = 'nas',
-  $read_groups = 'yes',
-  $port = '3306',
-  $readclients = 'no',
+  $nas_table                   = 'nas',
+  $read_groups                 = 'yes',
+  $port                        = '3306',
+  $readclients                 = 'no',
+  $pool_start                  = 1,
+  $pool_min                    = 1,
+  $pool_spare                  = 1,
+  $pool_idle_timeout           = 60,
+  $pool_connect_timeout        = '3.0',
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service
@@ -51,7 +56,7 @@ define freeradius::sql (
   unless is_integer($port) {
     fail('$port must be an integer')
   }
-  unless is_integer($num_sql_socks) {
+  unless is_integer($num_sql_socks) or $num_sql_socks == '${thread[pool].max_servers}' {
     fail('$num_sql_socks must be an integer')
   }
   unless is_integer($lifetime) {
@@ -62,6 +67,18 @@ define freeradius::sql (
   }
   unless is_integer($connect_failure_retry_delay) {
     fail('$connect_failure_retry_delay must be an integer')
+  }
+  unless is_integer($pool_start_delay) {
+    fail('$pool_start_delay must be an integer')
+  }
+  unless is_integer($pool_min_delay) {
+    fail('$pool_min_delay must be an integer')
+  }
+  unless is_integer($pool_spare_delay) {
+    fail('$pool_spare_delay must be an integer')
+  }
+  unless is_integer($pool_idle_timeout_delay) {
+    fail('$pool_idle_timeout_delay must be an integer')
   }
 
   # Fake booleans (FR uses yes/no instead of true/false)
