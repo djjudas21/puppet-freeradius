@@ -79,7 +79,7 @@ define freeradius::client (
   }
 
   if $huntgroups {
-    $huntgroups.each { |index, huntgroup|
+    $huntgroups.each |index, huntgroup| {
       freeradius::huntgroup { "huntgroup.client.${shortname}.${index}":
         * => $huntgroup
       }
