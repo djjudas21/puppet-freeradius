@@ -5,6 +5,7 @@ define freeradius::huntgroup (
   $conditions  = [],
   $order       = 50,
 ) {
+  $fr_basepath = $::freeradius::params::fr_basepath
 
   $conditionals = join($conditions, ", ")
 
