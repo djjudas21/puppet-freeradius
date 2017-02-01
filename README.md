@@ -771,7 +771,7 @@ Number of seconds to dely retrying on a failed database connection (per socket).
 
 Table to keep radius client info. Default: `nas`.
 
-#### `readclients`
+##### `readclients`
 
 Set to `yes` to read radius clients from the database (`$nas_table`) Clients will ONLY be read on server startup. For performance
 and security reasons, finding clients via SQL queries CANNOT be done "live" while the server is running. Default: `no`.
