@@ -21,7 +21,7 @@ define freeradius::client (
   $firewall                      = false,
   $ensure                        = present,
   $attributes                    = [],
-  $huntgroup                     = undef,
+  $huntgroups                    = undef,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
@@ -78,11 +78,11 @@ define freeradius::client (
     }
   }
 
-  if $huntgroup {
-    freeradius::huntgroup { "huntgroup.client.${shortname}":
-      ensure     => present,
-      huntgroup  => $huntgroup['name'],
-      conditions => $huntgroup['conditions'],
+  if $huntgroups {
+    $huntgroups.each { |index, huntgroup|
+      freeradius::huntgroup { "huntgroup.client.${shortname}.${index}":
+        * => $huntgroup
+      }
     }
   }
 }
