@@ -633,6 +633,63 @@ freeradius::site { 'inner-tunnel':
 }
 ```
 
+##### `ensure`
+
+Whether the site should be present or not.
+
+##### `source`
+
+Provide source to a file with the configuration of the site. Default: `undef`.
+
+##### `content`
+
+Provide content for the configuartion of the site. Default: `undef`.
+
+##### `authorize`
+
+Array of options (as String) for the authorize section of the site. This parameter is
+ignored if `source` or `content`are used. Default: [].
+
+##### `authenticate`
+
+Array of options (as String) for the authenticate section of the site. This parameter is
+ignored if `source` or `content`are used. Default: [].
+
+##### `preacct`
+
+Array of options (as String) for the preacct section of the site. This parameter is
+ignored if `source` or `content`are used. Default: [].
+
+##### `accounting`
+
+Array of options (as String) for the accounting section of the site. This parameter is
+ignored if `source` or `content`are used. Default: [].
+
+##### `session`
+
+Array of options (as String) for the session section of the site. This parameter is
+ignored if `source` or `content`are used. Default: [].
+
+##### `post_auth`
+
+Array of options (as String) for the post-auth section of the site. This parameter is
+ignored if `source` or `content`are used. Default: [].
+
+##### `pre_proxy`
+
+Array of options (as String) for the pre-proxy section of the site. This parameter is
+ignored if `source` or `content`are used. Default: [].
+
+##### `post_proxy`
+
+Array of options (as String) for the post-proxy section of the site. This parameter is
+ignored if `source` or `content`are used. Default: [].
+
+##### `listen`
+
+Array of listen definitions for the site. This parameter is ignored if `source` or
+`content`are used. Default: [].
+
 #### `freeradius::sql`
 
 Configure SQL connections. You can define multiple database connections by
