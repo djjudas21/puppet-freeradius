@@ -1,7 +1,7 @@
 # Install FreeRADIUS huntgroups
 define freeradius::huntgroup (
   $ensure      = present,
-  $huntgroup,
+  $huntgroup   = $title,
   $conditions  = [],
   $order       = 50,
 ) {

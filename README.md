@@ -266,6 +266,18 @@ freeradius::client { "wlan-controllers":
 }
 ```
 
+```puppet
+# Huntgroup Example
+freeradius::client { "asa01":
+  ip         => '192.168.0.1',
+  secret     => 'testing123',
+  huntgroups => [
+    { name       => 'firewall',
+      conditions => [ 'NAS-IP-Address == 192.168.0.1' ] },
+  ]
+}
+```
+
 ##### `ip`
 The IP address of the client or range in CIDR format. For IPv6, use `ipv6addr`. `ip` and `ip6` are mutually exclusive but one must be supplied.
 Default: `undef`.
@@ -321,6 +333,10 @@ Create a firewall exception for this virtual server. If this is set to `true`, y
 
 ##### `attributes`
 Array of attributes to assign to this client. Default: empty.
+
+
+##### `huntgroups`
+Array of hashes, each hash defines one freeradius::huntgroup. Hash keys are all passed to a new instance of freeradius::huntgroup.
 
 #### `freeradius::config`
 
@@ -428,6 +444,30 @@ If ALL home servers are dead, then this "fallback" home server is used. If set, 
 fallback, such as the DEFAULT realm.
 
 For reasons of stability, this home server SHOULD be a virtual server. Otherwise, the fallback may itself be dead!
+
+
+#### `freeradius::huntgroup`
+
+Define a huntgroup given a name and the conditions under which a huntgroup matches a client.
+
+```puppet
+freeradius::huntgroup { 'switchaccess':
+  huntgroup  => 'switchaccess',
+  conditions => [
+    'NAS-IP-Address == 192.168.0.1'
+  ]
+}
+
+##### `huntgroup`
+Name of the huntgroup to assign, if conditions are all met. Default to the resource title.
+
+##### `conditons`
+Array of conditions which are used to match the client, each element should contain a condition in the form of 'Key == Value'.
+
+##### `type`
+
+
+##### `home_server`
 
 
 #### `freeradius::instantiate`
