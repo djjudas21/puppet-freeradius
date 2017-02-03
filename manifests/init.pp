@@ -28,7 +28,7 @@ class freeradius (
 
   file { 'radiusd.conf':
     name    => "${freeradius::fr_basepath}/radiusd.conf",
-    mode    => '0640',
+    mode    => '0644',
     owner   => 'root',
     group   => $freeradius::fr_group,
     content => template('freeradius/radiusd.conf.erb'),
@@ -48,7 +48,7 @@ class freeradius (
     "${freeradius::fr_basepath}/scripts",
   ]:
     ensure  => directory,
-    mode    => '0750',
+    mode    => '0755',
     owner   => 'root',
     group   => $freeradius::fr_group,
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
@@ -68,7 +68,7 @@ class freeradius (
     ensure  => directory,
     purge   => true,
     recurse => true,
-    mode    => '0750',
+    mode    => '0755',
     owner   => 'root',
     group   => $freeradius::fr_group,
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
