@@ -18,6 +18,7 @@
        * [`freeradius::dictionary`](#freeradiusdictionary)
        * [`freeradius::home_server`](#freeradiushomeserver)
        * [`freeradius::home_server_pool`](#freeradiushomeserverpool)
+       * [`freeradius::huntgroup`](#freeradiushuntgroup)
        * [`freeradius::instantiate`](#freeradiusinstantiate)
        * [`freeradius::ldap`](#freeradiusldap)
        * [`freeradius::krb5`](#freeradiuskrb5)
@@ -245,12 +246,16 @@ Define RADIUS clients as seen in `clients.conf`
 ```puppet
 # Single host example
 freeradius::client { "wlan-controller01":
-  ip        => '192.168.0.1',
-  secret    => 'testing123',
-  shortname => 'wlc01',
-  nastype   => 'other',
-  port      => '1645-1646',
-  firewall  => true,
+  ip         => '192.168.0.1',
+  secret     => 'testing123',
+  shortname  => 'wlc01',
+  nastype    => 'other',
+  port       => '1645-1646',
+  firewall   => true,
+  huntgroups => [
+    { huntgroup  => 'wlanaccess',
+      conditions => [ 'NAS-IP-Address == 192.168.0.1' ] },
+  ]
 }
 ```
 
@@ -312,7 +317,6 @@ The lifetime, in seconds, of a TCP connection. It is ignored for clients sending
 ##### `idle_timeout`
 The idle timeout, in seconds, of a TCP connection. It is ignored for clients sending UDP traffic. Default: `undef`.
 
-
 ##### `port`
 The UDP port that this virtual server should listen on. Leave blank if this client is not tied to a virtual server. Currently the port number is only used to create firewall exceptions and you only need to specify it if you set `firewall => true`. Use port range syntax as in [`puppetlabs-firewall`](https://forge.puppetlabs.com/puppetlabs/firewall). Default: `undef`.
 
@@ -321,6 +325,10 @@ Create a firewall exception for this virtual server. If this is set to `true`, y
 
 ##### `attributes`
 Array of attributes to assign to this client. Default: empty.
+
+##### `huntgroups`
+Array of hashes, each hash containing the parameters passed to a new instance of `freeradius::huntgroup`. Default: `undef`.
+
 
 #### `freeradius::config`
 
@@ -428,6 +436,27 @@ If ALL home servers are dead, then this "fallback" home server is used. If set, 
 fallback, such as the DEFAULT realm.
 
 For reasons of stability, this home server SHOULD be a virtual server. Otherwise, the fallback may itself be dead!
+
+
+### `freeradius::huntgroup`
+Define a freeradius huntgroup which gets assigned to clients matching the specified conditions. Also take a look at the `freeradius::client::huntgroups` parameter.
+
+```puppet
+freeradius::huntgroup { "swith01.example.com-switchaccess":
+  huntgroup  => "switchaccess",
+  conditions => [ "NAS-IP-Address == '1.2.3.4'" ],
+  order      => "50",
+}
+```
+
+##### `huntgroup`
+Name of the huntgroup to be assigned in case the conditions are met. Required.
+
+##### `conditions`
+An array of conditions which have to match a client for the huntgroup to be assigned. Required.
+
+
+##### `order`
 
 
 #### `freeradius::instantiate`
