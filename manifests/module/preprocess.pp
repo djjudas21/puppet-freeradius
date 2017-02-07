@@ -5,7 +5,7 @@ class freeradius::module::preprocess (
   String $moddir                                     = "\${modconfdir}/\${.:instance}",
   String $huntgroups                                 = "\${moddir}/huntgroups",
   String $hints                                      = "\${moddir}/hints",
-  Freeradius::Boolean $with_acend_hack               = 'no',
+  Freeradius::Boolean $with_ascend_hack              = 'no',
   Integer $ascend_channels_per_line                  = 23,
   Freeradius::Boolean $with_ntdomain_hack            = 'no',
   Freeradius::Boolean $with_specialix_jetstream_hack = 'no',
