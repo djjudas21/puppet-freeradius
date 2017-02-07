@@ -1,0 +1,13 @@
+# This file is automatically managed by puppet
+#
+<%- @users.each do |user| -%>
+  <%- if user.is_a?(Hash) -%>
+    <%- checks = user['check_items'] ? user['check_items'] : [] -%>
+    <%- replies = user['reply_items'] ? user['reply_items'] : [] -%>
+<%= user['login'] %> <%= checks.join(", ") %>
+<%= "\t" + replies.join(",\n\t") %>
+  <%- else -%>
+<%= user %>
+  <%- end -%>
+
+<%- end -%>
