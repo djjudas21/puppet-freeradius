@@ -1,0 +1,39 @@
+# This file is managed by Puppet. DO NOT EDIT.
+#
+
+# Livingston-style 'users' file
+#
+# See "man users" for more information.
+#
+<%- if @name == 'default' -%>
+files {
+<%- else -%>
+files <%= @name %> {
+<%- end -%>
+  # Search for files in a subdirectory of mods-config which
+  # matches this instance of the files module.
+  moddir = <%= @moddir %>
+
+  # The default key attribute to use for matches.  The content
+  # of this attribute is used to match the "name" of the
+  # entry.
+  #key = "%{%{Stripped-User-Name}:-%{User-Name}}"
+<%- if @key -%>
+  key = "<%= @key %>"
+<%- end -%>
+
+  #  The old "users" style file is now located here.
+  filename = <%= @filename %>
+
+  #  This is accepted for backwards compatibility
+  #  It will be removed in a future release.
+  # usersfile = ${moddir}/authorize
+<%- if @usersfile -%>
+  usersfile = <%= @usersfile %>
+<%- end -%>
+
+  #  These are accepted for backwards compatibility.
+  #  They will be renamed in a future release.
+  acctusersfile = ${moddir}/accounting
+  preproxy_usersfile = ${moddir}/pre-proxy
+}
