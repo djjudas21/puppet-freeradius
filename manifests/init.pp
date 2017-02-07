@@ -15,6 +15,7 @@ class freeradius (
   $log_auth        = 'no',
   $preserve_mods   = true,
   $correct_escapes = true,
+  $manage_logpath  = true,
 ) inherits freeradius::params {
 
   validate_re($freeradius::fr_version, '^3', 'This module is only compatible with FreeRADIUS 3')
@@ -276,20 +277,22 @@ class freeradius (
     }
   }
 
-  # Make the radius log dir traversable
-  file { [
-    $freeradius::fr_logpath,
-    "${freeradius::fr_logpath}/radacct",
-  ]:
-    mode    => '0750',
-    require => Package[$freeradius::fr_package],
-  }
+  if $manage_logpath {
+    # Make the radius log dir traversable
+    file { [
+      $freeradius::fr_logpath,
+      "${freeradius::fr_logpath}/radacct",
+    ]:
+      mode    => '0750',
+      require => Package[$freeradius::fr_package],
+    }
 
-  file { "${freeradius::fr_logpath}/radius.log":
-    owner   => $freeradius::fr_user,
-    group   => $freeradius::fr_group,
-    seltype => 'radiusd_log_t',
-    require => [Package[$freeradius::fr_package], User[$freeradius::fr_user], Group[$freeradius::fr_group]],
+    file { "${freeradius::fr_logpath}/radius.log":
+      owner   => $freeradius::fr_user,
+      group   => $freeradius::fr_group,
+      seltype => 'radiusd_log_t',
+      require => [Package[$freeradius::fr_package], User[$freeradius::fr_user], Group[$freeradius::fr_group]],
+    }
   }
 
   logrotate::rule { 'radacct':
