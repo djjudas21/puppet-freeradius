@@ -57,7 +57,7 @@ localstatedir = /var
 sbindir = /usr/sbin
 logdir = <%= @fr_logpath %>
 raddbdir = <%= @fr_raddbdir %>
-radacctdir = ${logdir}/radacct
+radacctdir = <%= @radacctdir %>
 
 #
 #  name of the running server.  See also the "-n" command-line option.

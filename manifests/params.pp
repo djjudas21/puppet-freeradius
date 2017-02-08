@@ -143,4 +143,6 @@ class freeradius::params {
     'Debian' => "\${raddbdir}",
     default  => "\${localstatedir}/lib/radiusd",
   }
+
+  $radacctdir = "\${logdir}/radacct"
 }

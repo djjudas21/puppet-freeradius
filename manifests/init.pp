@@ -16,6 +16,7 @@ class freeradius (
   $preserve_mods   = true,
   $correct_escapes = true,
   $manage_logpath  = true,
+  $radacctdir      = $freeradius::params::radacctdir,
 ) inherits freeradius::params {
 
   validate_re($freeradius::fr_version, '^3', 'This module is only compatible with FreeRADIUS 3')
