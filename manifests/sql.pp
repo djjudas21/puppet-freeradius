@@ -6,7 +6,7 @@ define freeradius::sql (
   $login                       = 'radius',
   $radius_db                   = 'radius',
   $num_sql_socks               = '${thread[pool].max_servers}',
-  $query_file                  = 'sql/${database}/queries.conf',
+  $query_file                  = "\${modconfdir}/\${.:name}/main/\${dialect}/queries.conf",
   $custom_query_file           = '',
   $lifetime                    = '0',
   $max_queries                 = '0',
@@ -68,16 +68,16 @@ define freeradius::sql (
   unless is_integer($connect_failure_retry_delay) {
     fail('$connect_failure_retry_delay must be an integer')
   }
-  unless is_integer($pool_start_delay) {
-    fail('$pool_start_delay must be an integer')
+  unless is_integer($pool_start) {
+    fail('$pool_startmust be an integer')
   }
-  unless is_integer($pool_min_delay) {
+  unless is_integer($pool_min) {
     fail('$pool_min_delay must be an integer')
   }
-  unless is_integer($pool_spare_delay) {
+  unless is_integer($pool_spare) {
     fail('$pool_spare_delay must be an integer')
   }
-  unless is_integer($pool_idle_timeout_delay) {
+  unless is_integer($pool_idle_timeout) {
     fail('$pool_idle_timeout_delay must be an integer')
   }
 
