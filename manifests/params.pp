@@ -133,4 +133,14 @@ class freeradius::params {
     'Debian' => '/usr/lib/freeradius',
     default  => '/usr/lib64/freeradius',
   }
+
+  $fr_raddbdir = $::osfamily ? {
+    'Debian' => "\${sysconfdir}/freeradius",
+    default  => "\${sysconfdir}/raddb",
+  }
+
+  $fr_db_dir = $::osfamily ? {
+    'Debian' => "\${raddbdir}",
+    default  => "\${localstatedir}/lib/radiusd",
+  }
 }
