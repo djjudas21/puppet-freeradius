@@ -34,6 +34,10 @@ files <%= @name %> {
 
   #  These are accepted for backwards compatibility.
   #  They will be renamed in a future release.
+<%- if @acctusersfile -%>
   acctusersfile = ${moddir}/accounting
+<%- end -%>
+<%- if @preproxy_usersfile -%>
   preproxy_usersfile = ${moddir}/pre-proxy
+<%- end -%>
 }
