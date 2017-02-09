@@ -1,13 +1,13 @@
 # == Define freeradius::listen
 #
 define freeradius::listen (
-  $ensure          = 'present',
-  Freeradius::Listen_type $type            = 'auth',
-  $ip          = undef,
-  $ip6        = undef,
+  $ensure                  = 'present',
+  Enum['auth','acct','proxy','detail','status','coa'] $type = 'auth',
+  $ip                      = undef,
+  $ip6                     = undef,
   Integer $port            = 0,
-  $interface       = undef,
-  Array $clients         = [],
+  $interface               = undef,
+  Array $clients           = [],
   Integer $max_connections = 16,
   Integer $lifetime        = 0,
   Integer $idle_timeout    = 30,
