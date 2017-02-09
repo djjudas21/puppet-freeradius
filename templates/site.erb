@@ -50,7 +50,7 @@ server <%= @name %> {
 
 <%- @listen.each do |l| -%>
   listen {
-  <%- @l.each do |k, v| -%>
+  <%- l.each do |k, v| -%>
     <%= k %> = <%= v %>
   <%- end -%>
   }
