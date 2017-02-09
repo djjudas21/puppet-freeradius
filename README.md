@@ -20,6 +20,7 @@
        * [`freeradius::home_server_pool`](#freeradiushomeserverpool)
        * [`freeradius::instantiate`](#freeradiusinstantiate)
        * [`freeradius::ldap`](#freeradiusldap)
+       * [`freeradius::module::ldap`](#freeradiusmoduleldap)
        * [`freeradius::krb5`](#freeradiuskrb5)
        * [`freeradius::module`](#freeradiusmodule)
        * [`freeradius::policy`](#freeradiuspolicy)
@@ -439,14 +440,30 @@ freeradius::instantiate { 'mymodule': }
 ```
 
 #### `freeradius::ldap`
+Deprecated. Use `freeradius::module::ldap` instead.
+
+#### `freeradius::module::ldap`
 
 Configure LDAP support for FreeRADIUS
+
+##### `ensure`
+
+Whether the site should be present or not.
 
 ##### `identity`
 LDAP account for searching the directory. Required.
 
 ##### `password`
 Password for the `identity` account. Required.
+
+##### `sasl`
+SASL parameters to use for admin binds to the ldap server. This is a hash with 3 possible keys:
+
+* `mech`: The SASL mechanism used.
+* `proxy`: SASL authorizatino identity to proxy.
+* `realm`: SASL realm (used for kerberos)
+
+Default: `{}`
 
 ##### `basedn`
 Unless overridden in another section, the dn from which all searches will start from. Required.
@@ -458,9 +475,126 @@ server certificate, if you're using ldaps. Default: [`localhost`]
 ##### `port`
 Port to connect to the LDAP server on. Default: `389`
 
+##### `valuepair_attribute`
+Generic valuepair attribute. If set, this attribute will be retrieved in addition to any mapped attributes. Default: `undef`.
+
+##### `update`
+Array with mapping of LDAP directory attributes to RADIUS dictionary attributes. Default: `[]`
+
+##### `edir`
+Se to `yes` if you have eDirectory and want to use the universal password mechanisms. Possible values are `yes` and `no`. Default: `undef`.
+
+##### `edir_autz`
+Set to `yes`if you want to bind as the user after retrieving the Cleartest-Password. Possible values are `yes` and `no`. Default: `undef`.
+
+##### `user_base_dn`
+Where to start searching for users in the LDAP tree. Default: `${..base_dn}`.
+
+##### `user_filter`
+Filter for user objects. Default: `uid=%{%{Stripped-User-Name}-%{User-Name}})`
+
+##### `user_sasl`
+SASL parameters to use for user binds to the ldap server. This is a hash with 3 possible keys:
+
+* `mech`: The SASL mechanism used.
+* `proxy`: SASL authorizatino identity to proxy.
+* `realm`: SASL realm (used for kerberos)
+
+Default: `{}`
+
+##### `user_scope`
+Search scope for users. Valid values are `base`, `one`, `sub` and `children`. Default: `undef` (`sub` is applied).
+
+##### `user_sort_by`
+Server side result sorting. A list of space delimited attributes to order the result set by. Default: `undef`.
+
+##### `user_access_attribute`
+If this undefined, anyone is authorized. If it is defined, the contents of this attribute determine whether or not the user is authorised. Default: `undef`.
+
+##### `user_access_positive`
+Control whether the presence of 'access_attribute' allows access or denys access. Default: `undef`.
+
+##### `group_base_dn`
+Where to start searching for groups in the LDAP tree. Default: `${..base_dn}`.
+
+##### `group_filter`
+Filter for group objects. Default: `'(objectClass=posixGroup)'`.
+
+##### `group_scope`
+Search scope for groups. Valid values are `base`, `one`, `sub` and `children`. Default: `undef` (`sub` is applied).
+
+##### `group_name_attribute`
+Attribute that uniquely identifies a group. Default: `undef` (`'cn'` is applied).
+
+##### `group_membership_filter`
+Filter to find group objects a user is member of. That is, group objects with attributes that identify members (the inverse of `group_membership_attribute`). Default: `undef`.
+
+##### `group_membership_attribute`
+The attribute in user objects which contain the namos or DNs of groups a user is a member of. Default: `'memberOf'`.
+
+##### `group_cacheable_name`
+If `group_cacheable_name` or `group_cacheable_dn` are enabled, all group information for the user will be retrieved from the directory and written to LDAP-Group attributes appropiaate for the instance of rlm_ldap. Default: `undef`.
+
+##### `group_cacheable_dn`
+If `group_cacheable_name` or `group_cacheable_dn` are enabled, all group information for the user will be retrieved from the directory and written to LDAP-Group attributes appropiaate for the instance of rlm_ldap. Default: `undef`.
+
+##### `group_cache_attribute`
+Override the normal cache attribute (`<inst>-LDAP-Group` or `LDAP-Group` if using the default instance) and create a custom attribute. Default: `undef`.
+
+##### `group_attribute`
+Override the normal group comparison attribute name (`<inst>-LDAP-Group` or `LDAP-Group` if using the default instance). Default: `undef`.
+
+##### `profile_filter`
+Filter for RADIUS profile objects. Default: `undef`.
+
+##### `profile_default`
+The default profile. This may be a DN or an attribute reference. Default: `undef`.
+
+##### `profile_attribute`
+The LDAP attribute containing profile DNs to apply in addition to the default profile above. Default: `undef`.
+
+##### `client_base_dn`
+Where to start searching for clients in the LDAP tree. Default: `'${..base_dn}'`.
+
+##### `client_filter`
+Filter to match client objects. Default: `'(objectClass=radiusClient)'`.
+
+##### `client_scope`
+Search scope for clients. Valid values are `base`, `one`, `sub` and `children`. Default: `undef` (`sub` is applied).
+
+##### `read_clients`
+Load clients on startup. Default: `undef` (`'no'` is applied).
+
+##### `dereference`
+Control under which situations LDAP aliases are followed. May be one of `never`, `searching`, `finding` or `always`. Default: `undef` (`always` is applied).
+
+##### `chase_referrals`
+With `rebind` control whether the server follows references returned by LDAP directory. Mostly used for AD compatibility. Default: `yes`.
+
+##### `rebind`
+With `chase_referrals` control whether the server follows references returned by LDAP directory. Mostly used for AD compatibility. Default: `yes`.
+
+##### `use_referral_credentials`
+On rebind, use the credentials from the rebind url instead of admin credentials. Default: `no`.
+
+##### `session_tracking`
+If `'yes'`, then include draft-wahl-ldap-session tracking controls. Default: `undef`.
+
 ##### `uses`
 How many times the connection can be used before being re-established. This is useful for things
 like load balancers, which may exhibit sticky behaviour without it. `0` is unlimited. Default: `0`
+
+##### `retry_delay`
+The number of seconds to wait after the server tries to open a connection, and fails. Default: `30'.
+
+##### `lifetime`
+The lifetime (in seconds) of the connection. Default: `0` (forever).
+
+##### `idle_timeout`
+Idle timeout (in seconds). A connection which is unused for this length of time will be closed. Default: `60`.
+
+##### `connect_timeout`
+Connection timeout (in seconds). The maximum amount of time to wait for a new connection to be established. Default: `3.0`.
 
 ##### `idle`
 Sets the idle time before keepalive probes are sent. Default `60`
@@ -482,6 +616,12 @@ output of `radiusd -X` then it is supported. Otherwise, it is unsupported and ch
 
 ##### `timeout`
 Number of seconds to wait for LDAP query to finish. Default: `10`
+
+##### `timelimit`
+Seconds LDAP server has to process the query (server-side time limit). Default: `20`.
+
+##### `ldap_debug`
+Debug flag for LDAP SDK. Default: `0x0028`.
 
 ##### `start`
 Connections to create during module instantiation. If the server cannot create specified number of
@@ -511,6 +651,9 @@ Path to cert file for TLS
 
 ##### `keyfile`
 Path to key file for TLS
+
+##### `random_file`
+Random file used for TLS operations. Default: `undef` (`'/dev/urandom'` is used).
 
 ##### `requirecert`
 Certificate Verification requirements. Choose from:

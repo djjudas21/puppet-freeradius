@@ -21,65 +21,28 @@ define freeradius::ldap (
   $keyfile     = undef,
   $requirecert = 'allow',
 ) {
-  $fr_package          = $::freeradius::params::fr_package
-  $fr_service          = $::freeradius::params::fr_service
-  $fr_modulepath       = $::freeradius::params::fr_modulepath
-  $fr_group            = $::freeradius::params::fr_group
+  warning('The use of freeradius::ldap is deprecated. You must use freeradius::module::ldap instead')
 
-  # Validate our inputs
-  # Hostnames
-  $serverarray = any2array($server)
-  unless is_array($serverarray) {
-    fail('$server must be an array of hostnames or IP addresses')
-  }
-
-  # FR3.0 format server = 'ldap1.example.com, ldap1.example.com, ldap1.example.com'
-  # FR3.1 format server = 'ldap1.example.com'
-  #              server = 'ldap2.example.com'
-  #              server = 'ldap3.example.com'
-  $serverconcatarray = $::freeradius_version ? {
-    /^3\.0\./ => any2array(join($serverarray, ',')),
-    default   => $serverarray,
-  }
-
-  # Fake booleans (FR uses yes/no instead of true/false)
-  unless $starttls in ['yes', 'no'] {
-    fail('$starttls must be yes or no')
-  }
-
-  # Validate multiple choice options
-  unless $requirecert in ['never', 'allow', 'demand', 'hard'] {
-    fail('$requirecert must be one of never, allow, demand, hard')
-  }
-
-  # Validate integers
-  unless is_integer($port) {
-    fail('$port must be an integer')
-  }
-  unless is_integer($uses) {
-    fail('$uses must be an integer')
-  }
-  unless is_integer($idle) {
-    fail('$idle must be an integer')
-  }
-  unless is_integer($probes) {
-    fail('$probes must be an integer')
-  }
-  unless is_integer($interval) {
-    fail('$interval must be an integer')
-  }
-  unless is_integer($timeout) {
-    fail('$timeout must be an integer')
-  }
-
-  # Generate a module config, based on ldap.conf
-  file { "${fr_modulepath}/${name}":
-    ensure  => $ensure,
-    mode    => '0640',
-    owner   => 'root',
-    group   => $fr_group,
-    content => template('freeradius/ldap.erb'),
-    require => [Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+  freeradius::module::ldap {$name:
+    ensure      => $ensure,
+    identity    => $identity,
+    password    => $password,
+    basedn      => $basedn,
+    server      => $server,
+    port        => $port,
+    uses        => $uses,
+    idle        => $idle,
+    probes      => $probes,
+    interval    => $interval,
+    timeout     => $timeout,
+    start       => $start,
+    min         => $min,
+    max         => $max,
+    spare       => $spare,
+    starttls    => $starttls,
+    cafile      => $cafile,
+    certfile    => $certfile,
+    keyfile     => $keyfile,
+    requirecert => $requirecert,
   }
 }
