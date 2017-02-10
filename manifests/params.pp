@@ -69,7 +69,7 @@ class freeradius::params {
   # Whether the FreeRADIUS init.d startup script has a status setting or not
   $fr_service_has_status = $::osfamily ? {
     'RedHat' => true,
-    'Debian' => false,
+    'Debian' => true,
     default  => false,
   }
 
