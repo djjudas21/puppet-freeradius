@@ -56,7 +56,7 @@ sysconfdir = /etc
 localstatedir = /var
 sbindir = /usr/sbin
 logdir = <%= @fr_logpath %>
-raddbdir = ${sysconfdir}/raddb
+raddbdir = <%= @fr_raddbdir %>
 radacctdir = ${logdir}/radacct
 
 #
@@ -70,7 +70,7 @@ certdir = ${confdir}/certs
 cadir   = ${confdir}/certs
 run_dir = ${localstatedir}/run/${name}
 
-db_dir = ${localstatedir}/lib/radiusd
+db_dir = <%= @fr_db_dir %>
 
 #
 # libdir: Where to find the rlm_* modules.
