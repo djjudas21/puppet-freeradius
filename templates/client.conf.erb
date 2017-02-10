@@ -6,7 +6,7 @@ client <%= @shortname %> {
 	secret = "<%= @secret %>"
 	<% if @virtual_server %>virtual_server = <%= @virtual_server %><% end %>
 	<% if @nastype %>nas_type = <%= @nastype %><% end %>
-  require_message_authenticator = <%= @require_message_authenticator %>
+  <% if @require_message_authenticator %>require_message_authenticator = <%= @require_message_authenticator %><% end %>
   <% if @login %>login = <%= @login %><% end %>
   <% if @password %>password = <%= @password %><% end %>
   <% if @coa_server %>coa_server = <%= @coa_server %><% end %>
@@ -18,14 +18,14 @@ client <%= @shortname %> {
     <% if @idle_timeout %>idle_timeout = <%= @idle_timeout %><% end %>
   }
   <%- end -%>
-  <%- if !@attributes.empty? -%>
+  <%- if @attributes and !@attributes.empty? -%>
     <%- if @attributes.respond_to?('join') -%>
   <%= @attributes.join("\n  ") %>
     <%- elsif @attributes.is_a?(Hash) -%>
       <%- @attributes.sort.each do |k, v| -%>
   <%= k %> = <%= v %>
       <%- end -%>
-    <%- else -%>
+    <%- elsif @attributes -%>
   <%= @attributes %>
     <%- end -%>
   <%- end -%>
