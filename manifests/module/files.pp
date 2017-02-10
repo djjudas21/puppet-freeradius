@@ -3,16 +3,16 @@
 # Create e file module configuration for FreeRADIUS
 #
 define freeradius::module::files (
-  $ensure                     = 'present',
-  String $moddir              = "\${modconfdir}/\${.:instance}",
-  Optional[String] $key       = undef,
-  String $filename            = "\${moddir}/authorize",
-  Optional[String] $usersfile = undef,
-  String $acctusersfile       = "\${moddir}/accounting",
-  String $preproxy_usersfile  = "\${moddir}/pre-proxy",
-  Array[Hash] $users          = [],
-  Optional[String] $source    = undef,
-  Optional[String] $content   = undef,
+  $ensure                              = 'present',
+  String $moddir                       = "\${modconfdir}/\${.:instance}",
+  Optional[String] $key                = undef,
+  String $filename                     = "\${moddir}/authorize",
+  Optional[String] $usersfile          = undef,
+  Optional[String] $acctusersfile      = undef,
+  Optional[String] $preproxy_usersfile = undef,
+  Array[Hash] $users                   = [],
+  Optional[String] $source             = undef,
+  Optional[String] $content            = undef,
 ) {
   $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
   $fr_group            = $::freeradius::params::fr_group
