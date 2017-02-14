@@ -24,6 +24,7 @@
        * [`freeradius::krb5`](#freeradiuskrb5)
        * [`freeradius::module`](#freeradiusmodule)
        * [`freeradius::module::ippool`](#freeradiusmoduleippool)
+       * [`freeradius::module::linelog`](#freeradiusmodulelinelog)
        * [`freeradius::policy`](#freeradiuspolicy)
        * [`freeradius::realm`](#freeradiusrealm)
        * [`freeradius::site`](#freeradiussite)
@@ -746,6 +747,42 @@ Maximum time in seconds that an entry may be active. Default: `0` (no timeout).
 
 ##### `key`
 The key to use for the session database. Default: `undef`.
+
+#### `freeradius::module::linelog`
+Install and configure linelog module to log text to files.
+
+##### `ensure`
+If the module should `present` or `absent`. Default: `present`.
+
+##### `filename`
+The file where the logs will go. Default: `${logdir}/linelog`.
+
+##### `escape_filenames`
+If UTF-8 characters should be escaped from filename. Default: `no`.
+
+##### `permissions`
+Unix-style permissions for the log file. Default: `0600`.
+
+##### `group`
+The Unix group which owns the log file. Default: `undef`.
+
+##### `syslog_facility`
+Syslog facility (if logging via syslog). Default: `undef` (`daemon`).
+
+##### `syslog_severity`
+Syslog severity (if logging via syslog). Default: `undef` (`info`).
+
+##### `format`
+The default format string. Default: `This is a log message for %{User-Name}`.
+
+##### `reference`
+If it is defined, the line string logged is dynamically expanded and the result is used to find another configuration entry here, with the given name. That name is then used as the format string. Default: `messages.%{%reply:Packet-Type}:-default}`.
+
+##### `messages`
+Array of messages. The messages defined here are taken from the `reference` expansion. Default: `[]`.
+
+##### `accounting_request`
+Array of messages. Similar to `messages` but for accounting logs.
 
 #### `freeradius::policy`
 
