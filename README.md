@@ -23,6 +23,7 @@
        * [`freeradius::module::ldap`](#freeradiusmoduleldap)
        * [`freeradius::krb5`](#freeradiuskrb5)
        * [`freeradius::module`](#freeradiusmodule)
+       * [`freeradius::module::ippool`](#freeradiusmoduleippool)
        * [`freeradius::policy`](#freeradiuspolicy)
        * [`freeradius::realm`](#freeradiusrealm)
        * [`freeradius::site`](#freeradiussite)
@@ -711,6 +712,40 @@ freeradius::module { 'buffered-sql':
   content => template('some_template.erb)',
 }
 ```
+
+#### `freeradius::module::ippool`
+
+Install a `ippool` module
+
+##### `ensure`
+If the module should `present` or `absent`. Default: `present`.
+
+##### `range_start`
+The first IP address of the pool.
+
+##### `range_stop`
+The last IP address of the pool.
+
+##### `netmask`
+The network mask used for the pool
+
+##### `cache_size`
+The gdbm cache size for the db files. Default: number of IP address in the range.
+
+##### `filename`
+The main db file used to allocate address. Default: `${db_dir}/db.${name}`
+
+##### `ip_index`
+Helper db index file. Default: `${db_dir}/db.${name}.index`
+
+##### `override`
+If set, the Framed-IP-Address already in the reply (if any) will be discarded. Default: `no`.
+
+##### `maximum_timeout`
+Maximum time in seconds that an entry may be active. Default: `0` (no timeout).
+
+##### `key`
+The key to use for the session database. Default: `undef`.
 
 #### `freeradius::policy`
 
