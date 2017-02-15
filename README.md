@@ -26,6 +26,7 @@
        * [`freeradius::module::ippool`](#freeradiusmoduleippool)
        * [`freeradius::module::linelog`](#freeradiusmodulelinelog)
        * [`freeradius::module::detail`](#freeradiusmoduledetail)
+       * [`freeradius::module::files`](#freeradiusmodulefiles)
        * [`freeradius::policy`](#freeradiuspolicy)
        * [`freeradius::realm`](#freeradiusrealm)
        * [`freeradius::site`](#freeradiussite)
@@ -815,6 +816,72 @@ Log the package src/dst IP/port. Default: `undef`.
 
 ##### `suppress`
 Array of (sensitive) attributes that should be removed from the log. Default: `[]`.
+
+#### `freeradius::module::files`
+Install a `file` module with users in freeradius.
+
+##### `ensure`
+If the module should `present` or `absent`. Default: `present`.
+
+##### `moddir`
+Directory where the users file is located. Default: `${modconfdir}/${.:instance}`.
+
+##### `key`
+The default key attribute to use for matches. Default: `undef`.
+
+##### `filename`
+The (old) users style filename. Default: `${moddir}/authorize`.
+
+##### `usersfile`
+Accepted for backups compatibility. Default: `undef`.
+
+##### `acctusersfile`
+Accepted for backups compatibility. Default: `undef`.
+
+##### `preproxy_usersfile`
+Accepted for backups compatibility. Default: `undef`.
+
+##### `users`
+Array of hashes with users entries (see "man users"). If entry in the hash is an array which valid keys are:
+
+* `login`: The login of the user.
+* `check_items`: An array with check components for the user entry.
+* `reply_items`: An array with reply components for the user entry.
+
+For example:
+```puppet
+freeradius::module::files {'myuserfile':
+  users => [
+    {
+      login => 'DEFAULT',
+      check_items => [
+        'Realm == NULL'
+      ],
+      reply_items => [
+        'Fall-Through = No
+      ],
+    },
+  ],
+}
+```
+
+will produce a user file like:
+```
+DEFAULT Realm == NULL
+  Fall-Through = No
+```
+
+You should use just one of `users`, `source` or `content` parameters.
+
+##### `source`
+Provide source to a file with the users file. Default: `undef`.
+
+You should use just one of `users`, `source` or `content` parameters.
+
+##### `content`
+Provide the content for the users file. Default: `undef`.
+
+You should use just one of `users`, `source` or `content` parameters.
 
 #### `freeradius::policy`
 
