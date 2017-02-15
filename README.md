@@ -25,6 +25,7 @@
        * [`freeradius::module`](#freeradiusmodule)
        * [`freeradius::module::ippool`](#freeradiusmoduleippool)
        * [`freeradius::module::linelog`](#freeradiusmodulelinelog)
+       * [`freeradius::module::detail`](#freeradiusmoduledetail)
        * [`freeradius::policy`](#freeradiuspolicy)
        * [`freeradius::realm`](#freeradiusrealm)
        * [`freeradius::site`](#freeradiussite)
@@ -783,6 +784,37 @@ Array of messages. The messages defined here are taken from the `reference` expa
 
 ##### `accounting_request`
 Array of messages. Similar to `messages` but for accounting logs.
+
+#### `freeradius::module::detail`
+
+Install a detail module to write detailed log of accounting records.
+
+##### `ensure`
+If the module should `present` or `absent`. Default: `present`.
+
+##### `filename`
+The file where the detailed logs will go. Default: `${radacctdir}/%{%{Packet-Src-IP-Address}:-%{Packet-Src-IPv6-Address}}/detail-%Y%m%d`.
+
+##### `escape_filenames`
+If UTF-8 characters should be escaped from filename. Default: `no`.
+
+##### `permissions`
+Unix-style permissions for the log file. Default: `0600`.
+
+##### `group`
+The Unix group which owns the log file. Default: `undef`.
+
+##### `header`
+Header to use in every entry in the detail file. Default: `undef` (`%t`).
+
+##### `locking`
+Enable if a detail file reader will be reading this file. Default: `undef`.
+
+##### `log_packet_header`
+Log the package src/dst IP/port. Default: `undef`.
+
+##### `suppress`
+Array of (sensitive) attributes that should be removed from the log. Default: `[]`.
 
 #### `freeradius::policy`
 
