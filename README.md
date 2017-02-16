@@ -27,6 +27,7 @@
        * [`freeradius::module::linelog`](#freeradiusmodulelinelog)
        * [`freeradius::module::detail`](#freeradiusmoduledetail)
        * [`freeradius::module::files`](#freeradiusmodulefiles)
+       * [`freeradius::module::eap`](#freeradiusmoduleeap)
        * [`freeradius::policy`](#freeradiuspolicy)
        * [`freeradius::realm`](#freeradiusrealm)
        * [`freeradius::site`](#freeradiussite)
@@ -882,6 +883,213 @@ You should use just one of `users`, `source` or `content` parameters.
 Provide the content for the users file. Default: `undef`.
 
 You should use just one of `users`, `source` or `content` parameters.
+
+#### `freeradius::module::eap`
+Install a module for EAP configuration
+
+##### `ensure`
+If the module should `present` or `absent`. Default: `present`.
+
+##### `default_eap_type`
+Default EAP type. Default: `md5`.
+
+##### `timer_expire`
+How much time an entry is maintained in the list to correlate EAP-Response packets with EAP-Request packets. Default: `60`.
+
+##### `ignore_unknown_eap_types`
+By setting this options to `yes`, you can tell the server to keep processing requests with an EAP type it does not support. Default: `no`.
+
+##### `cisco_accounting_username_bug`
+Enables a work around to handle Cisco AP1230B firmware bug. Default: `no`.
+
+##### `max_sessions`
+Maximum number of EAP sessions the server tracked. Default: `${max_requests}`.
+
+##### Parameters to configure EAP-pwd authentication.
+
+###### `eap_pwd`
+If set to `true` configures EAP-pwd authentication. Default: `false`.
+
+###### `pwd_group`
+`group` used in pwd configuration. Default: `undef`.
+
+###### `pwd_server_id`
+`server_id` option in pwd configuration. Default: `undef`.
+
+###### `pwd_fragment_size`
+`fragment_size` option in pwd configuration. Default: `undef`.
+
+###### `pwd_virtual_server`
+The virtual server which determines the "known good" password for the user in pwd authentication. Default: `undef`.
+
+##### Parameters to configure Generic Tocken Card
+
+###### `gtc_challenge`
+The default challenge. Default: `undef`
+
+###### `gtc_auth_type`
+`auth_type` use in GTC. Default: `PAP`.
+
+##### Parameters for TLS configuration
+
+###### `tls_config_name`
+Name for the `tls-config`. It normally should not be used. Default: `tls-common`.
+
+###### `tls_private_key_password`
+Private key password. Default: `undef`.
+
+###### `tls_private_key_file`
+File with the private key of the server. Default: `${certdir}/server.pem`.
+
+###### `tls_certificate_file`
+File with the certificate of the server. Default: `${certdir}/server.pem`.
+
+###### `tls_ca_file`
+File with the trusted root CA list. Default: `${certdir}/ca.pem`.
+
+###### `tls_auth_chain`
+When setting to `no`, the server certificate file MUST include the full certificate chain. Default: `undef`.
+
+###### `tls_psk_identity`
+PSK identity (if OpenSSL supports TLS-PSK). Default: `undef`.
+
+###### `tls_psk_hexphrase`
+PSK (hex) password (if OpenSSL supports TLS-PSK). Default: `undef`.
+
+###### `tls_dh_file`
+DH file. Default: `${certdir}/dh`.
+
+###### `tls_random_file`
+Random file. Default: `undef` (`/dev/urandom`).
+
+###### `tls_fragment_size`
+Fragment size for TLS packets. Default: `undef`.
+
+###### `tls_include_length`
+If set to no, total length of the message is included only in the first packet of a fragment series. Default: `undef`.
+
+###### `tls_check_crl`
+Check the certificate revocation list. Default: `undef`.
+
+###### `tls_check_all_crl`
+Check if intermediate CAs have been revoked. Default: `undef`.
+
+###### `tls_ca_path`
+ca_path. Default: `${cadir}`.
+
+###### `tls_check_cert_issuer`
+If set, the value will be checked against the DN of the issuer in the client certificate. Default: `undef`.
+
+###### `tls_check_cert_cn`
+If it is set, the value will be xlat'ed and checked against the CN in the client certificate. Default: `undef`
+
+###### `tls_cipher_list`
+Set this option to specify the allowed TLS cipher suites. Default: `DEFAULT`.
+
+###### `tls_disable_tlsv1_2`
+Disable TLS v1.2. Default: `undef`.
+
+###### `tls_ecdh_curve`
+Elliptical cryptography configuration. Default: `prime256v1`.
+
+###### `tls_cache_enable`
+Enable TLS cache. Default: `yes`.
+
+###### `tls_cache_lifetime`
+Lifetime of the cached entries, in hours. Default: `24`.
+
+###### `tls_cache_max_entries`
+The maximum number of entries in the cache. Default: `255`.
+
+###### `tls_cache_name`
+Internal name of the session cache. Default: `undef`.
+
+###### `tls_cache_persist_dir`
+Simple directory-based storage of sessions. Default: `undef`.
+
+###### `tls_verify_skip_if_ocsp_ok`
+If the OCSP checks suceed, the verify section is run to allow additional checks. Default: `undef`.
+
+###### `tls_verify_tmpdir`
+Temporary directory where the client certificates are stored. Default: `undef`.
+
+###### `tls_verify_client`
+The command used to verify the client certificate. Default: `undef`.
+
+###### `tls_ocsp_enable`
+Enable OCSP certificate verification. Default: `no`.
+
+###### `tls_ocsp_override_cert_url`
+If set to `yes` the OCSP Responder URL is overrided. Default: `yes`.
+
+###### `tls_ocsp_url`
+The URL used to verify the certificate when `tls_ocsp_override_cert_url` is set to `yes`. Default: `http://127.0.0.1/ocsp/`.
+
+###### `tls_ocsp_use_nonce`
+If the OCSP Responder can not cope with nonce in the request, then it can be set to `no`. Default: `undef`.
+
+###### `tls_ocsp_timeout`
+Number of seconds before giving up waiting for OCSP response. Default: `undef`.
+
+###### `tls_ocsp_softfail`
+To treat OCSP errors as _soft_. Default: `undef`.
+
+###### `tls_virtual_server`
+Virtual server for EAP-TLS requests. Default: `undef`.
+
+##### Parameters for TTLS configuration
+
+###### `ttls_default_eap_type`
+Default EAP type use inside the TTLS tunnel. Default: `md5`.
+
+###### `ttls_copy_request_to_tunnel`
+If set to `yes`, any attribute in the ouside of the tunnel but not in the tunneled request is copied to the tunneled request. Default: `no`.
+
+###### `ttls_use_tunneled_reply`
+If set to `yes`, reply attributes get from the tunneled request are sent as part of the outside reply. Default: `no`.
+
+###### `ttls_virtual_server`
+The virtual server that will handle tunneled requests. Default: `inner-tunnel`.
+
+###### `ttls_include_length`
+If set to no, total length of the message is included only in the first packet of a fragment series. Default: `undef`.
+
+###### `ttls_require_client_cert`
+Set to `yes` to require a client certificate. Default: `undef`.
+
+###### Parameters for PEAP configuration
+
+###### `peap_default_eap_type`
+Default EAP type used in tunneled EAP session. Default: `mschapv2`.
+
+###### `peap_copy_request_to_tunnel`
+If set to `yes`, any attribute in the ouside of the tunnel but not in the tunneled request is copied to the tunneled request. Default: `no`.
+
+###### `peap_use_tunneled_reply`
+If set to `yes`, reply attributes get from the tunneled request are sent as part of the outside reply. Default: `no`.
+
+###### `peap_proxy_tunneled_request_as_eap`
+Set the parameter to `no` to proxy the tunneled EAP-MSCHAP-V2 as normal MSCHAPv2. Default: `undef`.
+
+###### `peap_virtual_server`
+The virtual server that will handle tunneled requests. Default: `inner-tunnel`.
+
+###### `peap_soh`
+Enables support for MS-SoH. Default: `undef`.
+
+###### `peap_soh_virtual_server`
+The virtual server that will handle tunneled requests. Default: `undef`.
+
+###### `peap_require_client_cert`
+Set to `yes` to require a client certificate. Default: `undef`.
+
+##### Parameters for MS-CHAPv2 configuration
+
+###### `mschapv2_send_error`
+If set to `yes`, then the error message will be sent back to the client. Default: `undef`.
+
+###### `mschapv2_identity`
+Server indentifier to send back in the challenge. Default: `undef`.
 
 #### `freeradius::policy`
 
