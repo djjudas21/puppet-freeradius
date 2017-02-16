@@ -19,6 +19,7 @@ define freeradius::ldap (
   $cafile      = undef,
   $certfile    = undef,
   $keyfile     = undef,
+  $nthashattr  = undef,
   $requirecert = 'allow',
 ) {
   warning('The use of freeradius::ldap is deprecated. You must use freeradius::module::ldap instead')
