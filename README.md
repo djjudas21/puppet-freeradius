@@ -28,6 +28,8 @@
        * [`freeradius::module::detail`](#freeradiusmoduledetail)
        * [`freeradius::module::files`](#freeradiusmodulefiles)
        * [`freeradius::module::eap`](#freeradiusmoduleeap)
+       * [`freeradius::module::preprocess`](#freeradiusmodulepreprocess)
+       * [`freeradius::module::huntgroup`](#freeradiusmodulehuntgroup)
        * [`freeradius::policy`](#freeradiuspolicy)
        * [`freeradius::realm`](#freeradiusrealm)
        * [`freeradius::site`](#freeradiussite)
@@ -1090,6 +1092,49 @@ If set to `yes`, then the error message will be sent back to the client. Default
 
 ###### `mschapv2_identity`
 Server indentifier to send back in the challenge. Default: `undef`.
+
+#### `freeradius::module::preprocess`
+Install a preprocess module to process _huntgroups_ and _hints_ files.
+
+##### `ensure`
+If the module should `present` or `absent`. Default: `present`.
+
+##### `moddir`
+Directory where the preprocess' files are located. Default: `${modconfdir}/${.:instance}`.
+
+##### `huntgroups`
+Path for the huntgroups file. Defaut: `${moddir}/huntgroups`.
+
+##### `hints`
+Path for the hints file. Default `${moddir}/hints`.
+
+##### `with_ascend_hack`
+This hack changes Ascend's weird port numbering to standar 0-??? port numbers. Default: `no`.
+
+##### `ascend_channels_per_line`
+Default: `23`.
+
+##### `with_ntdomain_hack`
+Windows NT machines often authenticate themselves as NT_DOMAIN\username. If this parameter is set to `yes`, then the NT_DOMAIN portion of the user-name is silently discarded. Default: `no`.
+
+##### `with_specialix_jetstream_hack`
+Set to `yes` if you are using a Specialix Jetstream 8500 access server. Default: `no`.
+
+##### `with_cicso_vsa_hack`
+Set to `yes` if you are using a Cisco or Quintum NAS. Default: `no`.
+
+#### `freeradius::module::huntgroup`
+
+Creates a huntgroup entry in a huntgroup file (see `freeradius::module::preprocess`)
+
+##### `conditions`
+Array of rules to match in this huntgroup.
+
+##### `order`
+Order of this huntgroup in the huntgroup files. This is the `order` parameter for the underlying `concat::fragment`. Default: `50' .
+
+##### `huntgroup`
+The path of the huntgroup file. Default: `huntgroup`.
 
 #### `freeradius::policy`
 
