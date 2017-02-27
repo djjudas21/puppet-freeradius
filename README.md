@@ -56,6 +56,7 @@ the end of 2016.
 
 | `jgazeley/freeradius` | FreeRADIUS  |
 | --------------------- | ----------- |
+| 3.x                   | 3.x         |
 | 2.x                   | 3.x         |
 | 1.x                   | 2.x and 3.x |
 | 0.x                   | 2.x         |
@@ -87,7 +88,7 @@ have many parameters as most values are hard-coded. I am working on parameterisi
 of the global settings to increase flexibility. Patches are welcome.
 
 ##### `control_socket`
-Use of the control_socket parameter in the freeradius class is deprecated. Use the `freeradius::control_socket` class instead.
+Use of the `control_socket` parameter in the freeradius class is deprecated. Use the `freeradius::control_socket` class instead.
 
 ##### `correct_escapes`
 Use correct backslash escaping in unlang. Default: `true`
@@ -117,7 +118,7 @@ Install support for LDAP. Default: `false`
 Install support for Kerberos. Default: `false`
 
 ##### `wpa_supplicant`
-Install wpa_supplicant utility. Default: `false`
+Install `wpa_supplicant` utility. Default: `false`
 
 ##### `winbind_support`
 Add the radius user to the winbind privileged group. You must install winbind separately. Default: `false`.
@@ -306,7 +307,7 @@ Login used by checkrad.pl when querying the NAS for simultaneous use. Default: `
 Password used by checkrad.pl when querying the NAS for simultaneous use. Default: `undef`.
 
 ##### `coa_server`
-A pointer to the "home_server_pool" OR a "home_server" section that contains the CoA configuration for this client. Default: `undef`.
+A pointer to the `home_server_pool` OR a `home_server` section that contains the CoA configuration for this client. Default: `undef`.
 
 ##### `response_window`
 Response window for proxied packets. Default: `undef`.
@@ -319,7 +320,6 @@ The lifetime, in seconds, of a TCP connection. It is ignored for clients sending
 
 ##### `idle_timeout`
 The idle timeout, in seconds, of a TCP connection. It is ignored for clients sending UDP traffic. Default: `undef`.
-
 
 ##### `port`
 The UDP port that this virtual server should listen on. Leave blank if this client is not tied to a virtual server. Currently the port number is only used to create firewall exceptions and you only need to specify it if you set `firewall => true`. Use port range syntax as in [`puppetlabs-firewall`](https://forge.puppetlabs.com/puppetlabs/firewall). Default: `undef`.
@@ -383,7 +383,7 @@ IPv6 address or hostname of the home server. Specify one of `ipaddr`, `ipv6addr`
 
 ##### `virtual_server`
 
-If you specify a virtual_server here, then requests will be proxied internally to that virtual server.
+If you specify a `virtual_server` here, then requests will be proxied internally to that virtual server.
 These requests CANNOT be proxied again, however. The intent is to have the local server handle packets
 when all home servers are dead. Specify one of `ipaddr`, `ipv6addr` or `virtual_server`
 
@@ -398,7 +398,7 @@ RADIUS transport. It may also be "tcp", in which case TCP will be used to talk t
 this home server. Default: `udp`
 
 ##### `status_check`
-Type of check to see if the home_server is dead or alive. Valid values are `none`, `status-server`
+Type of check to see if the `home_server` is dead or alive. Valid values are `none`, `status-server`
 and `request`. Default: `undef`.
 
 
@@ -519,7 +519,7 @@ Server side result sorting. A list of space delimited attributes to order the re
 If this undefined, anyone is authorized. If it is defined, the contents of this attribute determine whether or not the user is authorised. Default: `undef`.
 
 ##### `user_access_positive`
-Control whether the presence of 'access_attribute' allows access or denys access. Default: `undef`.
+Control whether the presence of `access_attribute` allows access or denys access. Default: `undef`.
 
 ##### `group_base_dn`
 Where to start searching for groups in the LDAP tree. Default: `${..base_dn}`.
@@ -585,7 +585,7 @@ With `chase_referrals` control whether the server follows references returned by
 On rebind, use the credentials from the rebind url instead of admin credentials. Default: `no`.
 
 ##### `session_tracking`
-If `'yes'`, then include draft-wahl-ldap-session tracking controls. Default: `undef`.
+If `yes`, then include draft-wahl-ldap-session tracking controls. Default: `undef`.
 
 ##### `uses`
 How many times the connection can be used before being re-established. This is useful for things
@@ -977,7 +977,7 @@ Check the certificate revocation list. Default: `undef`.
 Check if intermediate CAs have been revoked. Default: `undef`.
 
 ###### `tls_ca_path`
-ca_path. Default: `${cadir}`.
+Path to the CA file. Default: `${cadir}`.
 
 ###### `tls_check_cert_issuer`
 If set, the value will be checked against the DN of the issuer in the client certificate. Default: `undef`.
@@ -1115,7 +1115,7 @@ This hack changes Ascend's weird port numbering to standar 0-??? port numbers. D
 Default: `23`.
 
 ##### `with_ntdomain_hack`
-Windows NT machines often authenticate themselves as NT_DOMAIN\username. If this parameter is set to `yes`, then the NT_DOMAIN portion of the user-name is silently discarded. Default: `no`.
+Windows NT machines often authenticate themselves as `NT_DOMAIN\username`. If this parameter is set to `yes`, then the `NT_DOMAIN` portion of the user-name is silently discarded. Default: `no`.
 
 ##### `with_specialix_jetstream_hack`
 Set to `yes` if you are using a Specialix Jetstream 8500 access server. Default: `no`.
@@ -1485,8 +1485,7 @@ FreeRADIUS 2.x. It has not been thoroughly tested on other distributions, but
 might work. Likely sticking points with other distros are the names of packages,
 services and file paths.
 
-This module was written for use with Puppet 3.6 and 3.7, but should be quite agnostic
-to new versions of Puppet.
+This module requires Puppet 4 or greater.
 
 ## Development
 
@@ -1496,6 +1495,26 @@ bug fixes. You are also welcome to file issues but I make no guarantees of
 development effort if the features aren't useful to my employer.
 
 ## Release Notes
+
+### 3.0.0
+  * More parameters available for `freeradius::client`
+  * Allow management of `freeradius::dictionary` with `source` or `content`
+  * Enable status checks for `freeradius::home_server`
+  * More configurable options for `freeradius` base class
+  * More sensible permissions on various config files
+  * Refactor `freeradius::ldap` as `freeradius::module::ldap` and add more params
+  * Create `freeradius::listen` to manage arbitrary listeners
+  * Create `freeradius::module::detail` to configure detail loggers
+  * Create `freeradius::module::eap` to manage instantiations of the `eap` module
+  * Create `freeradius::module::files` to manage instantiations of the `files` module
+  * Create `freeradius::module::huntgroup` to manage huntgroups
+  * Create `freeradius::module::ippool` to manage ippool resources
+  * Create `freeradius::module::linelog` to configure linelog loggers
+  * Create `freeradius::module::preprocess` to manage instantiations of the `preprocess` module
+  * Fix some compatibility problems with Debian/Ubuntu systems
+  * Allow `freeradius::site` resources (virtual servers) to have their content managed other than just with flat files
+  * Add more options to `freeradius::sql`
+  * Add various types of validation for Puppet 4
 
 ### 2.3.1
   * Fix bug with log rotation throwing errors when radiusd is not running

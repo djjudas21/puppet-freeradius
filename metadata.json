@@ -1,6 +1,6 @@
 {
   "name": "jgazeley-freeradius",
-  "version": "2.3.1",
+  "version": "3.0.0",
   "author": "jgazeley",
   "summary": "Install and configure FreeRADIUS",
   "license": "Apache-2.0",
@@ -17,8 +17,6 @@
     {
       "operatingsystem": "Fedora",
       "operatingsystemrelease": [
-        "21",
-        "22",
         "23",
         "24",
         "25"
