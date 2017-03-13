@@ -67,6 +67,10 @@ define freeradius::module::eap (
   Optional[Freeradius::Boolean] $peap_require_client_cert           = undef,
   Optional[Freeradius::Boolean] $mschapv2_send_error                = undef,
   Optional[String] $mschapv2_identity                               = undef,
+  Boolean $eap_md5                                                  = true,
+  Boolean $eap_leap                                                 = true,
+  Boolean $eap_gtc                                                  = true,
+  Boolean $eap_peap                                                 = true,
 ) {
 
   freeradius::module{$name:
