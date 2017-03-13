@@ -1496,6 +1496,9 @@ development effort if the features aren't useful to my employer.
 
 ## Release Notes
 
+### 3.1.0
+  * Provide facility to enable/disable specific EAP types in `freeradius::module::eap`
+
 ### 3.0.0
   * More parameters available for `freeradius::client`
   * Allow management of `freeradius::dictionary` with `source` or `content`
