@@ -2,9 +2,9 @@
 define freeradius::home_server (
   $secret,
   $type = 'auth',
-  $ipaddr = '',
-  $ipv6addr = '',
-  $virtual_server = '',
+  $ipaddr = undef,
+  $ipv6addr = undef,
+  $virtual_server = undef,
   $port = 1812,
   $proto = 'udp',
   $status_check = undef,

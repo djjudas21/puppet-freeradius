@@ -2,8 +2,8 @@
 define freeradius::home_server_pool (
   $home_server,
   $type = 'fail-over',
-  $virtual_server = '',
-  $fallback = '',
+  $virtual_server = undef,
+  $fallback = undef,
 ) {
   $fr_basepath = $::freeradius::params::fr_basepath
 

@@ -1,9 +1,9 @@
 # Set up proxy realms
 define freeradius::realm (
-  $virtual_server = '',
-  $auth_pool = '',
-  $acct_pool = '',
-  $pool = '',
+  $virtual_server = undef,
+  $auth_pool = undef,
+  $acct_pool = undef,
+  $pool = undef,
   $nostrip = false,
 ) {
   $fr_basepath = $::freeradius::params::fr_basepath

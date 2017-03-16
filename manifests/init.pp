@@ -270,7 +270,7 @@ class freeradius (
   # package to be sure that the group has been created.
   group { $freeradius::fr_group:
     ensure  => present,
-    require => Package[$freeradius::fr_package]
+    require => Package[$freeradius::fr_package],
   }
 
   # Syslog rules

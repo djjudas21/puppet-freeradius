@@ -7,7 +7,7 @@ define freeradius::sql (
   $radius_db                   = 'radius',
   $num_sql_socks               = '${thread[pool].max_servers}',
   $query_file                  = "\${modconfdir}/\${.:name}/main/\${dialect}/queries.conf",
-  $custom_query_file           = '',
+  $custom_query_file           = undef,
   $lifetime                    = '0',
   $max_queries                 = '0',
   $ensure                      = present,

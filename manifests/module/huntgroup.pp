@@ -8,6 +8,6 @@ define freeradius::module::huntgroup (
   concat::fragment {"Huntgroup ${name}":
     target  => $huntgroup,
     order   => $order,
-    content => template('freeradius/huntgroup.erb')
+    content => template('freeradius/huntgroup.erb'),
   }
 }
