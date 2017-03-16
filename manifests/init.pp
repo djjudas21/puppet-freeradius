@@ -19,7 +19,9 @@ class freeradius (
   $radacctdir      = $freeradius::params::radacctdir,
 ) inherits freeradius::params {
 
-  validate_re($freeradius::fr_version, '^3', 'This module is only compatible with FreeRADIUS 3')
+  if $freeradius::fr_version !~ /^3/ {
+    notify { 'This module is only compatible with FreeRADIUS 3.': }
+  }
 
   validate_re($log_destination, '^(files|syslog|stdout|stderr)$',
     "log_destination value (${log_destination}) is not a valid value")
