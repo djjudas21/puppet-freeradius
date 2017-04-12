@@ -4,6 +4,7 @@ class freeradius (
   $max_servers     = '4096',
   $max_requests    = '4096',
   $mysql_support   = false,
+  $pgsql_support   = false,
   $perl_support    = false,
   $utils_support   = false,
   $ldap_support    = false,
@@ -212,6 +213,11 @@ class freeradius (
   }
   if $mysql_support {
     package { 'freeradius-mysql':
+      ensure => installed,
+    }
+  }
+  if $pgsql_support {
+    package { 'freeradius-postgresql':
       ensure => installed,
     }
   }
