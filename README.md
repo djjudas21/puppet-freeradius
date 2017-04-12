@@ -18,6 +18,7 @@
        * [`freeradius::dictionary`](#freeradiusdictionary)
        * [`freeradius::home_server`](#freeradiushomeserver)
        * [`freeradius::home_server_pool`](#freeradiushomeserverpool)
+       * [`freeradius::huntgroup`](#freeradiushuntgroup)
        * [`freeradius::instantiate`](#freeradiusinstantiate)
        * [`freeradius::ldap`](#freeradiusldap)
        * [`freeradius::module::ldap`](#freeradiusmoduleldap)
@@ -254,12 +255,16 @@ Define RADIUS clients as seen in `clients.conf`
 ```puppet
 # Single host example
 freeradius::client { "wlan-controller01":
-  ip        => '192.168.0.1',
-  secret    => 'testing123',
-  shortname => 'wlc01',
-  nastype   => 'other',
-  port      => '1645-1646',
-  firewall  => true,
+  ip         => '192.168.0.1',
+  secret     => 'testing123',
+  shortname  => 'wlc01',
+  nastype    => 'other',
+  port       => '1645-1646',
+  firewall   => true,
+  huntgroups => [
+    { huntgroup  => 'wlanaccess',
+      conditions => [ 'NAS-IP-Address == 192.168.0.1' ] },
+  ]
 }
 ```
 
@@ -329,6 +334,10 @@ Create a firewall exception for this virtual server. If this is set to `true`, y
 
 ##### `attributes`
 Array of attributes to assign to this client. Default: empty.
+
+##### `huntgroups`
+Array of hashes, each hash containing the parameters passed to a new instance of `freeradius::huntgroup`. Default: `undef`.
+
 
 #### `freeradius::config`
 
@@ -436,6 +445,27 @@ If ALL home servers are dead, then this "fallback" home server is used. If set, 
 fallback, such as the DEFAULT realm.
 
 For reasons of stability, this home server SHOULD be a virtual server. Otherwise, the fallback may itself be dead!
+
+
+### `freeradius::huntgroup`
+Define a freeradius huntgroup which gets assigned to clients matching the specified conditions. Also take a look at the `freeradius::client::huntgroups` parameter.
+
+```puppet
+freeradius::huntgroup { "swith01.example.com-switchaccess":
+  huntgroup  => "switchaccess",
+  conditions => [ "NAS-IP-Address == '1.2.3.4'" ],
+  order      => "50",
+}
+```
+
+##### `huntgroup`
+Name of the huntgroup to be assigned in case the conditions are met. Required.
+
+##### `conditions`
+An array of conditions which have to match a client for the huntgroup to be assigned. Required.
+
+
+##### `order`
 
 
 #### `freeradius::instantiate`

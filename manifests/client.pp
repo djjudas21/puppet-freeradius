@@ -21,6 +21,7 @@ define freeradius::client (
   $firewall                      = false,
   $ensure                        = present,
   $attributes                    = [],
+  $huntgroups                    = undef,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
@@ -74,6 +75,14 @@ define freeradius::client (
       }
     } else {
       fail('Must specify $port if you specify $firewall')
+    }
+  }
+
+  if $huntgroups {
+    $huntgroups.each |$index, $huntgroup| {
+      freeradius::huntgroup { "huntgroup.client.${shortname}.${index}":
+        * => $huntgroup
+      }
     }
   }
 }
