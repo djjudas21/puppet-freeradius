@@ -1,12 +1,12 @@
 home_server <%= @name %> {
 	type = <%= @type %>
-<% if @ipaddr != '' -%>
+<% if defined?(@ipaddr) -%>
 	ipaddr = <%= @ipaddr %>
 <% end -%>
-<% if @ipv6addr != '' -%>
+<% if defined?(@ipv6addr) -%>
 	ipv6addr = <%= @ipv6addr %>
 <% end -%>
-<% if @virtual_server != '' -%>
+<% if defined?(@virtual_server) -%>
 	virtual_server = <%= @virtual_server %>
 <% end -%>
 	port = <%= @port %>

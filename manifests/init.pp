@@ -311,7 +311,7 @@ class freeradius (
     create        => false,
     missingok     => true,
     compress      => true,
-    postrotate    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+    postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
     sharedscripts => true,
   }
 
@@ -322,7 +322,7 @@ class freeradius (
     create        => true,
     missingok     => true,
     compress      => true,
-    postrotate    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+    postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
     sharedscripts => true,
   }
 
@@ -333,7 +333,7 @@ class freeradius (
     create        => true,
     missingok     => true,
     compress      => true,
-    postrotate    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+    postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
     sharedscripts => true,
   }
 
