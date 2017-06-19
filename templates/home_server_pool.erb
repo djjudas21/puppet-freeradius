@@ -1,12 +1,12 @@
 home_server_pool <%= @name %> {
 	type = <%= @type %>
-<% if @virtual_server != '' -%>
+<% if defined?(@virtual_server) -%>
 	virtual_server = <%= @virtual_server %>
 <% end -%>
 <% @home_server.each do |server| -%>
 	home_server = <%= server %>
 <% end -%>
-<% if @fallback != '' -%>
+<% if defined?(@fallback) -%>
 	fallback = <%= @fallback %>
 <% end -%>
 }
