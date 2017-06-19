@@ -73,6 +73,9 @@ class freeradius::params {
     default  => false,
   }
 
+  # Default pid file location
+  $fr_pidfile = "/var/run/${fr_service}/${fr_service}.pid"
+
   # Default base path for FreeRADIUS configs
   $fr_basepath = $::osfamily ? {
     'RedHat' => '/etc/raddb',

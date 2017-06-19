@@ -127,7 +127,7 @@ define freeradius::sql (
       create       => true,
       compress     => true,
       missingok    => true,
-      postrotate   => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+      postrotate   => "kill -HUP `cat ${freeradius::fr_pidfile}`",
     }
   }
 }
