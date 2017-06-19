@@ -1,5 +1,12 @@
 ## Changelog
 
+### 3.2.0
+  * Warn instead of failing if the FR version is not 3.x
+  * Update logrotate module dependency
+  * Add PostgreSQL support
+  * Fix bug with templating home servers in Puppet 4
+  * Fix bug with logrotate postrotate on non Red Hat distros
+
 ### 3.1.0
   * Provide facility to enable/disable specific EAP types in `freeradius::module::eap`
 
