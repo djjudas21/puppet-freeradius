@@ -37,7 +37,7 @@
       "version_range": ">=3.0.0"
     },
     {
-      "name": "yo61/logrotate",
+      "name": "puppet/logrotate",
       "version_range": ">=1.4.0"
     },
     {
