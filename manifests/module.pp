@@ -18,8 +18,8 @@ define freeradius::module (
       target => "../mods-available/${name}",
     }
   } else {
-    # Deploy actual module to sites-enabled
-    file { "${fr_modulepath}/${name}":
+    # Deploy actual module to mods-available, and link it to mods-enabled
+    file { "${fr_basepath}/mods-available/${name}":
       ensure  => $ensure,
       mode    => '0640',
       owner   => 'root',
@@ -28,6 +28,10 @@ define freeradius::module (
       content => $content,
       require => [Package[$fr_package], Group[$fr_group]],
       notify  => Service[$fr_service],
+    }
+    file { "${fr_modulepath}/${name}":
+      ensure => link,
+      target => "../mods-available/${name}",
     }
   }
 }

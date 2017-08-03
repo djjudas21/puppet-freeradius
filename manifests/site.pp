@@ -26,7 +26,7 @@ define freeradius::site (
     default => undef,
   }
 
-  file { "${fr_basepath}/sites-enabled/${name}":
+  file { "${fr_basepath}/sites-available/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
@@ -35,5 +35,9 @@ define freeradius::site (
     content => $manage_content,
     require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
+  }
+  file { "${fr_basepath}/sites-enabled/${name}":
+    ensure => link,
+    target => "${fr_basepath}/sites-available/${name}",
   }
 }

@@ -65,6 +65,7 @@ define freeradius::module::ldap (
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service
   $fr_modulepath       = $::freeradius::params::fr_modulepath
+  $fr_basepath         = $::freeradius::params::fr_basepath
   $fr_group            = $::freeradius::params::fr_group
 
   # Validate our inputs
@@ -84,7 +85,7 @@ define freeradius::module::ldap (
   }
 
   # Generate a module config, based on ldap.conf
-  file { "${fr_modulepath}/${name}":
+  file { "${fr_basepath}/mods-available/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
@@ -92,5 +93,9 @@ define freeradius::module::ldap (
     content => template('freeradius/ldap.erb'),
     require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
+  }
+  file { "${fr_modulepath}/${name}":
+    ensure => link,
+    target => "../mods-available/${name}",
   }
 }

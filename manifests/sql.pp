@@ -108,7 +108,7 @@ define freeradius::sql (
   }
 
   # Generate a module config, based on sql.conf
-  file { "${fr_modulepath}/${name}":
+  file { "${fr_basepath}/mods-available/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
@@ -116,6 +116,10 @@ define freeradius::sql (
     content => template('freeradius/sql.conf.erb'),
     require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
+  }
+  file { "${fr_modulepath}/${name}":
+    ensure => link,
+    target => "../mods-available/${name}",
   }
 
   # Install rotation for sqltrace if we are using it

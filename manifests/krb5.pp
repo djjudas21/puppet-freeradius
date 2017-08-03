@@ -11,10 +11,11 @@ define freeradius::krb5 (
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service
   $fr_modulepath       = $::freeradius::params::fr_modulepath
+  $fr_basepath         = $::freeradius::params::fr_basepath
   $fr_group            = $::freeradius::params::fr_group
 
   # Generate a module config
-  file { "${fr_modulepath}/${name}":
+  file { "${fr_basepath}/mods-availabe/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
@@ -22,5 +23,9 @@ define freeradius::krb5 (
     content => template('freeradius/krb5.erb'),
     require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
+  }
+  file { "${fr_modulepath}/${name}":
+    ensure => link,
+    target => "../mods-available/${name}",
   }
 }
