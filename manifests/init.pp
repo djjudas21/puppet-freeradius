@@ -172,17 +172,21 @@ class freeradius (
   }
 
   # Set up attribute filter file
-  concat { "${freeradius::fr_modulepath}/attr_filter":
+  concat { "${freeradius::fr_basepath}/mods-available/attr_filter":
     owner   => 'root',
     group   => $freeradius::fr_group,
     mode    => '0640',
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
     notify  => Service[$freeradius::fr_service],
   }
+  file { "${fr_modulepath}/attr_filter":
+    ensure => link,
+    target => "../mods-available/attr_filter",
+  }
 
   # Install default attribute filters
   concat::fragment { 'attr-default':
-    target  => "${freeradius::fr_modulepath}/attr_filter",
+    target  => "${freeradius::fr_basepath}/mods-available/attr_filter",
     content => template('freeradius/attr_default.erb'),
     order   => 10,
   }
