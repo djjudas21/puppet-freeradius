@@ -695,7 +695,10 @@ Spare connections to be left idle. Default: `${thread[pool].max_spare_servers}`
 
 #### `freeradius::module`
 
-Install a module from a flat file, or enable a stock module that came with your distribution of FreeRADIUS.
+Install a module from a flat file, or enable a stock module that came with your distribution of
+FreeRADIUS. Modules are installed into `mods-available` and automatically symlinked into
+`mods-enabled`, to ensure compatibility with package managers. Any files in this directory that
+are *not* managed by Puppet will be removed.
 
 ```puppet
 # Enable a stock module
@@ -1189,9 +1192,9 @@ freeradius::script{ 'myperlscript.pl':
 
 #### `freeradius::site`
 
-Install a virtual server (a.k.a. site) from a flat file. Sites are installed directly
-into `/etc/raddb/sites-enabled`. Any files in this directory that are *not* managed by
-Puppet will be removed.
+Install a virtual server (a.k.a. site) from a flat file. Sites are installed into `sites-available`
+and automatically symlinked into `sites-enabled`, to ensure compatibility with package managers.
+Any files in this directory that are *not* managed by Puppet will be removed.
 
 ```puppet
 freeradius::site { 'inner-tunnel':
