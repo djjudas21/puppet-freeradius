@@ -1,5 +1,9 @@
 ## Changelog
 
+### 3.3.0
+  * Deploy modules to `mods_available` and symlink to `mods_enabled`
+  * Deploy modules to `sites_available` and symlink to `sites_enabled`
+
 ### 3.2.0
   * Warn instead of failing if the FR version is not 3.x
   * Update logrotate module dependency
