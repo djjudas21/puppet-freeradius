@@ -179,9 +179,9 @@ class freeradius (
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
     notify  => Service[$freeradius::fr_service],
   }
-  file { "${fr_modulepath}/attr_filter":
+  file { "${freeradius::fr_modulepath}/attr_filter":
     ensure => link,
-    target => "../mods-available/attr_filter",
+    target => '../mods-available/attr_filter',
   }
 
   # Install default attribute filters
