@@ -15,7 +15,7 @@ define freeradius::krb5 (
   $fr_group            = $::freeradius::params::fr_group
 
   # Generate a module config
-  file { "${fr_basepath}/mods-availabe/${name}":
+  file { "${fr_basepath}/mods-available/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
