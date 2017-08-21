@@ -26,6 +26,11 @@ define freeradius::site (
     default => undef,
   }
 
+  $ensure_link = $ensure ? {
+    'absent' => 'absent',
+    default  => 'link'
+  }
+
   file { "${fr_basepath}/sites-available/${name}":
     ensure  => $ensure,
     mode    => '0640',
@@ -37,7 +42,7 @@ define freeradius::site (
     notify  => Service[$fr_service],
   }
   file { "${fr_basepath}/sites-enabled/${name}":
-    ensure => link,
+    ensure => $ensure_link,
     target => "${fr_basepath}/sites-available/${name}",
   }
 }
