@@ -11,10 +11,15 @@ define freeradius::module (
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
+  $ensure_link = $ensure ? {
+    'absent' => 'absent',
+    default  => 'link'
+  }
+
   if ($preserve) {
     # Symlink to mods-available for stock modules
     file { "${fr_modulepath}/${name}":
-      ensure => link,
+      ensure => $ensure_link,
       target => "../mods-available/${name}",
     }
   } else {
@@ -30,7 +35,7 @@ define freeradius::module (
       notify  => Service[$fr_service],
     }
     file { "${fr_modulepath}/${name}":
-      ensure => link,
+      ensure => $ensure_link,
       target => "../mods-available/${name}",
     }
   }
