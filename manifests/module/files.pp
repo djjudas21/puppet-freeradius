@@ -19,7 +19,10 @@ define freeradius::module::files (
   $fr_service          = $::freeradius::params::fr_service
 
   $manage_content = $content ? {
-    undef     => template('freeradius/users.erb'),
+    undef     => $source ? {
+      undef   => template('freeradius/users.erb'),
+      default => undef,
+    },
     default   => $content,
   }
 
