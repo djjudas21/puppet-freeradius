@@ -978,6 +978,9 @@ Check the certificate revocation list. Default: `undef`.
 ###### `tls_check_all_crl`
 Check if intermediate CAs have been revoked. Default: `undef`.
 
+###### `tls_allow_expired_crl`
+Allow use of an expired CRL. Default: `undef`.
+
 ###### `tls_ca_path`
 Path to the CA file. Default: `${cadir}`.
 

@@ -332,6 +332,11 @@ eap {
     check_all_crl = <%= @tls_check_all_crl %>
 <%- end -%>
 
+    # Allow use of expired CRLs
+<%- if @tls_allow_expired_crl -%>
+    allow_expired_crl = <%= @tls_allow_expired_crl %>
+<%- end -%>
+
     ca_path = <%= @tls_ca_path %>
 
     #

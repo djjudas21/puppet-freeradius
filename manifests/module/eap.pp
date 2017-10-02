@@ -30,6 +30,7 @@ define freeradius::module::eap (
   Optional[Freeradius::Boolean] $tls_include_length                 = undef,
   Optional[Freeradius::Boolean] $tls_check_crl                      = undef,
   Optional[Freeradius::Boolean] $tls_check_all_crl                  = undef,
+  Optional[Freeradius::Boolean] $tls_allow_expired_crl              = undef,
   String $tls_ca_path                                               = "\${cadir}",
   Optional[String] $tls_check_cert_issuer                           = undef,
   Optional[String] $tls_check_cert_cn                               = undef,
