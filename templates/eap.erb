@@ -75,36 +75,32 @@ eap {
   }
 <%- end -%>
 
+<%- if @eap_pwd -%>
   #
   # EAP-pwd -- secure password-based authentication
   #
-<%- if @eap_pwd -%>
    pwd {
-#    group = 19
   <%- if @pwd_group -%>
     group = <%= @pwd_group %>
   <%- end -%>
 
     #
-#    server_id = theserver@example.com
   <%- if @pwd_server_id -%>
     server_id = <%= @pwd_server_id %>
   <%- end -%>
 
-    #  This has the same meaning as for TLS.
-#    fragment_size = 1020
   <%- if @pwd_fragment_size -%>
+    #  This has the same meaning as for TLS.
     fragment_size = <%= @pwd_fragment_size %>
   <%- end -%>
 
+  <%- if @pwd_virtual_server -%>
     # The virtual server which determines the
     # "known good" password for the user.
     # Note that unlike TLS, only the "authorize"
     # section is processed.  EAP-PWD requests can be
     # distinguished by having a User-Name, but
     # no User-Password, CHAP-Password, EAP-Message, etc.
-#    virtual_server = "inner-tunnel"
-  <%- if @pwd_virtual_server -%>
     virtual_server = <%= @pwd_virtual_server %>
   <%- end -%>
    }
@@ -139,11 +135,10 @@ eap {
   #  the users password will go over the wire in plain-text,
   #  for anyone to see.
   #
+<%- if @gtc_challenge -%>
   gtc {
     #  The default challenge, which many clients
     #  ignore..
-    #challenge = "Password: "
-<%- if @gtc_challenge -%>
     challenge = "<%= @gtc_challenge %>"
 <%- end  -%>
 
@@ -223,6 +218,7 @@ eap {
     #
     ca_file = <%= @tls_ca_file %>
 
+<%- if @tls_auto_chain -%>
      #  OpenSSL will automatically create certificate chains,
      #  unless we tell it to not do that.  The problem is that
      #  it sometimes gets the chains right from a certificate
@@ -230,8 +226,6 @@ eap {
     #
     #  When setting "auto_chain = no", the server certificate
     #  file MUST include the full certificate chain.
-  #  auto_chain = yes
-<%- if @tls_auto_chain -%>
     auto_chain = <%= @tls_auto_chain %>
 <%- end -%>
 
@@ -256,8 +250,6 @@ eap {
     #  look up the shared key (hexphrase) based on the
     #  identity.
     #
-  #  psk_identity = "test"
-  #  psk_hexphrase = "036363823"
 <%- if @tls_psk_identity -%>
     psk_identity = "<%= @tls_psk_identity %>"
 <%- end -%>
@@ -273,6 +265,7 @@ eap {
     #
     dh_file = <%= @tls_dh_file %>
 
+<%- if @tls_random_file -%>
     #
     #  If your system doesn't have /dev/urandom,
     #  you will need to create this file, and
@@ -282,11 +275,10 @@ eap {
     #  write to files in its configuration
     #  directory.
     #
-#    random_file = /dev/urandom
-<%- if @tls_random_file -%>
     random_file = <%= @tls_random_file %>"
 <%- end -%>
 
+<%- if @tls_fragment_size -%>
     #
     #  This can never exceed the size of a RADIUS
     #  packet (4096 bytes), and is preferably half
@@ -296,11 +288,10 @@ eap {
     #  In these cases, fragment size should be
     #  1024 or less.
     #
-  #  fragment_size = 1024
-<%- if @tls_fragment_size -%>
     fragment_size = <%= @tls_fragment_size %>
 <%- end -%>
 
+<%- if @tls_include_length -%>
     #  include_length is a flag which is
     #  by default set to yes If set to
     #  yes, Total Length of the message is
@@ -309,11 +300,10 @@ eap {
     #  message is included ONLY in the
     #  First packet of a fragment series.
     #
-  #  include_length = yes
-<%- if @tls_include_length -%>
     include_length = <%= @tls_include_length %>
 <%- end -%>
 
+<%- if @tls_check_crl -%>
     #  Check the Certificate Revocation List
     #
     #  1) Copy CA certificates and CRLs to same directory.
@@ -321,24 +311,22 @@ eap {
     #    'c_rehash' is OpenSSL's command.
     #  3) uncomment the line below.
     #  5) Restart radiusd
-  #  check_crl = yes
-<%- if @tls_check_crl -%>
     check_crl = <%= @tls_check_crl %>
 <%- end -%>
 
-    # Check if intermediate CAs have been revoked.
-  #  check_all_crl = yes
 <%- if @tls_check_all_crl -%>
+    # Check if intermediate CAs have been revoked.
     check_all_crl = <%= @tls_check_all_crl %>
 <%- end -%>
 
-    # Allow use of expired CRLs
 <%- if @tls_allow_expired_crl -%>
+    # Allow use of expired CRLs
     allow_expired_crl = <%= @tls_allow_expired_crl %>
 <%- end -%>
 
     ca_path = <%= @tls_ca_path %>
 
+<%- if @tls_check_cert_issuer -%>
     #
     #  If check_cert_issuer is set, the value will
     #  be checked against the DN of the issuer in
@@ -351,11 +339,10 @@ eap {
     #  TLS-Client-Cert-Issuer attribute.  This check
     #  can be done via any mechanism you choose.
     #
-  #  check_cert_issuer = "/C=GB/ST=Berkshire/L=Newbury/O=My Company Ltd"
-<%- if @tls_check_cert_issuer -%>
     check_cert_issuer = "<%= @tls_check_cert_issuer %>"
 <%- end -%>
 
+<%- if @tls_check_cert_cn -%>
     #
     #  If check_cert_cn is set, the value will
     #  be xlat'ed and checked against the CN
@@ -372,8 +359,6 @@ eap {
     #  TLS-Client-Cert-CN attribute.  This check
     #  can be done via any mechanism you choose.
     #
-  #  check_cert_cn = %{User-Name}
-<%- if @tls_check_cert_cn -%>
     check_cert_cn = <%= @tls_check_cert_cn %>
 <%- end -%>
     #
@@ -385,6 +370,7 @@ eap {
     #
     cipher_list = "<%= @tls_cipher_list %>"
 
+<%- if @tls_disable_tlsv1_2 -%>
     # Work-arounds for OpenSSL nonsense
     # OpenSSL 1.0.1f and 1.0.1g do not calculate
     # the EAP keys correctly.  The fix is to upgrade
@@ -392,8 +378,6 @@ eap {
     #
     #  For EAP-FAST, this MUST be set to "yes".
     #
-#    disable_tlsv1_2 = no
-<%- if @tls_disable_tlsv1_2 -%>
     disable_tlsv1_2 = <%= @tls_disable_tlsv1_2 %>
 <%- end -%>
 
@@ -466,6 +450,7 @@ eap {
       #
       max_entries = <%= @tls_cache_max_entries %>
 
+<%- if @tls_cache_name -%>
       #
       #  Internal "name" of the session cache. Used to
       #  distinguish which TLS context sessions belong to.
@@ -475,11 +460,10 @@ eap {
       #  set the "name" if you want to persist sessions (see
       #  below).
       #
-      #name = "EAP module"
-<%- if @tls_cache_name -%>
       name = "<%= @tls_cache_name %>"
 <%- end -%>
 
+<%- if @tls_cache_persist_dir -%>
       #
       #  Simple directory-based storage of sessions.
       #  Two files per session will be written, the SSL
@@ -494,8 +478,6 @@ eap {
       #
       #  This feature REQUIRES "name" option be set above.
       #
-      #persist_dir = "${logdir}/tlscache"
-<%- if @tls_cache_persist_dir -%>
       persist_dir = "<%= @tls_cache_persist_dir %>"
 <%- end -%>
     }
@@ -516,17 +498,17 @@ eap {
     #  run on successful certificate validation.
     #
     verify {
+<%- if @tls_verify_skip_if_ocsp_ok -%>
       #  If the OCSP checks succeed, the verify section
       #  is run to allow additional checks.
       #
       #  If you want to skip verify on OCSP success,
       #  uncomment this configuration item, and set it
       #  to "yes".
-  #    skip_if_ocsp_ok = no
-<%- if @tls_verify_skip_if_ocsp_ok -%>
       skip_if_ocsp_ok = <%= @tls_verify_skip_if_ocsp_ok %>
 <%- end -%>
 
+<%- if @tls_tmpdir -%>
       #  A temporary directory where the client
       #  certificates are stored.  This directory
       #  MUST be owned by the UID of the server,
@@ -538,11 +520,10 @@ eap {
       #
       #  You should also delete all of the files
       #  in the directory when the server starts.
-  #    tmpdir = /tmp/radiusd
-<%- if @tls_tmpdir -%>
       tmpdir = <%= @tls_tmpdir %>
 <%- end -%>
 
+<%- if @tls_client -%>
       #  The command used to verify the client cert.
       #  We recommend using the OpenSSL command-line
       #  tool.
@@ -555,8 +536,6 @@ eap {
       #  in PEM format.  This file is automatically
       #  deleted by the server when the command
       #  returns.
-  #    client = "/path/to/openssl verify -CApath ${..ca_path} %{TLS-Client-Cert-Filename}"
-<%- if @tls_client -%>
       client = "<%= @tls_client %>"
 <%- end -%>
     }
@@ -590,6 +569,7 @@ eap {
       #
       url = "<%= @tls_ocsp_url %>"
 
+<%- if @tls_ocsp_use_nonce -%>
       #
       # If the OCSP Responder can not cope with nonce
       # in the request, then it can be disabled here.
@@ -604,20 +584,18 @@ eap {
       # to disable it in the query here.
       # See http://technet.microsoft.com/en-us/library/cc770413%28WS.10%29.aspx
       #
-      # use_nonce = yes
-<%- if @tls_ocsp_use_nonce -%>
       use_nonce = <%= @tls_ocsp_use_nonce %>
 <%- end -%>
 
+<%- if @tls_ocsp_timeout -%>
       #
       # Number of seconds before giving up waiting
       # for OCSP response. 0 uses system default.
       #
-      # timeout = 0
-<%- if @tls_ocsp_timeout -%>
       timeout = <%= @tls_ocsp_timeout %>
 <%- end -%>
 
+<%- if @tls_ocsp_softfail -%>
       #
       # Normally an error in querying the OCSP
       # responder (no response from server, server did
@@ -632,8 +610,6 @@ eap {
       # certificates to connect if the OCSP responder
       # is not available. Use with caution.
       #
-      # softfail = no
-<%- if @tls_ocsp_softfail -%>
       softfail = <%= @tls_ocsp_softfail %>
 <%- end -%>
     }
@@ -654,7 +630,6 @@ eap {
     # virtual server has access to these attributes, and can
     # be used to accept or reject the request.
     #
-  #  virtual_server = check-eap-tls
 <%- if @tls_virtual_server -%>
     virtual_server = <%= @tls_virtual_server %>
 <%- end -%>
@@ -741,15 +716,15 @@ eap {
     #
     virtual_server = "<%= @ttls_virtual_server %>"
 
+<%- if @ttls_include_length -%>
     #  This has the same meaning, and overwrites, the
     #  same field in the "tls" configuration, above.
     #  The default value here is "yes".
     #
-  #  include_length = yes
-<%- if @ttls_include_length -%>
     include_length = <%= @ttls_include_length %>
 <%- end -%>
 
+<%- if @ttls_require_client_cert -%>
     #
     # Unlike EAP-TLS, EAP-TTLS does not require a client
     # certificate. However, you can require one by setting the
@@ -760,8 +735,6 @@ eap {
     #
     # in the control items for a request.
     #
-  #  require_client_cert = yes
-<%- if @ttls_require_client_cert -%>
     require_client_cert = <%= @ttls_require_client_cert %>
 <%- end -%>
   }
@@ -849,13 +822,12 @@ eap {
     #
     use_tunneled_reply = <%= @peap_use_tunneled_reply %>
 
+<%- if @peap_proxy_tunneled_request_as_eap -%>
     #  When the tunneled session is proxied, the
     #  home server may not understand EAP-MSCHAP-V2.
     #  Set this entry to "no" to proxy the tunneled
     #  EAP-MSCHAP-V2 as normal MSCHAPv2.
     #
-  #  proxy_tunneled_request_as_eap = yes
-<%- if @peap_proxy_tunneled_request_as_eap -%>
     proxy_tunneled_request_as_eap = <%= @peap_proxy_tunneled_request_as_eap %>
 <%- end -%>
 
@@ -871,24 +843,23 @@ eap {
     #
     virtual_server = "<%= @peap_virtual_server %>"
 
+<%- if @peap_soh -%>
     # This option enables support for MS-SoH
     # see doc/SoH.txt for more info.
     # It is disabled by default.
     #
-  #  soh = yes
-<%- if @peap_soh -%>
     soh = <%= @peap_soh %>
 <%- end -%>
 
+<%- if @peap_soh_virtual_server -%>
     #
     # The SoH reply will be turned into a request which
     # can be sent to a specific virtual server:
     #
-  #  soh_virtual_server = "soh-server"
-<%- if @peap_soh_virtual_server -%>
     soh_virtual_server = <%= @peap_soh_virtual_server %>
 <%- end -%>
 
+<%- if @peap_require_client_cert -%>
     #
     # Unlike EAP-TLS, PEAP does not require a client certificate.
     # However, you can require one by setting the following
@@ -898,8 +869,6 @@ eap {
     #
     # in the control items for a request.
     #
-  #  require_client_cert = yes
-<%- if @peap_require_client_cert -%>
     require_client_cert = <%= @peap_require_client_cert %>
 <%- end -%>
 }
@@ -920,6 +889,7 @@ eap {
   #  currently support.
   #
   mschapv2 {
+<%- if @mschapv2_send_error -%>
     #  Prior to version 2.1.11, the module never
     #  sent the MS-CHAP-Error message to the
     #  client.  This worked, but it had issues
@@ -936,17 +906,14 @@ eap {
     #  but *may* also cause other clients to stop
     #  working.
     #
-#    send_error = no
-<%- if @mschapv2_send_error -%>
     send_error = <%= @mschapv2_send_error %>
 <%- end -%>
 
+<%- if @mschapv2_identity -%>
     #  Server identifier to send back in the challenge.
     #  This should generally be the host name of the
     #  RADIUS server.  Or, some information to uniquely
     #  identify it.
-#    identity = "FreeRADIUS"
-<%- if @mschapv2_identity -%>
     identity = "<%= @mschapv2_identity %>"
 <%- end -%>
   }

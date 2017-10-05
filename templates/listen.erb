@@ -52,6 +52,7 @@ listen {
   #  0 means "use /etc/services for the proper port"
   port = <%= @port %>
 
+<%- if @interface -%>
   #  Some systems support binding to an interface, in addition
   #  to the IP address.  This feature isn't strictly necessary,
   #  but for sites with many IP addresses on one interface,
@@ -60,11 +61,10 @@ listen {
   #  If your system does not support this feature, you will
   #  get an error if you try to use it.
   #
-#  interface = eth0
-<%- if @interface -%>
   interface = <%= @interface %>
 <%- end -%>
 
+<%- if !@clients.empty? -%>
   #  Per-socket lists of clients.  This is a very useful feature.
   #
   #  The name here is a reference to a section elsewhere in
@@ -79,8 +79,6 @@ listen {
   #
   #  See clients.conf for the configuration of "per_socket_clients".
   #
-#  clients = per_socket_clients
-<%- if !@clients.empty? -%>
   clients = <%= @clients.join(',') %>
 <%- end -%>
 

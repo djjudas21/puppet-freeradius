@@ -14,21 +14,19 @@ files <%= @name %> {
   # matches this instance of the files module.
   moddir = <%= @moddir %>
 
+<%- if @key -%>
   # The default key attribute to use for matches.  The content
   # of this attribute is used to match the "name" of the
   # entry.
-  #key = "%{%{Stripped-User-Name}:-%{User-Name}}"
-<%- if @key -%>
   key = "<%= @key %>"
 <%- end -%>
 
   #  The old "users" style file is now located here.
   filename = <%= @filename %>
 
+<%- if @usersfile -%>
   #  This is accepted for backwards compatibility
   #  It will be removed in a future release.
-  # usersfile = ${moddir}/authorize
-<%- if @usersfile -%>
   usersfile = <%= @usersfile %>
 <%- end -%>
 

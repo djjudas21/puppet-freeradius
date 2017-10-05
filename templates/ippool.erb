@@ -60,6 +60,7 @@ ippool <%= @name %> {
   #  "no timeout".  The default value is 0
   maximum_timeout = <%= @maximum_timeout %>
 
+<%- if @key -%>
   #  The key to use for the session database (which
   #  holds the allocated ip's) normally it should
   #  just be the nas ip/port (which is the default).
@@ -68,8 +69,6 @@ ippool <%= @name %> {
   #  all requests, the key should be based on some
   #  other attribute that is in ALL requests, AND
   #  is unique to each machine needing an IP address.
-#  key = "%{NAS-IP-Address} %{NAS-Port}"
-<%- if @key -%>
   key = "<%= @key %>"
 <%- end -%>
 }

@@ -54,13 +54,12 @@ detail <%= @name %> {
   #  people from seeing that information.
   permissions = <%= @permissions %>
 
+<%- if @group -%>
   # The Unix group of the log file.
   #
   # The user that the server runs as must be in the specified
   # system group otherwise this will fail to work.
   #
-#  group = ${security.group}
-<%- if @group -%>
   group = <%= @group %>
 <%- end -%>
 
@@ -75,24 +74,23 @@ detail <%= @name %> {
   #
   header = "<%= @header %>"
 
+<%- if @locking -%>
   #
   #  Uncomment this line if the detail file reader will be
   #  reading this detail file.
   #
-#  locking = yes
-<%- if @locking -%>
   locking = <%= @locking == true %>
 <%- end -%>
 
+<%- if @log_packet_header -%>
   #
   #  Log the Packet src/dst IP/port.  This is disabled by
   #  default, as that information isn't used by many people.
   #
-#  log_packet_header = yes
-<%- if @log_packet_header -%>
   log_packet_header = <%= @log_packet_header == true %>
 <%- end -%>
 
+<%- if !@suppress.empty? -%>
   #
   # Certain attributes such as User-Password may be
   # "sensitive", so they should not be printed in the
@@ -101,10 +99,6 @@ detail <%= @name %> {
   #
   # The attributes should be listed one to a line.
   #
-  #suppress {
-    # User-Password
-  #}
-<%- if !@suppress.empty? -%>
   suppress {
     <%= @suppress.join("\n    ") %>
   }

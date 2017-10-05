@@ -35,17 +35,17 @@ linelog <%= @name %> {
   #  restrictive as possible.
   permissions = <%= @permissions %>
 
+<%- if @group -%>
   #
   # The Unix group which owns the log file.
   #
   # The user that freeradius runs as must be in the specified
   # group, otherwise it will not be possible to set the group.
   #
-  # group = ${security.group}
-<%- if @group -%>
   group = <%= @group %>
 <%- end -%>
 
+<%- if @syslog_facility -%>
   #  Syslog facility (if logging via syslog).
   #  Defaults to the syslog_facility config item in radiusd.conf.
   #  Standard facilities are:
@@ -69,11 +69,10 @@ linelog <%= @name %> {
   #  - ftp         The file transfer protocol daemons: ftpd(8),
   #                tftpd(8).
   #  - local[0-7]  Reserved for local use.
-  # syslog_facility = daemon
-<%- if @syslog_facility -%>
   syslog_facility = <%= @syslog_facility %>
 <%- end -%>
 
+<%- if @syslog_severity -%>
   #  Syslog severity (if logging via syslog). Defaults to info.
   #  Possible values are:
   #  - emergency   A panic condition.  This is normally broadcast
@@ -88,8 +87,6 @@ linelog <%= @name %> {
   #  - info        Informational messages.
   #  - debug       Messages that contain information normally of use
   #                only when debugging a program.
-  #  syslog_severity = info
-<%- if @syslog_severity -%>
   syslog_severity = <%= @syslog_severity %>
 <%- end -%>
 
