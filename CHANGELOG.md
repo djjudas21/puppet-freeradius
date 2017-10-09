@@ -1,5 +1,12 @@
 ## Changelog
 
+### 3.4.0
+  * Fix bug with modules that have ensure => absent
+  * Fix bug with module::files where content and source
+  * Fix bug with path of krb5 module
+  * Manage parameter `allow_expired_crl`
+  * Clean up comments in templates to reduce the size
+
 ### 3.3.0
   * Deploy modules to `mods_available` and symlink to `mods_enabled`
   * Deploy modules to `sites_available` and symlink to `sites_enabled`
