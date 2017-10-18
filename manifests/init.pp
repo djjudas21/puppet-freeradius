@@ -17,6 +17,7 @@ class freeradius (
   $preserve_mods   = true,
   $correct_escapes = true,
   $manage_logpath  = true,
+  $package_ensure  = 'installed',
   $radacctdir      = $freeradius::params::radacctdir,
 ) inherits freeradius::params {
 
@@ -26,6 +27,8 @@ class freeradius (
 
   validate_re($log_destination, '^(files|syslog|stdout|stderr)$',
     "log_destination value (${log_destination}) is not a valid value")
+
+  validate_re($package_ensure, '^(installed|latest)$', 'package_ensure must be one of installed, latest')
 
   if $control_socket == true {
     warning('Use of the control_socket parameter in the freeradius class is deprecated. Please use the freeradius::control_socket class instead.')
@@ -212,42 +215,42 @@ class freeradius (
 
   # Install FreeRADIUS packages
   package { 'freeradius':
-    ensure => installed,
+    ensure => $package_ensure,
     name   => $freeradius::fr_package,
   }
   if $mysql_support {
     package { 'freeradius-mysql':
-      ensure => installed,
+      ensure => $package_ensure,
     }
   }
   if $pgsql_support {
     package { 'freeradius-postgresql':
-      ensure => installed,
+      ensure => $package_ensure,
     }
   }
   if $perl_support {
     package { 'freeradius-perl':
-      ensure => installed,
+      ensure => $package_ensure,
     }
   }
   if $utils_support {
     package { 'freeradius-utils':
-      ensure => installed,
+      ensure => $package_ensure,
     }
   }
   if $ldap_support {
     package { 'freeradius-ldap':
-      ensure => installed,
+      ensure => $package_ensure,
     }
   }
   if $krb5_support {
     package { 'freeradius-krb5':
-      ensure => installed,
+      ensure => $package_ensure,
     }
   }
   if $wpa_supplicant {
     package { 'wpa_supplicant':
-      ensure => installed,
+      ensure => $package_ensure,
       name   => $freeradius::fr_wpa_supplicant,
     }
   }

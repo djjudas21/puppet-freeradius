@@ -131,6 +131,9 @@ Add a syslog rule (using the `saz/rsyslog` module). Default: `false`.
 ##### `log_auth`
 Log authentication requests (yes/no). Default: `no`.
 
+##### `package_ensure`
+Choose whether the package is just installed and left (`installed`), or updated every Puppet run (`latest`). Default: `installed`
+
 ```puppet
 class { 'freeradius':
   max_requests    => 4096,
