@@ -1,5 +1,9 @@
 ## Changelog
 
+### 3.4.1
+  * Fix calling syntax for logrotate
+  * Add param `package_ensure`
+
 ### 3.4.0
   * Fix bug with modules that have ensure => absent
   * Fix bug with module::files where content and source
