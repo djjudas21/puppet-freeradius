@@ -135,8 +135,8 @@ eap {
   #  the users password will go over the wire in plain-text,
   #  for anyone to see.
   #
-<%- if @gtc_challenge -%>
   gtc {
+<%- if @gtc_challenge -%>
     #  The default challenge, which many clients
     #  ignore..
     challenge = "<%= @gtc_challenge %>"
