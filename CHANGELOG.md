@@ -1,6 +1,6 @@
 ## Changelog
 
-### 3.4.2
+### 3.4.3
   * Fix missing notify that caused problems when adding a new virtual server in `sites_available`
 
 ### 3.4.1
