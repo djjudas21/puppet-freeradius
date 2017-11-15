@@ -19,8 +19,10 @@ define freeradius::module (
   if ($preserve) {
     # Symlink to mods-available for stock modules
     file { "${fr_modulepath}/${name}":
-      ensure => $ensure_link,
-      target => "../mods-available/${name}",
+      ensure  => $ensure_link,
+      target  => "../mods-available/${name}",
+      notify  => Service[$fr_service],
+      require => File["${fr_basepath}/mods-available/${name}"],
     }
   } else {
     # Deploy actual module to mods-available, and link it to mods-enabled
@@ -32,7 +34,6 @@ define freeradius::module (
       source  => $source,
       content => $content,
       require => [Package[$fr_package], Group[$fr_group]],
-      notify  => Service[$fr_service],
     }
     file { "${fr_modulepath}/${name}":
       ensure => $ensure_link,
