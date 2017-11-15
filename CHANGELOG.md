@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.4.2
+  * Fix missing notify that caused problems when adding a new virtual server in `sites_available`
+
 ### 3.4.1
   * Fix calling syntax for logrotate
   * Add param `package_ensure`
