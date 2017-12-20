@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.5.0
+  * Add support for huntgroups (thanks @sts and @phaer)
+
 ### 3.4.3
   * Fix missing notify that caused problems when adding a new virtual server in `sites_available`
 
