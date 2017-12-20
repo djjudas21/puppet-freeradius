@@ -8,7 +8,7 @@ define freeradius::huntgroup (
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_service  = $::freeradius::params::fr_service
 
-  $conditionals = join($conditions, ", ")
+  $conditionals = join($conditions, ', ')
 
   $content    = "${huntgroup}\t${conditionals}\n"
 
