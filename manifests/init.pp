@@ -119,6 +119,10 @@ class freeradius (
     }
   }
 
+  # Always restart the service after every module operation
+  Freeradius::Module {
+    notify => Service[$freeradius::fr_service]
+  }
 
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
