@@ -34,6 +34,11 @@ class freeradius (
     warning('Use of the control_socket parameter in the freeradius class is deprecated. Please use the freeradius::control_socket class instead.')
   }
 
+  # Always restart the service after every module operation
+  Freeradius::Module {
+    notify => Service[$freeradius::fr_service]
+  }
+
   file { 'radiusd.conf':
     name    => "${freeradius::fr_basepath}/radiusd.conf",
     mode    => '0644',
@@ -117,11 +122,6 @@ class freeradius (
     ]:
       preserve => true,
     }
-  }
-
-  # Always restart the service after every module operation
-  Freeradius::Module {
-    notify => Service[$freeradius::fr_service]
   }
 
   # Set up concat policy file, as there is only one global policy
