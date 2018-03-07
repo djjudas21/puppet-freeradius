@@ -77,10 +77,25 @@ class freeradius::params {
   $fr_pidfile = "/var/run/${fr_service}/${fr_service}.pid"
 
   # Default base path for FreeRADIUS configs
-  $fr_basepath = $::osfamily ? {
-    'RedHat' => '/etc/raddb',
-    'Debian' => '/etc/freeradius',
-    default  => '/etc/raddb',
+  case $::osfamily {
+    'RedHat': {
+      $fr_basepath = '/etc/raddb'
+      $fr_raddbdir = "\${sysconfdir}/raddb"
+    }
+    'Debian': {
+      $fr_basepath = $::operatingsystemmajrelease ? {
+        '9'     => '/etc/freeradius/3.0',
+        default => '/etc/freeradius',
+      }
+      $fr_raddbdir = $::operatingsystemmajrelease ? {
+        '9'     => "\${sysconfdir}/freeradius3.0",
+        default => "\${sysconfdir}/freeradius",
+      }
+    }
+    default: {
+      $fr_basepath = '/etc/raddb'
+      $fr_raddbdir = "\${sysconfdir}/raddb"
+    }
   }
 
   # Default module dir
@@ -135,11 +150,6 @@ class freeradius::params {
     'RedHat' => '/usr/lib64/freeradius',
     'Debian' => '/usr/lib/freeradius',
     default  => '/usr/lib64/freeradius',
-  }
-
-  $fr_raddbdir = $::osfamily ? {
-    'Debian' => "\${sysconfdir}/freeradius",
-    default  => "\${sysconfdir}/raddb",
   }
 
   $fr_db_dir = $::osfamily ? {

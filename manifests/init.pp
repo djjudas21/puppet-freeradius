@@ -8,6 +8,7 @@ class freeradius (
   $perl_support    = false,
   $utils_support   = false,
   $ldap_support    = false,
+  $dhcp_support    = false,
   $krb5_support    = false,
   $wpa_supplicant  = false,
   $winbind_support = false,
@@ -96,7 +97,6 @@ class freeradius (
       'chap',
       'detail',
       'detail.log',
-      'dhcp',
       'digest',
       'dynamic_clients',
       'echo',
@@ -258,6 +258,11 @@ class freeradius (
   }
   if $ldap_support {
     package { 'freeradius-ldap':
+      ensure => $package_ensure,
+    }
+  }
+  if $dhcp_support {
+    package { 'freeradius-dhcp':
       ensure => $package_ensure,
     }
   }
