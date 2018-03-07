@@ -44,10 +44,7 @@
 
 This module installs and configures [FreeRADIUS](http://freeradius.org/) server
 on Linux. It supports FreeRADIUS 3.x only. It was designed with CentOS in mind
-but should work on other distributions. Please note that at this time, current
-versions of Debian and Ubuntu still package FreeRADIUS 2.2.x which is end-of-life.
-If you use Debian or Ubuntu, you will need to use version 1.x of this module,
-which itself is no longer maintained.
+but should work on other distributions. 
 
 This module requires Puppet 4.0.0 or greater. Puppet 3.x was
 [discontinued](https://puppet.com/misc/puppet-enterprise-lifecycle) at
@@ -112,6 +109,9 @@ Install FreeRADIUS utils. Default: `false`
 
 ##### `ldap_support`
 Install support for LDAP. Default: `false`
+
+##### `dhcp_support`
+Install support for DHCP. Default: `false`
 
 ##### `krb5_support`
 Install support for Kerberos. Default: `false`
@@ -229,7 +229,7 @@ freeradius::blank { [
 
 #### `freeradius::cert`
 
-Install certificates as provided. These are installed in `/etc/raddb/certs`. Beware that any certificates *not* deployed by Puppet will be purged from this directory.
+Install certificates as provided. These are installed in `certs`. Beware that any certificates *not* deployed by Puppet will be purged from this directory.
 
 ```puppet
 freeradius::cert { 'mycert.pem':
@@ -350,7 +350,7 @@ Array of hashes, each hash defines one freeradius::huntgroup. Hash keys are all 
 
 #### `freeradius::config`
 
-Install arbitrary config snippets from a flat file. These are installed in `/etc/raddb/conf.d`
+Install arbitrary config snippets from a flat file. These are installed in `mods-config`
 
 ```puppet
 freeradius::config { 'realm-checks.conf':
@@ -366,7 +366,7 @@ freeradius::config { 'realm-checks.conf':
 
 #### `freeradius::dictionary`
 
-Install custom dictionaries without breaking the default FreeRADIUS dictionary. Custom dictionaries are installed in `/etc/raddb/dictionary.d` and automatically included in the global dictionary.
+Install custom dictionaries without breaking the default FreeRADIUS dictionary. Custom dictionaries are installed in `dictionary.d` and automatically included in the global dictionary.
 
 ```puppet
 freeradius::dictionary { 'mydict':
@@ -1228,7 +1228,7 @@ user name is used to perform matches.If you do not want this to happen, set this
 #### `freeradius::script`
 
 Install a helper script, e.g. which might be called upon by a virtual server. These are
-placed in `/etc/raddb/scripts` and are not automatically included by the server.
+placed in `scripts` and are not automatically included by the server.
 
 ```puppet
 freeradius::script{ 'myperlscript.pl':
@@ -1373,7 +1373,7 @@ default, points to the `dialup.conf` specific to your database engine, so leave 
 using stock queries.
 
 If you need to use custom queries, it is recommended that you deploy your query file using
-`freeradius::script` to install the file into `/etc/raddb/scripts/custom_dialup.conf` and then
+`freeradius::script` to install the file into `scripts/custom_dialup.conf` and then
 set `query_file` to `scripts/custom_dialup.conf`.
 
 ##### `custom_query_file`
