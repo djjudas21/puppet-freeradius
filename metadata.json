@@ -21,6 +21,12 @@
         "26",
         "27"
       ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "9"
+      ]
     }
   ],
   "dependencies": [
