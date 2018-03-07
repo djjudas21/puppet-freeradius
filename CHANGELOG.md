@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.6.0
+  * Add support for Debian 9 (thanks @its-not-a-bug-its-a-feature)
+
 ### 3.5.0
   * Add support for huntgroups (thanks @sts and @phaer)
 
