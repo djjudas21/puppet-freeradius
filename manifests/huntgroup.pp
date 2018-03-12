@@ -13,7 +13,6 @@ define freeradius::huntgroup (
   $content    = "${huntgroup}\t${conditionals}\n"
 
   concat::fragment { "huntgroup.${title}":
-    ensure  => $ensure,
     target  => "${fr_basepath}/mods-config/preprocess/huntgroups",
     content => $content,
     order   => $order,

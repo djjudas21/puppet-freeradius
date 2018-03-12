@@ -19,20 +19,4 @@ class freeradius::module::preprocess (
     ensure  => $ensure,
     content => template('freeradius/preprocess.erb'),
   }
-
-
-  $huntgroup_path = $huntgroups ? {
-    "\${moddir}/huntgroups" => "${fr_moduleconfigpath}/preprocess/huntgroups",
-    default                 => $huntgroups,
-  }
-
-  concat {'huntgroup':
-    ensure  => $ensure,
-    path    => $huntgroup_path,
-    owner   => 'root',
-    group   => $fr_group,
-    mode    => '0640',
-    require => Freeradius::Module['preprocess'],
-    notify  => Service[$fr_service],
-  }
 }
