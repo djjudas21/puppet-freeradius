@@ -8,13 +8,9 @@ define freeradius::huntgroup (
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_service  = $::freeradius::params::fr_service
 
-  $conditionals = join($conditions, ', ')
-
-  $content    = "${huntgroup}\t${conditionals}\n"
-
   concat::fragment { "huntgroup.${title}":
     target  => "${fr_basepath}/mods-config/preprocess/huntgroups",
-    content => $content,
+    content => template('freeradius/huntgroup.erb'),
     order   => $order,
     notify  => Service[$fr_service],
   }

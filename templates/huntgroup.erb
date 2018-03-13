@@ -1,10 +1,6 @@
 
-#
-##########################################################
-# Huntgroup Puppet Name: <%= @name %>
-#
 <%- if @conditions.is_a?(Array) -%>
-<%= @conditions.collect { |cond| @name + " " + cond }.join("\n") %>
+<%= @conditions.collect { |cond| @huntgroup + " " + cond }.join("\n") %>
 <%- else -%>
-<%= @name %> <%= @conditions %>
+<%= @huntgroup %> <%= @conditions %>
 <%- end -%>
