@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared_contexts'
 
-describe 'freeradius::krb5' do
+describe 'freeradius::module::ldap' do
   # by default the hiera integration uses hiera data from the shared_contexts.rb file
   # but basically to mock hiera you first need to add a key/value pair
   # to the specific context in the spec/shared_contexts.rb file
@@ -23,13 +23,67 @@ describe 'freeradius::krb5' do
   # while all required parameters will require you to add a value
   let(:params) do
     {
-      keytab: nil,
-      principal: nil,
+      basedn: nil,
+      # ensure: "present",
+      # server: ["localhost"],
+      # port: "389",
+      # identity: :undef,
+      # password: :undef,
+      # sasl: {},
+      # valuepair_attribute: :undef,
+      # update: :undef,
+      # edir: :undef,
+      # edir_autz: :undef,
+      # user_base_dn: "${..base_dn}",
+      # user_filter: "(uid=%{%{Stripped-User-Name}:-%{User-Name}})",
+      # user_sasl: {},
+      # user_scope: :undef,
+      # user_sort_by: :undef,
+      # user_access_attribute: :undef,
+      # user_access_positive: :undef,
+      # group_base_dn: "${..base_dn}",
+      # group_filter: "(objectClass=posixGroup)",
+      # group_scope: :undef,
+      # group_name_attribute: :undef,
+      # group_membership_filter: :undef,
+      # group_membership_attribute: "memberOf",
+      # group_cacheable_name: :undef,
+      # group_cacheable_dn: :undef,
+      # group_cache_attribute: :undef,
+      # group_attribute: :undef,
+      # profile_filter: :undef,
+      # profile_default: :undef,
+      # profile_attribute: :undef,
+      # client_base_dn: "${..base_dn}",
+      # client_filter: "(objectClass=radiusClient)",
+      # client_scope: :undef,
+      # read_clients: :undef,
+      # dereference: :undef,
+      # chase_referrals: "yes",
+      # rebind: "yes",
+      # use_referral_credentials: "no",
+      # session_tracking: :undef,
+      # timeout: "10",
+      # timelimit: "3",
+      # idle: "60",
+      # probes: "3",
+      # interval: "3",
+      # ldap_debug: "0x0028",
+      # starttls: "no",
+      # cafile: :undef,
+      # certfile: :undef,
+      # keyfile: :undef,
+      # random_file: :undef,
+      # requirecert: "allow",
       # start: "${thread[pool].start_servers}",
       # min: "${thread[pool].min_spare_servers}",
       # max: "${thread[pool].max_servers}",
       # spare: "${thread[pool].max_spare_servers}",
-      # ensure: "present",
+      # uses: "0",
+      # retry_delay: "30",
+      # lifetime: "0",
+      # idle_timeout: "60",
+      # connect_timeout: "3.0",
 
     }
   end

@@ -1,6 +1,6 @@
 fixtures:
     symlinks:
-      freeradius: "#{source_dir}"
+      puppet-freeradius: "#{source_dir}"
     repositories:
       stdlib:
         repo: https://github.com/puppetlabs/puppetlabs-stdlib.git

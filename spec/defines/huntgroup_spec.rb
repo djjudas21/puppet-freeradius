@@ -1,13 +1,15 @@
 require 'spec_helper'
 require 'shared_contexts'
 
-describe 'freeradius::status_server' do
+describe 'freeradius::huntgroup' do
   # by default the hiera integration uses hiera data from the shared_contexts.rb file
   # but basically to mock hiera you first need to add a key/value pair
   # to the specific context in the spec/shared_contexts.rb file
   # Note: you can only use a single hiera context per describe/context block
   # rspec-puppet does not allow you to swap out hiera data on a per test block
   #include_context :hiera
+
+  let(:title) { 'XXreplace_meXX' }
 
   # below is the facts hash that gives you the ability to mock
   # facts on a per describe/context block.  If you use a fact in your
@@ -21,8 +23,11 @@ describe 'freeradius::status_server' do
   # while all required parameters will require you to add a value
   let(:params) do
     {
-      # port: "18121",
-      # listen: "*",
+      # ensure: "present",
+      # huntgroup: "$title",
+      # conditions: [],
+      # order: "50",
+
     }
   end
   # add these two lines in a single test block to enable puppet and hiera debug mode
@@ -30,8 +35,12 @@ describe 'freeradius::status_server' do
   # Puppet::Util::Log.newdestination(:console)
   
   it do
-    is_expected.to contain_freeradius__site('status').with(
-      content: [],
+    is_expected.to contain_concat__fragment('huntgroup.$title').with(
+      target: '$::freeradius::params::fr_basepath/mods-config/preprocess/huntgroups',
+      content: '$title\t$conditionals\n',
+      order: '50',
+      notify: 'Service[$::freeradius::params::fr_service]',
     )
   end
+  
 end

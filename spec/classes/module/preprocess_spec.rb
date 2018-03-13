@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared_contexts'
 
-describe 'freeradius::status_server' do
+describe 'freeradius::module::preprocess' do
   # by default the hiera integration uses hiera data from the shared_contexts.rb file
   # but basically to mock hiera you first need to add a key/value pair
   # to the specific context in the spec/shared_contexts.rb file
@@ -21,8 +21,15 @@ describe 'freeradius::status_server' do
   # while all required parameters will require you to add a value
   let(:params) do
     {
-      # port: "18121",
-      # listen: "*",
+      # ensure: "present",
+      # moddir: "${modconfdir}/${.:instance}",
+      # huntgroups: "${moddir}/huntgroups",
+      # hints: "${moddir}/hints",
+      # with_ascend_hack: "no",
+      # ascend_channels_per_line: "23",
+      # with_ntdomain_hack: "no",
+      # with_specialix_jetstream_hack: "no",
+      # with_cisco_vsa_hack: "no",
     }
   end
   # add these two lines in a single test block to enable puppet and hiera debug mode
@@ -30,7 +37,8 @@ describe 'freeradius::status_server' do
   # Puppet::Util::Log.newdestination(:console)
   
   it do
-    is_expected.to contain_freeradius__site('status').with(
+    is_expected.to contain_freeradius__module('preprocess').with(
+      ensure: 'present',
       content: [],
     )
   end

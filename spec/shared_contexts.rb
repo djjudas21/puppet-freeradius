@@ -8,21 +8,6 @@ hiera_config_file = File.expand_path(File.join(File.dirname(__FILE__), 'fixtures
 shared_context :global_hiera_data do
   let(:hiera_data) do
      {
-       #"freeradius::control_socket" => '',
-       #"freeradius::control_socket::mode" => '',
-       #"freeradius::ldap_support" => '',
-       #"freeradius::krb5_support" => '',
-       #"freeradius::max_requests" => '',
-       #"freeradius::max_servers" => '',
-       #"freeradius::mysql_support" => '',
-       #"freeradius::perl_support" => '',
-       #"freeradius::status_server::listen" => '',
-       #"freeradius::status_server::port" => '',
-       #"freeradius::status_server::secret" => '',
-       #"freeradius::syslog" => '',
-       #"freeradius::utils_support" => '',
-       #"freeradius::winbind_support" => '',
-       #"freeradius::wpa_supplicant" => '',
      
      }
   end

@@ -10,37 +10,56 @@ describe 'freeradius::site' do
   #include_context :hiera
 
   let(:title) { 'XXreplace_meXX' }
-  
+
   # below is the facts hash that gives you the ability to mock
   # facts on a per describe/context block.  If you use a fact in your
   # manifest you should mock the facts below.
   let(:facts) do
     {}
   end
+
   # below is a list of the resource parameters that you can override.
   # By default all non-required parameters are commented out,
   # while all required parameters will require you to add a value
   let(:params) do
     {
-      #:source => undef,
-      #:content => undef,
-      #:ensure => present,
+      # ensure: "present",
+      # source: :undef,
+      # content: :undef,
+      # authorize: [],
+      # authenticate: [],
+      # preacct: [],
+      # accounting: [],
+      # session: [],
+      # post_auth: [],
+      # pre_proxy: [],
+      # post_proxy: [],
+      # listen: [],
+
     }
   end
   # add these two lines in a single test block to enable puppet and hiera debug mode
   # Puppet::Util::Log.level = :debug
   # Puppet::Util::Log.newdestination(:console)
+  
   it do
-    is_expected.to contain_file('$::osfamily ? { RedHat => /etc/raddb, Debian => /etc/freeradius, default => /etc/raddb }/sites-enabled/XXreplace_meXX')
-      .with(
-        'content' => 'undef',
-        'ensure'  => 'present',
-        'group'   => '$::osfamily ? { RedHat => radiusd, Debian => freerad, default => radiusd }',
-        'mode'    => '0640',
-        'notify'  => 'Service[$fr_service]',
-        'owner'   => 'root',
-        'require' => '[Package[$fr_package], Group[$fr_group]]',
-        'source'  => 'undef'
-      )
+    is_expected.to contain_file('$::freeradius::params::fr_basepath/sites-available/$name').with(
+      ensure: 'present',
+      mode: '0640',
+      owner: 'root',
+      group: '$::freeradius::params::fr_group',
+      source: :undef,
+      content: '',
+      require: ['Package[$::freeradius::params::fr_package]', 'Group[$::freeradius::params::fr_group]'],
+      notify: 'Service[$::freeradius::params::fr_service]',
+    )
   end
+  
+  it do
+    is_expected.to contain_file('$::freeradius::params::fr_basepath/sites-enabled/$name').with(
+      ensure: '',
+      target: '$::freeradius::params::fr_basepath/sites-available/$name',
+    )
+  end
+  
 end

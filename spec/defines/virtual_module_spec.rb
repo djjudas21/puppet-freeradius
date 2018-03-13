@@ -1,13 +1,15 @@
 require 'spec_helper'
 require 'shared_contexts'
 
-describe 'freeradius::status_server' do
+describe 'freeradius::virtual_module' do
   # by default the hiera integration uses hiera data from the shared_contexts.rb file
   # but basically to mock hiera you first need to add a key/value pair
   # to the specific context in the spec/shared_contexts.rb file
   # Note: you can only use a single hiera context per describe/context block
   # rspec-puppet does not allow you to swap out hiera data on a per test block
   #include_context :hiera
+
+  let(:title) { 'XXreplace_meXX' }
 
   # below is the facts hash that gives you the ability to mock
   # facts on a per describe/context block.  If you use a fact in your
@@ -21,8 +23,10 @@ describe 'freeradius::status_server' do
   # while all required parameters will require you to add a value
   let(:params) do
     {
-      # port: "18121",
-      # listen: "*",
+      submodules: nil,
+      # ensure: "present",
+      # type: "redundant-load-balance",
+
     }
   end
   # add these two lines in a single test block to enable puppet and hiera debug mode
@@ -30,8 +34,15 @@ describe 'freeradius::status_server' do
   # Puppet::Util::Log.newdestination(:console)
   
   it do
-    is_expected.to contain_freeradius__site('status').with(
+    is_expected.to contain_file('$::freeradius::params::fr_basepath/instantiate/$name').with(
+      ensure: 'present',
+      mode: '0640',
+      owner: 'root',
+      group: '$::freeradius::params::fr_group',
       content: [],
+      require: ['Package[$::freeradius::params::fr_package]', 'Group[$::freeradius::params::fr_group]'],
+      notify: 'Service[$::freeradius::params::fr_service]',
     )
   end
+  
 end
