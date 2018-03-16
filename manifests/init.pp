@@ -60,6 +60,10 @@ class freeradius (
     "${freeradius::fr_basepath}/policy.d",
     "${freeradius::fr_basepath}/dictionary.d",
     "${freeradius::fr_basepath}/scripts",
+    "${freeradius::fr_basepath}/mods-config",
+    "${freeradius::fr_basepath}/mods-config/attr_filter",
+    "${freeradius::fr_basepath}/mods-config/preprocess",
+    "${freeradius::fr_basepath}/mods-config/sql",
   ]:
     ensure  => directory,
     mode    => '0755',
@@ -198,6 +202,22 @@ class freeradius (
     order   => 10,
   }
 
+  # Manage the file permissions for files defined in attr_filter
+  file { [
+    "${freeradius::fr_basepath}/mods-config/attr_filter/access_challenge",
+    "${freeradius::fr_basepath}/mods-config/attr_filter/access_reject",
+    "${freeradius::fr_basepath}/mods-config/attr_filter/accounting_response",
+    "${freeradius::fr_basepath}/mods-config/attr_filter/post-proxy",
+    "${freeradius::fr_basepath}/mods-config/attr_filter/pre-proxy",
+  ]:
+    ensure  => 'present',
+    mode    => '0640',
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service[$freeradius::fr_service],
+  }
+
   # Install a slightly tweaked stock dictionary that includes
   # our custom dictionaries
   concat { "${freeradius::fr_basepath}/dictionary":
@@ -230,6 +250,14 @@ class freeradius (
     order  => 10,
   }
 
+  # Fix the permissions on the hints file
+  file { "${freeradius::fr_basepath}/mods-config/preprocess/hints":
+    ensure  => 'present',
+    mode    => '0640',
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+  }
 
   # Install FreeRADIUS packages
   package { 'freeradius':
