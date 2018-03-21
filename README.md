@@ -467,6 +467,7 @@ freeradius::huntgroup { 'switchaccess':
     'NAS-IP-Address == 192.168.0.1'
   ]
 }
+```
 
 ##### `huntgroup`
 Name of the huntgroup to assign, if conditions are all met. Default to the resource title.
