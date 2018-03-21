@@ -88,7 +88,7 @@ class freeradius::params {
         default => '/etc/freeradius',
       }
       $fr_raddbdir = $::operatingsystemmajrelease ? {
-        '9'     => "\${sysconfdir}/freeradius3.0",
+        '9'     => "\${sysconfdir}/freeradius/3.0",
         default => "\${sysconfdir}/freeradius",
       }
     }
