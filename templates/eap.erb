@@ -275,7 +275,7 @@ eap {
     #  write to files in its configuration
     #  directory.
     #
-    random_file = <%= @tls_random_file %>"
+    random_file = <%= @tls_random_file %>
 <%- end -%>
 
 <%- if @tls_fragment_size -%>
@@ -374,7 +374,7 @@ eap {
     # Work-arounds for OpenSSL nonsense
     # OpenSSL 1.0.1f and 1.0.1g do not calculate
     # the EAP keys correctly.  The fix is to upgrade
-    # OpenSSL, or disable TLS 1.2 here. 
+    # OpenSSL, or disable TLS 1.2 here.
     #
     #  For EAP-FAST, this MUST be set to "yes".
     #
