@@ -32,7 +32,7 @@ eap {
   #  configurable length of time, entries in the list
   #  expire, and are deleted.
   #
-  timer_expire     = <%= @timer_expire %>
+  timer_expire = <%= @timer_expire %>
 
   #  There are many EAP types, but the server has support
   #  for only a limited subset.  If the server receives
@@ -79,7 +79,7 @@ eap {
   #
   # EAP-pwd -- secure password-based authentication
   #
-   pwd {
+  pwd {
   <%- if @pwd_group -%>
     group = <%= @pwd_group %>
   <%- end -%>
@@ -103,7 +103,7 @@ eap {
     # no User-Password, CHAP-Password, EAP-Message, etc.
     virtual_server = <%= @pwd_virtual_server %>
   <%- end -%>
-   }
+  }
 <%- end -%>
 
 <%- if @eap_leap -%>
@@ -219,10 +219,10 @@ eap {
     ca_file = <%= @tls_ca_file %>
 
 <%- if @tls_auto_chain -%>
-     #  OpenSSL will automatically create certificate chains,
-     #  unless we tell it to not do that.  The problem is that
-     #  it sometimes gets the chains right from a certificate
-     #  signature view, but wrong from the clients view.
+    #  OpenSSL will automatically create certificate chains,
+    #  unless we tell it to not do that.  The problem is that
+    #  it sometimes gets the chains right from a certificate
+    #  signature view, but wrong from the clients view.
     #
     #  When setting "auto_chain = no", the server certificate
     #  file MUST include the full certificate chain.
@@ -871,7 +871,7 @@ eap {
     #
     require_client_cert = <%= @peap_require_client_cert %>
 <%- end -%>
-}
+  }
 <%- end -%>
 
   #

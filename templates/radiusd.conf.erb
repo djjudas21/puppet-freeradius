@@ -264,7 +264,7 @@ log {
 	#  The command-line option "-X" over-rides this option, and forces
 	#  logging to go to stdout.
 	#
-  destination = <%= @log_destination %>
+	destination = <%= @log_destination %>
 
 	#
 	#  Highlight important messages sent to stderr and stdout.
@@ -495,16 +495,14 @@ security {
 	#
 	status_server = yes
 
-        #  allow_vulnerable_openssl: Allow the server to start with
-        #  versions of OpenSSL known to have critical vulnerabilities.
-        #
-        #  This check is based on the version number reported by libssl
-        #  and may not reflect patches applied to libssl by
-        #  distribution maintainers.
-        #
-        allow_vulnerable_openssl = yes
-
-
+	#  allow_vulnerable_openssl: Allow the server to start with
+	#  versions of OpenSSL known to have critical vulnerabilities.
+	#
+	#  This check is based on the version number reported by libssl
+	#  and may not reflect patches applied to libssl by
+	#  distribution maintainers.
+	#
+	allow_vulnerable_openssl = yes
 }
 
 # PROXY CONFIGURATION
