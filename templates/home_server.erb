@@ -13,7 +13,6 @@ home_server <%= @name %> {
 	proto = <%= @proto %>
 	secret = <%= @secret %>
 <%- if @status_check -%>
-  status_check = <%= @status_check %>
+	status_check = <%= @status_check %>
 <%- end -%>
 }
-
