@@ -5,6 +5,7 @@ define freeradius::realm (
   $acct_pool = undef,
   $pool = undef,
   $nostrip = false,
+  $realm_order = 0,
 ) {
   $fr_basepath = $::freeradius::params::fr_basepath
 
@@ -17,6 +18,6 @@ define freeradius::realm (
   concat::fragment { "realm-${name}":
     target  => "${fr_basepath}/proxy.conf",
     content => template('freeradius/realm.erb'),
-    order   => 30,
+    order   => 30 + $realm_order,
   }
 }
