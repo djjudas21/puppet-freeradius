@@ -33,6 +33,7 @@ class freeradius::params {
         '14.10' => '2',
         '15.04' => '2',
         '15.10' => '2',
+        '18.04' => '3',
         default => '2',
       }
     }
@@ -85,10 +86,12 @@ class freeradius::params {
     'Debian': {
       $fr_basepath = $::operatingsystemmajrelease ? {
         '9'     => '/etc/freeradius/3.0',
+        '18.04'     => '/etc/freeradius/3.0',
         default => '/etc/freeradius',
       }
       $fr_raddbdir = $::operatingsystemmajrelease ? {
         '9'     => "\${sysconfdir}/freeradius/3.0",
+        '18.04'     => "\${sysconfdir}/freeradius/3.0",
         default => "\${sysconfdir}/freeradius",
       }
     }
