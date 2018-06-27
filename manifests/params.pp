@@ -16,7 +16,7 @@ class freeradius::params {
         6       => '2',
         7       => '2',
         8       => '2',
-        default => '2',
+        default => '3',
       }
     }
     'Fedora': {
