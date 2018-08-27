@@ -699,6 +699,9 @@ Path to CA cert file for TLS
 ##### `certfile`
 Path to cert file for TLS
 
+##### `capath`
+Path to CA cert files for TLS
+
 ##### `keyfile`
 Path to key file for TLS
 
