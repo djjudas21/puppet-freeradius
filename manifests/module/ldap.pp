@@ -48,6 +48,7 @@ define freeradius::module::ldap (
   String $ldap_debug                                                  = '0x0028',
   Freeradius::Boolean $starttls                                       = 'no',
   Optional[String] $cafile                                            = undef,
+  Optional[String] $capath                                            = undef,
   Optional[String] $certfile                                          = undef,
   Optional[String] $keyfile                                           = undef,
   Optional[String] $random_file                                       = undef,
