@@ -1228,6 +1228,9 @@ configuration item, instead of specifying both `auth_pool` and `acct_pool`.
 Normally, when an incoming User-Name is matched against the realm, the realm name is "stripped" off, and the "stripped"
 user name is used to perform matches.If you do not want this to happen, set this to `true`. Default: `false`.
 
+##### `order`
+
+Set custom order of realm fragments, otherwise they are automatically ordered alphabetically. Default: `30`
 
 #### `freeradius::script`
 
