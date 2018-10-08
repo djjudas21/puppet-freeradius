@@ -20,6 +20,7 @@
        * [`freeradius::home_server_pool`](#freeradiushomeserverpool)
        * [`freeradius::instantiate`](#freeradiusinstantiate)
        * [`freeradius::ldap`](#freeradiusldap)
+       * ['freeradius::listen`](#freeradiuslisten)
        * [`freeradius::module::ldap`](#freeradiusmoduleldap)
        * [`freeradius::krb5`](#freeradiuskrb5)
        * [`freeradius::module`](#freeradiusmodule)
@@ -739,6 +740,31 @@ Maximum number of connections. Default: `${thread[pool].max_servers}`
 
 ##### `spare`
 Spare connections to be left idle. Default: `${thread[pool].max_spare_servers}`
+
+#### `freeradius::listen`
+
+Define listening interface
+
+##### `type`
+Type of listener. Must be one of `auth`, `acct`, `proxy`, `detail`, `status`, `coa`. Default: `auth`
+
+##### `ip`
+The IPv4 address of the interface to listen. `ip` and `ip6` are mutually exclusive. Default: `undef`
+
+##### `ip6`
+The IPv6 address of the interface to listen. `ip` and `ip6` are mutually exclusive. Default: `undef`
+
+##### `port`
+Default: `undef`
+
+##### `max_connections`
+Default : `16`
+
+##### `lifetime`
+Default : `0`
+
+##### `idle_timeout`
+Default : `30`
 
 #### `freeradius::module`
 
