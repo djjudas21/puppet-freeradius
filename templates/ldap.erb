@@ -575,7 +575,9 @@ ldap <%= @name %> {
 <% if @cafile -%>
 		ca_file = <%= @cafile %>
 <% end -%>
-#               ca_path = ${certdir}
+<% if @capath -%>
+		ca_path = <%= @capath %>
+<% end -%>
 <% if @certfile -%>
 		certificate_file = <%= @certfile %>
 <% end -%>
