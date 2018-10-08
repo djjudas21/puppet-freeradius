@@ -425,8 +425,8 @@ and `request`. Default: `undef`.
 
 ##### `home_server`
 
-An array of one or more home servers. The names of the home servers are NOT the hostnames, but the names
-of the sections. (e.g. `home_server foo {...}` has name "foo".
+An array of one or more home servers (this must be an array even if you only have one home server). The names
+of the home servers are NOT the hostnames, but the names of the sections. (e.g. `home_server foo {...}` has name "foo".
 
 Note that ALL home servers listed here have to be of the same type. i.e. they all have to be "auth", or they all have to
 be "acct", or they all have to be "auth+acct".
