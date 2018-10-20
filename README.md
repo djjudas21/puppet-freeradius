@@ -20,7 +20,7 @@
        * [`freeradius::home_server_pool`](#freeradiushomeserverpool)
        * [`freeradius::instantiate`](#freeradiusinstantiate)
        * [`freeradius::ldap`](#freeradiusldap)
-       * ['freeradius::listen`](#freeradiuslisten)
+       * [`freeradius::listen`](#freeradiuslisten)
        * [`freeradius::module::ldap`](#freeradiusmoduleldap)
        * [`freeradius::krb5`](#freeradiuskrb5)
        * [`freeradius::module`](#freeradiusmodule)
@@ -502,10 +502,10 @@ Configure LDAP support for FreeRADIUS
 Whether the site should be present or not.
 
 ##### `identity`
-LDAP account for searching the directory. Required.
+LDAP account for searching the directory. Optional.
 
 ##### `password`
-Password for the `identity` account. Required.
+Password for the `identity` account. Optional.
 
 ##### `sasl`
 SASL parameters to use for admin binds to the ldap server. This is a hash with 3 possible keys:
