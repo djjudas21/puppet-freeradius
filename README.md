@@ -502,10 +502,10 @@ Configure LDAP support for FreeRADIUS
 Whether the site should be present or not.
 
 ##### `identity`
-LDAP account for searching the directory. Required.
+LDAP account for searching the directory. Optional.
 
 ##### `password`
-Password for the `identity` account. Required.
+Password for the `identity` account. Optional.
 
 ##### `sasl`
 SASL parameters to use for admin binds to the ldap server. This is a hash with 3 possible keys:
