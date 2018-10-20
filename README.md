@@ -20,7 +20,7 @@
        * [`freeradius::home_server_pool`](#freeradiushomeserverpool)
        * [`freeradius::instantiate`](#freeradiusinstantiate)
        * [`freeradius::ldap`](#freeradiusldap)
-       * ['freeradius::listen`](#freeradiuslisten)
+       * [`freeradius::listen`](#freeradiuslisten)
        * [`freeradius::module::ldap`](#freeradiusmoduleldap)
        * [`freeradius::krb5`](#freeradiuskrb5)
        * [`freeradius::module`](#freeradiusmodule)
