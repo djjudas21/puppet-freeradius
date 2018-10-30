@@ -278,7 +278,8 @@ describe 'freeradius' do
       .with(
         'command' => 'openssl dhparam -out $freeradius::fr_basepath/certs/dh 1024',
         'creates' => '$freeradius::fr_basepath/certs/dh',
-        'path'    => '/usr/bin'
+        'path'    => '/usr/bin',
+        'require' => 'File[$freeradius::fr_basepath/certs]'
       )
   end
   it do
@@ -286,13 +287,14 @@ describe 'freeradius' do
       .with(
         'command' => 'dd if=/dev/urandom of=$freeradius::fr_basepath/certs/random count=10 >/dev/null 2>&1',
         'creates' => '$freeradius::fr_basepath/certs/random',
-        'path'    => '/bin'
+        'path'    => '/bin',
+        'require' => 'File[$freeradius::fr_basepath/certs]'
       )
   end
   it do
     is_expected.to contain_exec('radiusd-config-test')
       .with(
-        'command'     => 'sudo radiusd -XC | grep 'Configuration appears to be OK.' | wc -l',
+        'command'     => 'sudo radiusd -XC | grep \'Configuration appears to be OK.\' | wc -l',
         'logoutput'   => 'on_failure',
         'path'        => '[/bin/, /sbin/, /usr/bin/, /usr/sbin/]',
         'refreshonly' => 'true',
@@ -350,7 +352,7 @@ describe 'freeradius' do
   it do
     is_expected.to contain_syslog__rule('radiusd-log')
       .with(
-        'command' => 'if $programname == 'radiusd' then $freeradius::fr_logpath/radius.log\\n&~',
+        'command' => 'if $programname == \'radiusd\' then $freeradius::fr_logpath/radius.log\\n&~',
         'order'   => '12'
       )
   end
