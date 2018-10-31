@@ -406,6 +406,7 @@ class freeradius (
     command => "openssl dhparam -out ${freeradius::fr_basepath}/certs/dh 1024",
     creates => "${freeradius::fr_basepath}/certs/dh",
     path    => '/usr/bin',
+    require => File["${freeradius::fr_basepath}/certs"],
   }
 
   # Generate global SSL parameters
@@ -413,6 +414,7 @@ class freeradius (
     command => "dd if=/dev/urandom of=${freeradius::fr_basepath}/certs/random count=10 >/dev/null 2>&1",
     creates => "${freeradius::fr_basepath}/certs/random",
     path    => '/bin',
+    require => File["${freeradius::fr_basepath}/certs"],
   }
 
   # This exec tests the radius config and fails if it's bad
