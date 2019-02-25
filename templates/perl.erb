@@ -60,6 +60,7 @@ perl {
 	#
 	<% @function_names.sort.each do |default, value| -%>
     <%= default %><%= value %>
+    <% end -%>
 	#func_authenticate = authenticate
 	#func_authorize = authorize
 	#func_preacct = preacct

@@ -10,7 +10,7 @@ define freeradius::module::perl (
   Optional[String] $path                                = undef,
   Optional[String] $content                             = undef,
   Optional[Hash[String, String]] $function_names        = undef,
-  Optional[Hash[String, String]] $split_accouting_names = undef,
+  Optional[Hash[String, String]] $split_accounting_names = undef,
 ) {
   $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
   $fr_group            = $::freeradius::params::fr_group
