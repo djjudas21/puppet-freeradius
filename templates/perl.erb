@@ -59,9 +59,10 @@ perl {
 	#  names other than the defaults.
 	#
 	<% if defined?(@function_names) %>
-	<% @function_names.sort.each do |default, value| -%>
+	<% @function_names.each_pair do |default, value| -%>
     <%= default %><%= value %>
     <% end -%>
+    <% end %>
 	#func_authenticate = authenticate
 	#func_authorize = authorize
 	#func_preacct = preacct
