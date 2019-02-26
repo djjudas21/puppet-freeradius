@@ -58,10 +58,10 @@ perl {
 	#  Uncomment and change if you want to use function
 	#  names other than the defaults.
 	#
-	<% if defined?(@function_names) %>
+	<% if defined?(@function_names) -%>
 	<% @function_names.each_pair do |default, value| -%>
-    <%= default %><%= value %>
-    <% end -%>
+    <%= default %> = <%= value %>
+    <% end %>
     <% end %>
 	#func_authenticate = authenticate
 	#func_authorize = authorize
