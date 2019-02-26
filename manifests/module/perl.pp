@@ -3,14 +3,12 @@
 # Create the perl module configuration for FreeRADIUS
 #
 define freeradius::module::perl (
-  $ensure                                               = file,
-  String $moddir                                        = "${fr_moduleconfigpath}/perl",
-  Optional[String] $key                                 = undef,
-  Optional[String] $perl_filename                       = undef,
-  Optional[String] $path                                = undef,
-  Optional[String] $content                             = undef,
-  Optional[Hash[String, String]] $function_names        = undef,
-  Optional[Hash[String, String]] $split_accounting_names = undef,
+  $ensure                                        = file,
+  String $moddir                                 = "${fr_moduleconfigpath}/perl",
+  Optional[String] $perl_filename                = undef,
+  Optional[String] $path                         = undef,
+  Optional[String] $content                      = undef,
+  Optional[Hash[String, String]] $function_names = undef,
 ) {
   $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
   $fr_group            = $::freeradius::params::fr_group

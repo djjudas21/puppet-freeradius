@@ -31,6 +31,7 @@
        * [`freeradius::module::eap`](#freeradiusmoduleeap)
        * [`freeradius::module::preprocess`](#freeradiusmodulepreprocess)
        * [`freeradius::module::huntgroup`](#freeradiusmodulehuntgroup)
+       * [`freeradius::module::perl`](#freeradiusmoduleperl)
        * [`freeradius::policy`](#freeradiuspolicy)
        * [`freeradius::realm`](#freeradiusrealm)
        * [`freeradius::site`](#freeradiussite)
@@ -1213,6 +1214,33 @@ Order of this huntgroup in the huntgroup files. This is the `order` parameter fo
 
 ##### `huntgroup`
 The path of the huntgroup file. Default: `huntgroup`.
+
+#### `freeradius::module::perl`
+
+Installs the Perl module [rlm_perl](https://wiki.freeradius.org/modules/rlm_perl) with more advanced configuration
+
+```puppet
+freeradius::module::perl { 'somename':
+  perl_filename  => 'scriptname.pl',
+  path           => "puppet:///modules/profiles/radius_proxy/",
+  function_names => $function_names,
+}
+```
+##### `perl_filename`
+Filename of the Perl script.
+
+##### `path`
+The path of the source file on the Puppet server.
+
+##### `function_names`
+If different function names to default are used, or if seperate functions for accounting start and stop are used, just pass a hash of default and actual function names.
+```puppet
+$function_names = {
+  "func_authenticate"     => "alternative_name",
+  "func_start_accounting" => "start_function",
+  "func_stop_accounting"  => "stop_function",
+}
+```
 
 #### `freeradius::policy`
 
