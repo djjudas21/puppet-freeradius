@@ -60,7 +60,7 @@ perl {
 	#
 	<% if defined?(@function_names) -%>
 	<% @function_names.each_pair do |default, value| -%>
-    <%= default %> = <%= value %>
+    <%-	%><%= default %> = <%= value %>
     <% end %>
     <% end %>
 	#func_authenticate = authenticate
