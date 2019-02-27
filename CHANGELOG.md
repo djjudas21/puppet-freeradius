@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.8.0
+  * Add proper support for perl modules (thanks @deligatedgeek)
+
 ### 3.7.0
   * Add support for Ubuntu 18.04 LTS (thanks @rogermartensson)
   * Improved support for Debian 9 (thanks @carlgarner)
