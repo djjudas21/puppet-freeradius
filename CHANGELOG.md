@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.8.1
+  * Bugfix: Enable `attr_filter` module before service restart (thanks @theosotr)
+
 ### 3.8.0
   * Add proper support for perl modules (thanks @deligatedgeek)
 
