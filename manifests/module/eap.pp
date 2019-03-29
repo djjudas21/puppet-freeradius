@@ -36,6 +36,8 @@ define freeradius::module::eap (
   Optional[String] $tls_check_cert_cn                               = undef,
   String $tls_cipher_list                                           = 'DEFAULT',
   Optional[Freeradius::Boolean] $tls_disable_tlsv1_2                = undef,
+  Optional[String] $tls_min_version                                 = undef,
+  Optional[String] $tls_max_version                                 = undef,
   String $tls_ecdh_curve                                            = 'prime256v1',
   Freeradius::Boolean $tls_cache_enable                             = 'yes',
   Integer $tls_cache_lifetime                                       = 24,
