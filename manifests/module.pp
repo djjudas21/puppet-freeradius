@@ -33,6 +33,7 @@ define freeradius::module (
       source  => $source,
       content => $content,
       require => [Package[$fr_package], Group[$fr_group]],
+      notify  => Service[$fr_service],
     }
     file { "${fr_modulepath}/${name}":
       ensure  => $ensure_link,

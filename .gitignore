@@ -2,3 +2,8 @@
 pkg/
 spec/fixures/
 .gemfile.lock
+Gemfile.lock
+/spec/fixtures/manifests/
+/spec/fixtures/modules/
+.ruby-gemset
+.ruby-version
