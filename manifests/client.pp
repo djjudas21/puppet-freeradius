@@ -58,14 +58,14 @@ define freeradius::client (
   if ($firewall and $ensure == 'present') {
     if $port {
       if $ip {
-        firewall { "100-${shortname}-${port}-v4":
+        firewall { "100 ${shortname} ${port} v4":
           proto  => 'udp',
           dport  => $port,
           action => 'accept',
           source => $ip,
         }
       } elsif $ip6 {
-        firewall { "100-${shortname}-${port}-v6":
+        firewall { "100 ${shortname} ${port} v6":
           proto    => 'udp',
           dport    => $port,
           action   => 'accept',
