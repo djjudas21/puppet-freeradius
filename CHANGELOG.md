@@ -1,5 +1,10 @@
 ## Changelog
 
+### 3.8.2
+  * Bugfix: Fix for client iptables rules being repeatedly added by subsequent Puppet runs (thanks @guest715)
+  * Bugfix: Module file notifies service, not only symlink (thanks @ihpu)
+  * Add support for Debian 10 / Freeradius 3.0.16 (thanks @OlivierLM)
+
 ### 3.8.1
   * Bugfix: Enable `attr_filter` module before service restart (thanks @theosotr)
 
