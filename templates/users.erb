@@ -6,8 +6,8 @@
     <%- replies = user['reply_items'] ? user['reply_items'] : [] -%>
 <%= user['login'] %> <%= checks.join(", ") %>
 <%= "\t" + replies.join(",\n\t") %>
+
   <%- else -%>
 <%= user %>
   <%- end -%>
-
 <%- end -%>
