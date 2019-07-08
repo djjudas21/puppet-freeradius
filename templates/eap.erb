@@ -543,7 +543,7 @@ eap {
       tmpdir = <%= @tls_tmpdir %>
 <%- end -%>
 
-<%- if @tls_client -%>
+<%- if @tls_verify_client -%>
       #  The command used to verify the client cert.
       #  We recommend using the OpenSSL command-line
       #  tool.
@@ -556,7 +556,7 @@ eap {
       #  in PEM format.  This file is automatically
       #  deleted by the server when the command
       #  returns.
-      client = "<%= @tls_client %>"
+      client = "<%= @tls_verify_client %>"
 <%- end -%>
     }
 

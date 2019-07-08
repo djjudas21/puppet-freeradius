@@ -10,7 +10,7 @@ define freeradius::module::files (
   Optional[String] $usersfile          = undef,
   Optional[String] $acctusersfile      = undef,
   Optional[String] $preproxy_usersfile = undef,
-  Array[Hash] $users                   = [],
+  Array $users                         = [],
   Optional[String] $source             = undef,
   Optional[String] $content            = undef,
 ) {
