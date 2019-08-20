@@ -7,6 +7,28 @@
   "source": "https://github.com/djjudas21/puppet-freeradius",
   "project_page": "https://github.com/djjudas21/puppet-freeradius",
   "issues_url": "https://github.com/djjudas21/puppet-freeradius/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_range": ">=4.0.0"
+    },
+    {
+      "name": "puppetlabs/firewall",
+      "version_range": ">=1.0.0 <2.0.0"
+    },
+    {
+      "name": "saz/rsyslog",
+      "version_range": ">=3.0.0"
+    },
+    {
+      "name": "puppet/logrotate",
+      "version_range": ">=1.4.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_range": ">=1.0.0"
+    }
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
@@ -36,32 +58,13 @@
       ]
     }
   ],
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_range": ">=4.0.0"
-    },
-    {
-      "name": "puppetlabs/firewall",
-      "version_range": ">=1.0.0 <2.0.0"
-    },
-    {
-      "name": "saz/rsyslog",
-      "version_range": ">=3.0.0"
-    },
-    {
-      "name": "puppet/logrotate",
-      "version_range": ">=1.4.0"
-    },
-    {
-      "name": "puppetlabs/concat",
-      "version_range": ">=1.0.0"
-    }
-  ],
   "requirements": [
     {
       "name": "puppet",
       "version_requirement": ">=4.0.0 <5.0.0"
     }
-  ]
+  ],
+  "pdk-version": "1.12.0",
+  "template-url": "pdk-default#1.12.0",
+  "template-ref": "1.12.0-0-g55d9ae2"
 }
