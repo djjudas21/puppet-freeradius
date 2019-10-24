@@ -17,4 +17,25 @@ define freeradius::module::ippool (
     ensure  => $ensure,
     content => template('freeradius/ippool.erb'),
   }
+
+  $_file_path = $filename =~ Stdlib::AbsolutePath ? {
+    true    => $filename,
+    default => regsubst($filename, /\${db_dir}/, $freeradius::params::fr_basepath),
+  }
+  $_index_path = $ip_index =~ Stdlib::AbsolutePath ? {
+    true    => $ip_index,
+    default => regsubst($ip_index, /\${db_dir}/, $freeradius::params::fr_basepath),
+  }
+  file {$_file_path:
+    ensure => 'present',
+    owner  => $freeradius::params::fr_user,
+    group  => $freeradius::params::fr_group,
+    mode   => '0640',
+  }
+  file {$_index_path:
+    ensure => 'present',
+    owner  => $freeradius::params::fr_user,
+    group  => $freeradius::params::fr_group,
+    mode   => '0640',
+  }
 }
