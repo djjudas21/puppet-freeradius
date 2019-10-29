@@ -94,8 +94,8 @@ class freeradius::params {
       }
       $fr_raddbdir = $::operatingsystemmajrelease ? {
         '9'          => "\${sysconfdir}/freeradius/3.0",
-        '10'         => '\${sysconfdir}/freeradius/3.0',
-        'buster/sid' => '\${sysconfdir}/freeradius/3.0',
+        '10'         => "\${sysconfdir}/freeradius/3.0",
+        'buster/sid' => "\${sysconfdir}/freeradius/3.0",
         '18.04'      => "\${sysconfdir}/freeradius/3.0",
         default      => "\${sysconfdir}/freeradius",
       }

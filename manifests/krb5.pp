@@ -2,10 +2,10 @@
 define freeradius::krb5 (
   $keytab,
   $principal,
-  $start       = '${thread[pool].start_servers}',
-  $min         = '${thread[pool].min_spare_servers}',
-  $max         = '${thread[pool].max_servers}',
-  $spare       = '${thread[pool].max_spare_servers}',
+  $start       = "\${thread[pool].start_servers}",
+  $min         = "\${thread[pool].min_spare_servers}",
+  $max         = "\${thread[pool].max_servers}",
+  $spare       = "\${thread[pool].max_spare_servers}",
   $ensure      = 'present',
 ) {
   $fr_package          = $::freeradius::params::fr_package

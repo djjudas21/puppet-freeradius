@@ -5,7 +5,7 @@ define freeradius::sql (
   $server                      = 'localhost',
   $login                       = 'radius',
   $radius_db                   = 'radius',
-  $num_sql_socks               = '${thread[pool].max_servers}',
+  $num_sql_socks               = "\${thread[pool].max_servers}",
   $query_file                  = "\${modconfdir}/\${.:name}/main/\${dialect}/queries.conf",
   $custom_query_file           = undef,
   $lifetime                    = '0',
@@ -21,7 +21,7 @@ define freeradius::sql (
   $usergroup_table             = 'radusergroup',
   $deletestalesessions         = 'yes',
   $sqltrace                    = 'no',
-  $sqltracefile                = '${logdir}/sqllog.sql',
+  $sqltracefile                = "\${logdir}/sqllog.sql",
   $connect_failure_retry_delay = '60',
   $nas_table                   = 'nas',
   $read_groups                 = 'yes',
@@ -56,7 +56,7 @@ define freeradius::sql (
   unless is_integer($port) {
     fail('$port must be an integer')
   }
-  unless is_integer($num_sql_socks) or $num_sql_socks == '${thread[pool].max_servers}' {
+  unless is_integer($num_sql_socks) or $num_sql_socks == "\${thread[pool].max_servers}" {
     fail('$num_sql_socks must be an integer')
   }
   unless is_integer($lifetime) {
