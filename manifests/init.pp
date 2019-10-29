@@ -191,9 +191,9 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
   file { "${freeradius::fr_modulepath}/attr_filter":
-    ensure  => link,
-    target  => '../mods-available/attr_filter',
-    notify  => Service[$freeradius::fr_service],
+    ensure => link,
+    target => '../mods-available/attr_filter',
+    notify => Service[$freeradius::fr_service],
   }
 
   # Install default attribute filters
