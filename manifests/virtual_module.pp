@@ -1,23 +1,13 @@
 # Define a virtual module, made up of others
 define freeradius::virtual_module (
-  $submodules,
-  $ensure = present,
-  $type = 'redundant-load-balance',
-) {
+  Array[String] $submodules,
+  Freeradius::Ensure $ensure = present,
+  Enum['redundant','load-balance','redundant-load-balance','group'] $type = 'redundant-load-balance',
+  ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
-
-  # Valid types of virtual module from
-  # http://wiki.freeradius.org/config/load-balancing
-  # http://wiki.freeradius.org/config/Fail-over#virtual-modules
-  validate_re($type, [
-    '^redundant$',
-    '^load-balance$',
-    '^redundant-load-balance$',
-    '^group$',
-  ])
 
   # Make sure $submodules is a non-zero array
   validate_array($submodules)

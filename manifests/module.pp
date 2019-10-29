@@ -1,9 +1,9 @@
 # Install FreeRADIUS modules
 define freeradius::module (
-  $source = undef,
-  $content = undef,
-  $ensure = present,
-  $preserve = false,
+  Optional[String] $source   = undef,
+  Optional[String] $content  = undef,
+  Freeradius::Ensure $ensure = present,
+  Boolean $preserve          = false,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service

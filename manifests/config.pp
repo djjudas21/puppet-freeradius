@@ -1,8 +1,8 @@
 # Install FreeRADIUS config snippets
 define freeradius::config (
-  $source = undef,
-  $content = undef,
-  $ensure = present,
+  Optional[String] $source   = undef,
+  Optional[String] $content  = undef,
+  Freeradius::Ensure $ensure = present,
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service

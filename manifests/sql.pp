@@ -1,37 +1,37 @@
 # Configure SQL support for FreeRADIUS
 define freeradius::sql (
-  $database,
-  $password,
-  $server                      = 'localhost',
-  $login                       = 'radius',
-  $radius_db                   = 'radius',
-  $num_sql_socks               = "\${thread[pool].max_servers}",
-  $query_file                  = "\${modconfdir}/\${.:name}/main/\${dialect}/queries.conf",
-  $custom_query_file           = undef,
-  $lifetime                    = '0',
-  $max_queries                 = '0',
-  $ensure                      = present,
-  $acct_table1                 = 'radacct',
-  $acct_table2                 = 'radacct',
-  $postauth_table              = 'radpostauth',
-  $authcheck_table             = 'radcheck',
-  $authreply_table             = 'radreply',
-  $groupcheck_table            = 'radgroupcheck',
-  $groupreply_table            = 'radgroupreply',
-  $usergroup_table             = 'radusergroup',
-  $deletestalesessions         = 'yes',
-  $sqltrace                    = 'no',
-  $sqltracefile                = "\${logdir}/sqllog.sql",
-  $connect_failure_retry_delay = '60',
-  $nas_table                   = 'nas',
-  $read_groups                 = 'yes',
-  $port                        = '3306',
-  $readclients                 = 'no',
-  $pool_start                  = 1,
-  $pool_min                    = 1,
-  $pool_spare                  = 1,
-  $pool_idle_timeout           = 60,
-  $pool_connect_timeout        = '3.0',
+  Enum['mysql', 'mssql', 'oracle', 'postgresql'] $database,
+  String $password,
+  Optional[String] $server                       = 'localhost',
+  Optional[String] $login                        = 'radius',
+  Optional[String] $radius_db                    = 'radius',
+  Freeradius::Integer $num_sql_socks             = "\${thread[pool].max_servers}",
+  Optional[String] $query_file                   = "\${modconfdir}/\${.:name}/main/\${dialect}/queries.conf",
+  Optional[String] $custom_query_file            = undef,
+  Optional[Integer] $lifetime                    = 0,
+  Optional[Integer] $max_queries                 = 0,
+  Freeradius::Ensure $ensure                     = present,
+  Optional[String] $acct_table1                  = 'radacct',
+  Optional[String] $acct_table2                  = 'radacct',
+  Optional[String] $postauth_table               = 'radpostauth',
+  Optional[String] $authcheck_table              = 'radcheck',
+  Optional[String] $authreply_table              = 'radreply',
+  Optional[String] $groupcheck_table             = 'radgroupcheck',
+  Optional[String] $groupreply_table             = 'radgroupreply',
+  Optional[String] $usergroup_table              = 'radusergroup',
+  Freeradius::Boolean $deletestalesessions       = 'yes',
+  Freeradius::Boolean $sqltrace                  = 'no',
+  Optional[String] $sqltracefile                 = "\${logdir}/sqllog.sql",
+  Optional[Integer] $connect_failure_retry_delay = 60,
+  Optional[String] $nas_table                    = 'nas',
+  Freeradius::Boolean $read_groups               = 'yes',
+  Optional[Integer] $port                        = 3306,
+  Freeradius::Boolean $readclients               = 'no',
+  Optional[Integer] $pool_start                  = 1,
+  Optional[Integer] $pool_min                    = 1,
+  Optional[Integer] $pool_spare                  = 1,
+  Optional[Integer] $pool_idle_timeout           = 60,
+  Optional[Float] $pool_connect_timeout          = '3.0',
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service
@@ -42,57 +42,14 @@ define freeradius::sql (
   $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
 
   # Validate our inputs
-  # Validate multiple choice options
-  unless $database in ['mysql', 'mssql', 'oracle', 'postgresql'] {
-    fail('$database must be one of mysql, mssql, oracle, postgresql')
-  }
-
   # Hostnames
   unless (is_domain_name($server) or is_ip_address($server)) {
     fail('$server must be a valid hostname or IP address')
   }
 
   # Validate integers
-  unless is_integer($port) {
-    fail('$port must be an integer')
-  }
   unless is_integer($num_sql_socks) or $num_sql_socks == "\${thread[pool].max_servers}" {
     fail('$num_sql_socks must be an integer')
-  }
-  unless is_integer($lifetime) {
-    fail('$lifetime must be an integer')
-  }
-  unless is_integer($max_queries) {
-    fail('$max_queries must be an integer')
-  }
-  unless is_integer($connect_failure_retry_delay) {
-    fail('$connect_failure_retry_delay must be an integer')
-  }
-  unless is_integer($pool_start) {
-    fail('$pool_startmust be an integer')
-  }
-  unless is_integer($pool_min) {
-    fail('$pool_min_delay must be an integer')
-  }
-  unless is_integer($pool_spare) {
-    fail('$pool_spare_delay must be an integer')
-  }
-  unless is_integer($pool_idle_timeout) {
-    fail('$pool_idle_timeout_delay must be an integer')
-  }
-
-  # Fake booleans (FR uses yes/no instead of true/false)
-  unless $deletestalesessions in ['yes', 'no'] {
-    fail('$deletestalesessions must be yes or no')
-  }
-  unless $sqltrace in ['yes', 'no'] {
-    fail('$sqltrace must be yes or no')
-  }
-  unless $read_groups in ['yes', 'no'] {
-    fail('$read_groups must be yes or no')
-  }
-  unless $readclients in ['yes', 'no'] {
-    fail('$readclients must be yes or no')
   }
 
   # Determine default location of query file

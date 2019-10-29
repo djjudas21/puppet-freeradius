@@ -4,7 +4,7 @@ define freeradius::module::ippool (
   String $range_start,
   String $range_stop,
   String $netmask,
-  $ensure                       = 'present',
+  Freeradius::Ensure $ensure    = 'present',
   Optional[Integer] $cache_size = undef,
   String $filename              = "\${db_dir}/db.${name}",
   String $ip_index              = "\${db_dir}/db.${name}.index",

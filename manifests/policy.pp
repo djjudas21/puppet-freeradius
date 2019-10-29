@@ -1,8 +1,8 @@
 # Install FreeRADIUS policies
 define freeradius::policy (
-  $source,
-  $order = 50,
-  $ensure = present,
+  Optional[String] $source,
+  Optional[Integer] $order   = 50,
+  Freeradius::Ensure $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service

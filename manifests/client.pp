@@ -1,49 +1,32 @@
 # Install FreeRADIUS clients (WISMs or testing servers)
 define freeradius::client (
-  $secret,
-  $shortname                     = $title,
-  $ip                            = undef,
-  $ip6                           = undef,
-  $proto                         = undef,
-  $require_message_authenticator = 'no',
-  $virtual_server                = undef,
-  $nastype                       = undef,
-  $login                         = undef,
-  $password                      = undef,
-  $coa_server                    = undef,
-  $response_window               = undef,
-  $max_connections               = undef,
-  $lifetime                      = undef,
-  $idle_timeout                  = undef,
-  $redirect                      = undef,
-  $port                          = undef,
-  $srcip                         = undef,
-  $firewall                      = false,
-  $ensure                        = present,
-  $attributes                    = [],
-  $huntgroups                    = undef,
+  String $secret,
+  Optional[String] $shortname                        = $title,
+  Optional[String] $ip                               = undef,
+  Optional[String] $ip6                              = undef,
+  Enum['*', 'udp', 'tcp'] $proto                     = undef,
+  Freeradius::Boolean $require_message_authenticator = 'no',
+  Optional[String] $virtual_server                   = undef,
+  Enum['cisco', 'computone', 'livingston', 'juniper', 'max40xx', 'multitech', 'netserver', 'pathras', 'patton', 'portslave', 'tc', 'usrhiper', 'other'] $nastype = undef,
+  Optional[String] $login                            = undef,
+  Optional[String] $password                         = undef,
+  Optional[String] $coa_server                       = undef,
+  Optional[String] $response_window                  = undef,
+  Optional[Integer] $max_connections                 = undef,
+  Optional[Integer] $lifetime                        = undef,
+  Optional[Integer] $idle_timeout                    = undef,
+  Optional[String] $redirect                         = undef,
+  Optional[Integer] $port                            = undef,
+  Optional[String] $srcip                            = undef,
+  Boolean $firewall                                  = false,
+  Freeradius::Ensure $ensure                         = present,
+  Array $attributes                    = [],
+  Optional[String] $huntgroups                    = undef,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
-
-  if $proto {
-    unless $proto in ['*', 'udp', 'tcp'] {
-      fail('$proto must be one of udp, tcp or *')
-    }
-  }
-
-  unless $require_message_authenticator in ['yes', 'no'] {
-    fail('$require_message_authenticator must be one of yes or no')
-  }
-
-  if $nastype {
-    unless $nastype in ['cisco', 'computone', 'livingston', 'juniper', 'max40xx',
-    'multitech', 'netserver', 'pathras', 'patton', 'portslave', 'tc', 'usrhiper', 'other'] {
-      fail('$nastype must be one of cisco, computone, livingston, juniper, max40xx, multitech, netserver, pathras, patton, portslave, tc, usrhiper, other')
-    }
-  }
 
   file { "${fr_basepath}/clients.d/${shortname}.conf":
     ensure  => $ensure,

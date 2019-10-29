@@ -1,6 +1,6 @@
 # Instantiate a module in global config
 define freeradius::instantiate (
-  $ensure = present,
+  Freeradius::Ensure $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service

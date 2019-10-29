@@ -1,24 +1,23 @@
 # == Define freeradius::listen
 #
 define freeradius::listen (
-  $ensure                  = 'present',
+  Freeradius::Ensure $ensure                                = 'present',
   Enum['auth','acct','proxy','detail','status','coa'] $type = 'auth',
-  $ip                      = undef,
-  $ip6                     = undef,
-  Integer $port            = 0,
-  $interface               = undef,
-  Array $clients           = [],
-  Integer $max_connections = 16,
-  Integer $lifetime        = 0,
-  Integer $idle_timeout    = 30,
+  Optional[String] $ip                                      = undef,
+  Optional[String] $ip6                                     = undef,
+  Integer $port                                             = 0,
+  String $interface                                         = undef,
+  Array[String] $clients                                    = [],
+  Integer $max_connections                                  = 16,
+  Integer $lifetime                                         = 0,
+  Integer $idle_timeout                                     = 30,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
-  #
-  # Parameters' validation
+  # Parameter validation
   if $ip and $ip != '*' and !is_ip_address($ip) {
     fail('ip must be a valid IP address or \'*\'')
   }
@@ -28,7 +27,7 @@ define freeradius::listen (
   }
 
   if $ip and $ip6 {
-    fail('Only of ip and ip6 can be used')
+    fail('Only one of ip or ip6 can be used')
   }
 
   file { "${fr_basepath}/listen.d/${name}.conf":

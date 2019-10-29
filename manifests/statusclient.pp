@@ -1,11 +1,11 @@
 # Install FreeRADIUS clients (WISMs or testing servers)
 define freeradius::statusclient (
-  $secret,
-  $ip = undef,
-  $ip6 = undef,
-  $port = undef,
-  $shortname = $name,
-  $ensure = present,
+  String $secret,
+  Optional[String] $ip        = undef,
+  Optional[String] $ip6       = undef,
+  Optional[Integer] $port     = undef,
+  Optional[String] $shortname = $name,
+  Freeradius::Ensure $ensure  = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service

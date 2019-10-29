@@ -1,8 +1,8 @@
 # Configure LDAP support for FreeRADIUS
 define freeradius::module::ldap (
   String $basedn,
-  Enum['present','absent'] $ensure                                    = 'present',
-  $server                                                             = ['localhost'],
+  Freeradius::Ensure $ensure                                         = 'present',
+  Array[String] $server                                               = ['localhost'],
   Integer $port                                                       = 389,
   Optional[String] $identity                                          = undef,
   Optional[String] $password                                          = undef,
@@ -70,19 +70,13 @@ define freeradius::module::ldap (
   $fr_group            = $::freeradius::params::fr_group
 
   # Validate our inputs
-  # Hostnames
-  $serverarray = any2array($server)
-  unless is_array($serverarray) {
-    fail('$server must be an array of hostnames or IP addresses')
-  }
-
   # FR3.0 format server = 'ldap1.example.com, ldap1.example.com, ldap1.example.com'
   # FR3.1 format server = 'ldap1.example.com'
   #              server = 'ldap2.example.com'
   #              server = 'ldap3.example.com'
   $serverconcatarray = $::freeradius_version ? {
-    /^3\.0\./ => any2array(join($serverarray, ',')),
-    default   => $serverarray,
+    /^3\.0\./ => any2array(join($server, ',')),
+    default   => $server,
   }
 
   # Generate a module config, based on ldap.conf

@@ -1,9 +1,9 @@
 # Install FreeRADIUS custom dictionaries
 define freeradius::dictionary (
-  $source = undef,
-  $content = undef,
-  $order = 50,
-  $ensure = present,
+  Optional[String] $source   = undef,
+  Optional[String] $content  = undef,
+  Optional[Integer] $order   = 50,
+  Freeradius::Ensure $ensure = 'present',
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
@@ -11,7 +11,7 @@ define freeradius::dictionary (
   $fr_group    = $::freeradius::params::fr_group
 
   if !$source and !$content {
-    fail('source or content parameter should be provided')
+    fail('source or content parameter must be provided')
   }
 
   # Install dictionary in dictionary.d

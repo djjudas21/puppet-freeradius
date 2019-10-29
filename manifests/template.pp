@@ -1,7 +1,7 @@
 # Configure a template snippet
 define freeradius::template (
-  $source = undef,
-  $content = undef,
+  Optional[String] $source  = undef,
+  Optional[String] $content = undef,
 ) {
   $fr_basepath = $::freeradius::params::fr_basepath
 
@@ -13,4 +13,3 @@ define freeradius::template (
     order   => 10,
   }
 }
-

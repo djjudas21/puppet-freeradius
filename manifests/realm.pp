@@ -1,18 +1,13 @@
 # Set up proxy realms
 define freeradius::realm (
-  $virtual_server = undef,
-  $auth_pool = undef,
-  $acct_pool = undef,
-  $pool = undef,
-  $nostrip = false,
-  $order = 30,
+  Optional[String] $virtual_server = undef,
+  Optional[String] $auth_pool      = undef,
+  Optional[String] $acct_pool      = undef,
+  Optional[String] $pool           = undef,
+  Optional[Boolean] $nostrip       = false,
+  Optional[Integer] $order         = 30,
 ) {
   $fr_basepath = $::freeradius::params::fr_basepath
-
-  # Validate bools
-  unless is_bool($nostrip) {
-    fail('nostrip must be true or false')
-  }
 
   # Configure config fragment for this realm
   concat::fragment { "realm-${name}":
