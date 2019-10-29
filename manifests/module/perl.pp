@@ -3,7 +3,7 @@
 # Create the perl module configuration for FreeRADIUS
 #
 define freeradius::module::perl (
-  $ensure                                        = file,
+  Optional[String] $ensure                       = file,
   String $moddir                                 = "${fr_moduleconfigpath}/perl",
   Optional[String] $perl_filename                = undef,
   Optional[String] $path                         = undef,

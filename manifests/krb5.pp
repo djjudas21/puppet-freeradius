@@ -1,12 +1,12 @@
 # Configure Kerberos support for FreeRADIUS
 define freeradius::krb5 (
-  $keytab,
-  $principal,
-  $start       = "\${thread[pool].start_servers}",
-  $min         = "\${thread[pool].min_spare_servers}",
-  $max         = "\${thread[pool].max_servers}",
-  $spare       = "\${thread[pool].max_spare_servers}",
-  $ensure      = 'present',
+  String $keytab,
+  String $principal,
+  Freeradius::Integer  $start = "\${thread[pool].start_servers}",
+  Freeradius::Integer  $min   = "\${thread[pool].min_spare_servers}",
+  Freeradius::Integer  $max   = "\${thread[pool].max_servers}",
+  Freeradius::Integer  $spare = "\${thread[pool].max_spare_servers}",
+  Freeradius::Ensure $ensure  = 'present',
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service

@@ -1,7 +1,7 @@
 # Install FreeRADIUS helper scripts
 define freeradius::script (
-  $source,
-  $ensure = present,
+  String $source,
+  Freeradius::Ensure $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service

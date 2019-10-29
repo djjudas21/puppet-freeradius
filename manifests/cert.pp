@@ -1,9 +1,9 @@
 # Install FreeRADIUS certificates
 define freeradius::cert (
-  $source = undef,
-  $content = undef,
-  $type = 'key',
-  $ensure = present,
+  Optional[String] $source   = undef,
+  Optional[String] $content  = undef,
+  Optional[String] $type     = 'key',
+  Freeradius::Ensure $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
