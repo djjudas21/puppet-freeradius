@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.9.0
+  * Bugfix: Fix mismatch between `tls_verify_client` parameter in the eap module manifest and `tls_client` in the eap template (thanks @guest715)
+  * Bugfix: Fix users template permits the users array to contain either Hashes or Strings (thanks @guest715)
+  * Bugfix: Create ippool files in freerad::module::ippool (thanks @amateo)
+  * Convert module packaging to PDK
+  * Update OS & Puppet version compatibility data
+  * Lint fixes
+  * Add data type validation for all parameters
+
 ### 3.8.2
   * Bugfix: Fix for client iptables rules being repeatedly added by subsequent Puppet runs (thanks @guest715)
   * Bugfix: Module file notifies service, not only symlink (thanks @ihpu)
