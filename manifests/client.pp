@@ -4,7 +4,7 @@ define freeradius::client (
   Optional[String] $shortname                        = $title,
   Optional[String] $ip                               = undef,
   Optional[String] $ip6                              = undef,
-  Enum['*', 'udp', 'tcp'] $proto                     = undef,
+  Enum['*', 'udp', 'tcp'] $proto                     = '*',
   Freeradius::Boolean $require_message_authenticator = 'no',
   Optional[String] $virtual_server                   = undef,
   Enum['cisco', 'computone', 'livingston', 'juniper', 'max40xx', 'multitech', 'netserver', 'pathras', 'patton', 'portslave', 'tc', 'usrhiper', 'other'] $nastype = undef,
