@@ -4,10 +4,10 @@ define freeradius::client (
   Optional[String] $shortname                        = $title,
   Optional[String] $ip                               = undef,
   Optional[String] $ip6                              = undef,
-  Enum['*', 'udp', 'tcp'] $proto                     = '*',
+  Optional[Enum['*', 'udp', 'tcp']] $proto           = '*',
   Freeradius::Boolean $require_message_authenticator = 'no',
   Optional[String] $virtual_server                   = undef,
-  Enum['cisco', 'computone', 'livingston', 'juniper', 'max40xx', 'multitech', 'netserver', 'pathras', 'patton', 'portslave', 'tc', 'usrhiper', 'other'] $nastype = undef,
+  Optional[Enum['cisco', 'computone', 'livingston', 'juniper', 'max40xx', 'multitech', 'netserver', 'pathras', 'patton', 'portslave', 'tc', 'usrhiper', 'other']] $nastype = undef,
   Optional[String] $login                            = undef,
   Optional[String] $password                         = undef,
   Optional[String] $coa_server                       = undef,
@@ -20,8 +20,8 @@ define freeradius::client (
   Optional[String] $srcip                            = undef,
   Boolean $firewall                                  = false,
   Freeradius::Ensure $ensure                         = present,
-  Array $attributes                    = [],
-  Optional[String] $huntgroups                    = undef,
+  Variant[Array, Hash, String] $attributes           = [],
+  Optional[String] $huntgroups                       = undef,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service
