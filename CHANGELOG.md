@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.9.1
+  * Various bugfixes in parameter type validation (thanks @craigwatson and @amateo)
+
 ### 3.9.0
   * Bugfix: Fix mismatch between `tls_verify_client` parameter in the eap module manifest and `tls_client` in the eap template (thanks @guest715)
   * Bugfix: Fix users template permits the users array to contain either Hashes or Strings (thanks @guest715)
