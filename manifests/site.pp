@@ -1,8 +1,8 @@
 # Install FreeRADIUS virtual servers (sites)
 define freeradius::site (
   Freeradius::Ensure $ensure  = present,
-  String $source              = undef,
-  String $content             = undef,
+  Optional[String] $source    = undef,
+  Optional[String] $content   = undef,
   Array[String] $authorize    = [],
   Array[String] $authenticate = [],
   Array[String] $preacct      = [],
