@@ -1,18 +1,48 @@
 home_server <%= @name %> {
-	type = <%= @type %>
+    type = <%= @type %>
 <% if defined?(@ipaddr) -%>
-	ipaddr = <%= @ipaddr %>
+    ipaddr = <%= @ipaddr %>
 <% end -%>
 <% if defined?(@ipv6addr) -%>
-	ipv6addr = <%= @ipv6addr %>
+    ipv6addr = <%= @ipv6addr %>
 <% end -%>
 <% if defined?(@virtual_server) -%>
-	virtual_server = <%= @virtual_server %>
+    virtual_server = <%= @virtual_server %>
 <% end -%>
-	port = <%= @port %>
-	proto = <%= @proto %>
-	secret = <%= @secret %>
+    port = <%= @port %>
+    proto = <%= @proto %>
+    secret = <%= @secret %>
+<% if defined?(@src_ipaddr) -%>
+    src_ipaddr = <%= @src_ipaddr %>
+<% end -%>
+<% if defined?(@response_window) -%>
+    response_window = <%= @response_window %>
+<% end -%>
+<% if defined?(@no_response_fail) -%>
+    no_response_fail = <%= @no_response_fail %>
+<% end -%>
+<% if defined?(@zombie_period) -%>
+    zombie_period = <%= @zombie_period %>
+<% end -%>
+<% if defined?(@revive_interval) -%>
+    revive_interval = <%= @revive_interval %>
+<% end -%>
 <%- if @status_check -%>
-	status_check = <%= @status_check %>
+    status_check = <%= @status_check %>
 <%- end -%>
+<% if defined?(@username) -%>
+    username = <%= @username %>
+<% end -%>
+<% if defined?(@password) -%>
+    password = <%= @password %>
+<% end -%>
+<% if defined?(@check_interval) -%>
+    check_interval = <%= @check_interval %>
+<% end -%>
+<% if defined?(@num_answers_to_alive) -%>
+    num_answers_to_alive = <%= @num_answers_to_alive %>
+<% end -%>
+<% if defined?(@max_outstanding) -%>
+    max_outstanding = <%= @max_outstanding %>
+<% end -%>
 }
