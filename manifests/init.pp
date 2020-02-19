@@ -242,6 +242,7 @@ class freeradius (
     group   => $freeradius::fr_group,
     mode    => '0640',
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service[$freeradius::fr_service],
   }
   concat::fragment { 'huntgroups_header':
     target => "${freeradius::fr_basepath}/mods-config/preprocess/huntgroups",
