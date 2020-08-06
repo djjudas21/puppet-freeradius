@@ -3,6 +3,7 @@ class freeradius (
   Boolean $control_socket          = false,
   Integer $max_servers             = 4096,
   Integer $max_requests            = 4096,
+  Integer $max_request_time        = 30,
   Boolean $mysql_support           = false,
   Boolean $pgsql_support           = false,
   Boolean $perl_support            = false,
