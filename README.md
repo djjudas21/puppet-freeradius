@@ -94,6 +94,9 @@ Use correct backslash escaping in unlang. Default: `true`
 ##### `max_requests`
 The maximum number of requests which the server keeps track of. This should be 256 multiplied by the number of clients. Default: `4096`
 
+##### `max_request_time`
+The maximum time (in seconds) to handle a request. Default: `30`
+
 ##### `max_servers`
 Limit on the total number of servers running. Default: `4096`
 

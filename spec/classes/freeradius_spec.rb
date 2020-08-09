@@ -24,6 +24,7 @@ describe 'freeradius' do
       #:control_socket => false,
       #:max_servers => "4096",
       #:max_requests => "4096",
+      #:max_request_time => "30",
       #:mysql_support => false,
       #:perl_support => false,
       #:utils_support => false,
