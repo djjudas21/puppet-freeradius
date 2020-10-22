@@ -63,6 +63,8 @@ class freeradius (
     "${freeradius::fr_basepath}/mods-config/attr_filter",
     "${freeradius::fr_basepath}/mods-config/preprocess",
     "${freeradius::fr_basepath}/mods-config/sql",
+    "${freeradius::fr_basepath}/sites-available",
+    "${freeradius::fr_basepath}/mods-available",
   ]:
     ensure  => directory,
     mode    => '0755',
@@ -138,12 +140,12 @@ class freeradius (
   }
   concat::fragment { 'policy_header':
     target  => "${freeradius::fr_basepath}/policy.conf",
-    content => "policy {\n",
+    content => 'policy {',
     order   => 10,
   }
   concat::fragment { 'policy_footer':
     target  => "${freeradius::fr_basepath}/policy.conf",
-    content => "}\n",
+    content => '}',
     order   => '99',
   }
 
@@ -162,7 +164,7 @@ class freeradius (
   }
   concat::fragment { 'template_footer':
     target  => "${freeradius::fr_basepath}/templates.conf",
-    content => "}\n",
+    content => '}',
     order   => '95',
   }
 
@@ -177,7 +179,7 @@ class freeradius (
   }
   concat::fragment { 'proxy_header':
     target  => "${freeradius::fr_basepath}/proxy.conf",
-    content => "# Proxy config\n\n",
+    content => '# Proxy config\n',
     order   => '05',
   }
 
@@ -341,7 +343,7 @@ class freeradius (
   # Syslog rules
   if $syslog == true {
     rsyslog::snippet { '12-radiusd-log':
-      content => "if \$programname == \'radiusd\' then ${freeradius::fr_logpath}/radius.log\n&~",
+      content => "if \$programname == \'radiusd\' then ${freeradius::fr_logpath}/radius.log\n\&\~",
     }
   }
 
@@ -434,7 +436,7 @@ class freeradius (
     "${freeradius::fr_basepath}/clients.conf",
     "${freeradius::fr_basepath}/sql.conf",
   ]:
-    content => "# FILE INTENTIONALLY BLANK\n",
+    content => '# FILE INTENTIONALLY BLANK\n',
     mode    => '0644',
     owner   => 'root',
     group   => $freeradius::fr_group,

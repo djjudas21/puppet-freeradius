@@ -1,21 +1,17 @@
 require 'spec_helper'
-require 'facter'
+require 'facter/freeradius_version'
 
 describe :freeradius_version, :type => :fact do
-
-  before :all do
-    # perform any action that should be run for the entire test suite
-  end
-
   before :each do
-    # perform any action that should be run before every test
     Facter.clear
-  # This will mock the facts that confine uses to limit facts running under certain conditions
-  # below is how you mock responses from the command line
-  # you will need to built tests that plugin different mocked values in order to fully test your facter code
+    expect(Facter::Core::Execution).to receive(:exec).with('radiusd -v').and_return('FreeRADIUS Version 3.0.21')
   end
 
-  it 'should return a value' do
-    expect(Facter.fact(:freeradius_version).value).to eq('value123')  #<-- change the value to match your expectation
+  it 'should set freeradius_version' do
+    expect(Facter.fact(:freeradius_version).value).to eq('3.0.21')
+  end
+
+  it 'should set freeradius_maj_version' do
+    expect(Facter.fact(:freeradius_maj_version).value).to eq('3')
   end
 end

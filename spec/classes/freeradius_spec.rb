@@ -1,376 +1,536 @@
 require 'spec_helper'
-require 'shared_contexts'
 
 describe 'freeradius' do
-  # by default the hiera integration uses hiera data from the shared_contexts.rb file
-  # but basically to mock hiera you first need to add a key/value pair
-  # to the specific context in the spec/shared_contexts.rb file
-  # Note: you can only use a single hiera context per describe/context block
-  # rspec-puppet does not allow you to swap out hiera data on a per test block
-  #include_context :hiera
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}" do
+      include_context 'redhat_params'
 
-  
-  # below is the facts hash that gives you the ability to mock
-  # facts on a per describe/context block.  If you use a fact in your
-  # manifest you should mock the facts below.
-  let(:facts) do
-    {}
-  end
-  # below is a list of the resource parameters that you can override.
-  # By default all non-required parameters are commented out,
-  # while all required parameters will require you to add a value
-  let(:params) do
-    {
-      #:control_socket => false,
-      #:max_servers => "4096",
-      #:max_requests => "4096",
-      #:max_request_time => "30",
-      #:mysql_support => false,
-      #:perl_support => false,
-      #:utils_support => false,
-      #:ldap_support => false,
-      #:krb5_support => false,
-      #:wpa_supplicant => false,
-      #:winbind_support => false,
-      #:syslog => false,
-      #:log_auth => 'no',
-    }
-  end
-  # add these two lines in a single test block to enable puppet and hiera debug mode
-  # Puppet::Util::Log.level = :debug
-  # Puppet::Util::Log.newdestination(:console)
-  it do
-    is_expected.to contain_file('radiusd.conf')
-      .with(
-        'content' => 'template(freeradius/radiusd.conf.fr$freeradius::fr_version.erb)',
-        'group'   => '$freeradius::fr_group',
-        'mode'    => '0640',
-        'name'    => '$freeradius::fr_basepath/radiusd.conf',
-        'notify'  => 'Service[$freeradius::fr_service]',
-        'owner'   => 'root',
-        'require' => '[Package[$freeradius::fr_package], Group[$freeradius::fr_group]]'
-      )
-  end
-  it do
-    is_expected.to contain_file('[$freeradius::fr_basepath/statusclients.d, $freeradius::fr_basepath, $freeradius::fr_basepath/conf.d, $freeradius::fr_basepath/attr.d, $freeradius::fr_basepath/users.d, $freeradius::fr_basepath/policy.d, $freeradius::fr_basepath/dictionary.d, $freeradius::fr_basepath/scripts]')
-      .with(
-        'ensure'  => 'directory',
-        'group'   => '$freeradius::fr_group',
-        'mode'    => '0750',
-        'notify'  => 'Service[$freeradius::fr_service]',
-        'owner'   => 'root',
-        'require' => '[Package[$freeradius::fr_package], Group[$freeradius::fr_group]]'
-      )
-  end
-  it do
-    is_expected.to contain_file('[$freeradius::fr_basepath/certs, $freeradius::fr_basepath/clients.d, $freeradius::fr_basepath/sites-enabled, $freeradius::fr_basepath/sites-available, $freeradius::fr_basepath/instantiate]')
-      .with(
-        'ensure'  => 'directory',
-        'group'   => '$freeradius::fr_group',
-        'mode'    => '0750',
-        'notify'  => 'Service[$freeradius::fr_service]',
-        'owner'   => 'root',
-        'purge'   => 'true',
-        'recurse' => 'true',
-        'require' => '[Package[$freeradius::fr_package], Group[$freeradius::fr_group]]'
-      )
-  end
-  it do
-    is_expected.to contain_freeradius__module('eap')
-      .with(
-        'ensure' => 'absent'
-      )
-  end
-  it do
-    is_expected.to contain_concat('$freeradius::fr_basepath/policy.conf')
-      .with(
-        'group'   => '$freeradius::fr_group',
-        'mode'    => '0640',
-        'notify'  => 'Service[$freeradius::fr_service]',
-        'owner'   => 'root',
-        'require' => '[Package[$freeradius::fr_package], Group[$freeradius::fr_group]]'
-      )
-  end
-  it do
-    is_expected.to contain_concat__fragment('policy_header')
-      .with(
-        'content' => 'policy {\\n',
-        'order'   => '10',
-        'target'  => '$freeradius::fr_basepath/policy.conf'
-      )
-  end
-  it do
-    is_expected.to contain_concat__fragment('policy_footer')
-      .with(
-        'content' => '}\\n',
-        'order'   => '99',
-        'target'  => '$freeradius::fr_basepath/policy.conf'
-      )
-  end
-  it do
-    is_expected.to contain_concat('$freeradius::fr_basepath/proxy.conf')
-      .with(
-        'group'   => '$freeradius::fr_group',
-        'mode'    => '0640',
-        'notify'  => 'Service[$freeradius::fr_service]',
-        'owner'   => 'root',
-        'require' => '[Package[$freeradius::fr_package], Group[$freeradius::fr_group]]'
-      )
-  end
-  it do
-    is_expected.to contain_concat__fragment('proxy_header')
-      .with(
-        'content' => '# Proxy config\\n\\n',
-        'order'   => '05',
-        'target'  => '$freeradius::fr_basepath/proxy.conf'
-      )
-  end
-  it do
-    is_expected.to contain_concat('$freeradius::fr_modulepath/attr_filter')
-      .with(
-        'group'   => '$freeradius::fr_group',
-        'mode'    => '0640',
-        'notify'  => 'Service[$freeradius::fr_service]',
-        'owner'   => 'root',
-        'require' => '[Package[$freeradius::fr_package], Group[$freeradius::fr_group]]'
-      )
-  end
-  it do
-    is_expected.to contain_concat__fragment('attr-default')
-      .with(
-        'content' => 'template(freeradius/attr_default.fr$freeradius::fr_version.erb)',
-        'order'   => '10',
-        'target'  => '$freeradius::fr_modulepath/attr_filter'
-      )
-  end
-  it do
-    is_expected.to contain_concat('$freeradius::fr_basepath/dictionary')
-      .with(
-        'group'   => '$freeradius::fr_group',
-        'mode'    => '0640',
-        'owner'   => 'root',
-        'require' => '[Package[$freeradius::fr_package], Group[$freeradius::fr_group]]'
-      )
-  end
-  it do
-    is_expected.to contain_concat__fragment('dictionary_header')
-      .with(
-        'order'  => '10',
-        'source' => 'puppet:///modules/freeradius/dictionary.header',
-        'target' => '$freeradius::fr_basepath/dictionary'
-      )
-  end
-  it do
-    is_expected.to contain_concat__fragment('dictionary_footer')
-      .with(
-        'order'  => '90',
-        'source' => 'puppet:///modules/freeradius/dictionary.footer',
-        'target' => '$freeradius::fr_basepath/dictionary'
-      )
-  end
-  it do
-    is_expected.to contain_package('freeradius')
-      .with(
-        'ensure' => 'installed',
-        'name'   => '$freeradius::fr_package'
-      )
-  end
-  it do
-    is_expected.to contain_service('$freeradius::fr_service')
-      .with(
-        'enable'     => 'true',
-        'ensure'     => 'running',
-        'hasrestart' => 'true',
-        'hasstatus'  => '$freeradius::fr_service_has_status',
-        'name'       => '$freeradius::fr_service',
-        'require'    => '[Exec[radiusd-config-test], File[radiusd.conf], User[$freeradius::fr_user], Package[$freeradius::fr_package]]'
-      )
-  end
-  it do
-    is_expected.to contain_user('$freeradius::fr_user')
-      .with(
-        'ensure'  => 'present',
-        'groups'  => '$winbind_support ? { true => $freeradius::fr_wbpriv_user, default => undef }',
-        'require' => 'Package[$freeradius::fr_package]'
-      )
-  end
-  it do
-    is_expected.to contain_group('$freeradius::fr_group')
-      .with(
-        'ensure'  => 'present',
-        'require' => 'Package[$freeradius::fr_package]'
-      )
-  end
-  it do
-    is_expected.to contain_freeradius__module('always')
-      .with(      )
-  end
-  it do
-    is_expected.to contain_freeradius__module('detail')
-      .with(      )
-  end
-  it do
-    is_expected.to contain_freeradius__module('detail.log')
-      .with(      )
-  end
-  it do
-    is_expected.to contain_file('[$freeradius::fr_logpath, $freeradius::fr_logpath/radacct]')
-      .with(
-        'mode'    => '0750',
-        'require' => 'Package[$freeradius::fr_package]'
-      )
-  end
-  it do
-    is_expected.to contain_file('$freeradius::fr_logpath/radius.log')
-      .with(
-        'group'   => '$freeradius::fr_group',
-        'owner'   => '$freeradius::fr_user',
-        'require' => '[Package[$freeradius::fr_package], User[$freeradius::fr_user], Group[$freeradius::fr_group]]',
-        'seltype' => 'radiusd_log_t'
-      )
-  end
-  it do
-    is_expected.to contain_logrotate__rule('radacct')
-      .with(
-        'compress'      => 'true',
-        'create'        => 'false',
-        'missingok'     => 'true',
-        'path'          => '$freeradius::fr_logpath/radacct/*/*.log',
-        'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
-        'rotate'        => '7',
-        'rotate_every'  => 'day',
-        'sharedscripts' => 'true'
-      )
-  end
-  it do
-    is_expected.to contain_logrotate__rule('checkrad')
-      .with(
-        'compress'      => 'true',
-        'create'        => 'true',
-        'missingok'     => 'true',
-        'path'          => '$freeradius::fr_logpath/checkrad.log',
-        'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
-        'rotate'        => '1',
-        'rotate_every'  => 'week',
-        'sharedscripts' => 'true'
-      )
-  end
-  it do
-    is_expected.to contain_logrotate__rule('radiusd')
-      .with(
-        'compress'      => 'true',
-        'create'        => 'true',
-        'missingok'     => 'true',
-        'path'          => '$freeradius::fr_logpath/radius*.log',
-        'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
-        'rotate'        => '26',
-        'rotate_every'  => 'week',
-        'sharedscripts' => 'true'
-      )
-  end
-  it do
-    is_expected.to contain_file('[$freeradius::fr_basepath/certs/dh, $freeradius::fr_basepath/certs/random]')
-      .with(
-        'require' => 'Exec[dh, random]'
-      )
-  end
-  it do
-    is_expected.to contain_exec('dh')
-      .with(
-        'command' => 'openssl dhparam -out $freeradius::fr_basepath/certs/dh 1024',
-        'creates' => '$freeradius::fr_basepath/certs/dh',
-        'path'    => '/usr/bin',
-        'require' => 'File[$freeradius::fr_basepath/certs]'
-      )
-  end
-  it do
-    is_expected.to contain_exec('random')
-      .with(
-        'command' => 'dd if=/dev/urandom of=$freeradius::fr_basepath/certs/random count=10 >/dev/null 2>&1',
-        'creates' => '$freeradius::fr_basepath/certs/random',
-        'path'    => '/bin',
-        'require' => 'File[$freeradius::fr_basepath/certs]'
-      )
-  end
-  it do
-    is_expected.to contain_exec('radiusd-config-test')
-      .with(
-        'command'     => 'sudo radiusd -XC | grep \'Configuration appears to be OK.\' | wc -l',
-        'logoutput'   => 'on_failure',
-        'path'        => '[/bin/, /sbin/, /usr/bin/, /usr/sbin/]',
-        'refreshonly' => 'true',
-        'returns'     => '0'
-      )
-  end
-  it do
-    is_expected.to contain_file('[$freeradius::fr_basepath/sites-available/default, $freeradius::fr_basepath/sites-available/inner-tunnel, $freeradius::fr_basepath/clients.conf, $freeradius::fr_basepath/sql.conf]')
-      .with(
-        'content' => '# FILE INTENTIONALLY BLANK\\n',
-        'group'   => '$freeradius::fr_group',
-        'mode'    => '0644',
-        'notify'  => 'Service[$freeradius::fr_service]',
-        'owner'   => 'root',
-        'require' => '[Package[$freeradius::fr_package], Group[$freeradius::fr_group]]'
-      )
-  end
-  it do
-    is_expected.to contain_package('freeradius-mysql')
-      .with(
-        'ensure' => 'installed'
-      )
-  end
-  it do
-    is_expected.to contain_package('freeradius-perl')
-      .with(
-        'ensure' => 'installed'
-      )
-  end
-  it do
-    is_expected.to contain_package('freeradius-utils')
-      .with(
-        'ensure' => 'installed'
-      )
-  end
-  it do
-    is_expected.to contain_package('freeradius-ldap')
-      .with(
-        'ensure' => 'installed'
-      )
-  end
-  it do
-    is_expected.to contain_package('freeradius-krb5')
-      .with(
-        'ensure' => 'installed'
-      )
-  end
-  it do
-    is_expected.to contain_package('wpa_supplicant')
-      .with(
-        'ensure' => 'installed',
-        'name'   => '$freeradius::fr_wpa_supplicant'
-      )
-  end
-  it do
-    is_expected.to contain_syslog__rule('radiusd-log')
-      .with(
-        'command' => 'if $programname == \'radiusd\' then $freeradius::fr_logpath/radius.log\\n&~',
-        'order'   => '12'
-      )
-  end
-  it do
-    is_expected.to contain_exec('delete-radius-rpmnew')
-      .with(
-        'command' => 'find $freeradius::fr_basepath -name *.rpmnew -delete',
-        'onlyif'  => 'find $freeradius::fr_basepath -name *.rpmnew | grep rpmnew',
-        'path'    => '[/bin/, /sbin/, /usr/bin/, /usr/sbin/]'
-      )
-  end
-  it do
-    is_expected.to contain_exec('delete-radius-rpmsave')
-      .with(
-        'command' => 'find $freeradius::fr_basepath -name *.rpmsave -delete',
-        'onlyif'  => 'find $freeradius::fr_basepath -name *.rpmsave | grep rpmsave',
-        'path'    => '[/bin/, /sbin/, /usr/bin/, /usr/sbin/]'
-      )
+      let(:facts) { os_facts }
+
+      # Empty params hash by default so we can super().merge
+      let(:params) { {} }
+
+      it do
+        is_expected.to contain_file('radiusd.conf')
+          .with(
+            'group'  => 'radiusd',
+            'mode'   => '0644',
+            'path'   => '/etc/raddb/radiusd.conf',
+            'notify' => 'Service[radiusd]',
+            'owner'  => 'root',
+          )
+          .that_requires('Package[freeradius]')
+          .that_requires('Group[radiusd]')
+      end
+
+      it do
+        [
+          '/etc/raddb/statusclients.d',
+          '/etc/raddb',
+          '/etc/raddb/conf.d',
+          '/etc/raddb/attr.d',
+          '/etc/raddb/users.d',
+          '/etc/raddb/policy.d',
+          '/etc/raddb/dictionary.d',
+          '/etc/raddb/scripts',
+          '/etc/raddb/mods-config',
+          '/etc/raddb/mods-config/attr_filter',
+          '/etc/raddb/mods-config/preprocess',
+          '/etc/raddb/mods-config/sql',
+          '/etc/raddb/sites-available',
+          '/etc/raddb/mods-available',
+        ].each do |file|
+          is_expected.to contain_file(file)
+            .with(
+              'ensure'  => 'directory',
+              'group'   => 'radiusd',
+              'mode'    => '0755',
+              'notify'  => 'Service[radiusd]',
+              'owner'   => 'root',
+            )
+            .that_requires('Package[freeradius]')
+            .that_requires('Group[radiusd]')
+        end
+      end
+
+      it do
+        [
+          '/etc/raddb/certs',
+          '/etc/raddb/clients.d',
+          '/etc/raddb/listen.d',
+          '/etc/raddb/sites-enabled',
+          '/etc/raddb/instantiate'
+        ].each do |file|
+          is_expected.to contain_file(file)
+            .with(
+              'ensure'  => 'directory',
+              'group'   => 'radiusd',
+              'mode'    => '0755',
+              'notify'  => 'Service[radiusd]',
+              'owner'   => 'root',
+              'purge'   => 'true',
+              'recurse' => 'true',
+            )
+            .that_requires('Package[freeradius]')
+            .that_requires('Group[radiusd]')
+        end
+      end
+
+      it do
+        is_expected.to contain_concat('/etc/raddb/policy.conf')
+          .with(
+            'group'   => 'radiusd',
+            'mode'    => '0640',
+            'notify'  => 'Service[radiusd]',
+            'owner'   => 'root',
+          )
+          .that_requires('Package[freeradius]')
+          .that_requires('Group[radiusd]')
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('policy_header')
+          .with(
+            'content' => 'policy {',
+            'order'   => '10',
+            'target'  => '/etc/raddb/policy.conf'
+          )
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('policy_footer')
+          .with(
+            'content' => '}',
+            'order'   => '99',
+            'target'  => '/etc/raddb/policy.conf'
+          )
+      end
+
+      it do
+        is_expected.to contain_concat('/etc/raddb/proxy.conf')
+          .with(
+            'group'   => 'radiusd',
+            'mode'    => '0640',
+            'notify'  => 'Service[radiusd]',
+            'owner'   => 'root',
+          )
+          .that_requires('Package[freeradius]')
+          .that_requires('Group[radiusd]')
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('proxy_header')
+          .with(
+            'content' => '# Proxy config\n',
+            'order'   => '05',
+            'target'  => '/etc/raddb/proxy.conf'
+          )
+      end
+
+      it do
+        is_expected.to contain_concat('/etc/raddb/mods-available/attr_filter')
+          .with(
+            'group'   => 'radiusd',
+            'mode'    => '0640',
+            'notify'  => 'Service[radiusd]',
+            'owner'   => 'root',
+          )
+          .that_requires('Package[freeradius]')
+          .that_requires('Group[radiusd]')
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('attr-default')
+          .with(
+            'order'   => '10',
+            'target'  => '/etc/raddb/mods-available/attr_filter'
+          )
+      end
+
+      it do
+        is_expected.to contain_concat('/etc/raddb/dictionary')
+          .with(
+            'group'   => 'radiusd',
+            'mode'    => '0640',
+            'owner'   => 'root',
+          )
+          .that_requires('Package[freeradius]')
+          .that_requires('Group[radiusd]')
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('dictionary_header')
+          .with(
+            'order'  => '10',
+            'source' => 'puppet:///modules/freeradius/dictionary.header',
+            'target' => '/etc/raddb/dictionary'
+          )
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('dictionary_footer')
+          .with(
+            'order'  => '90',
+            'source' => 'puppet:///modules/freeradius/dictionary.footer',
+            'target' => '/etc/raddb/dictionary'
+          )
+      end
+
+      it do
+        is_expected.to contain_package('freeradius')
+          .with(
+            'ensure' => 'installed',
+            'name'   => 'freeradius'
+          )
+      end
+
+      it do
+        is_expected.to contain_service('radiusd')
+          .with(
+            'enable'     => 'true',
+            'ensure'     => 'running',
+            'hasrestart' => 'true',
+            'hasstatus'  => 'true',
+            'name'       => 'radiusd',
+          )
+          .that_requires('Package[freeradius]')
+          .that_requires('User[radiusd]')
+          .that_requires('Exec[radiusd-config-test]')
+          .that_requires('File[radiusd.conf]')
+      end
+
+      it do
+        is_expected.to contain_user('radiusd')
+          .with(
+            'ensure'  => 'present',
+            'groups'  => nil,
+          )
+          .that_requires('Package[freeradius]')
+      end
+
+      context 'with winbind support' do
+        let(:params) do
+          {
+            winbind_support: true,
+          }
+        end
+
+        it do
+          is_expected.to contain_user('radiusd')
+            .with(
+              'groups'  => 'wbpriv',
+            )
+        end
+      end
+
+      it do
+        is_expected.to contain_group('radiusd')
+          .with(
+            'ensure'  => 'present',
+          )
+          .that_requires('Package[freeradius]')
+      end
+
+      it do
+        is_expected.to contain_freeradius__module('always')
+          .with(      )
+      end
+
+      it do
+        is_expected.to contain_freeradius__module('detail')
+          .with(      )
+      end
+
+      it do
+        is_expected.to contain_freeradius__module('detail.log')
+          .with(      )
+      end
+
+      it do
+        [
+          '/var/log/radius',
+          '/var/log/radius/radacct'
+        ].each do |file|
+          is_expected.to contain_file(file)
+            .with(
+              'mode'    => '0750',
+            )
+            .that_requires('Package[freeradius]')
+        end
+      end
+
+      it do
+        is_expected.to contain_file('/var/log/radius/radius.log')
+          .with(
+            'group'   => 'radiusd',
+            'owner'   => 'radiusd',
+            'seltype' => 'radiusd_log_t'
+          )
+          .that_requires('Package[freeradius]')
+          .that_requires('User[radiusd]')
+          .that_requires('Group[radiusd]')
+      end
+
+      it do
+        is_expected.to contain_logrotate__rule('radacct')
+          .with(
+            'compress'      => 'true',
+            'create'        => 'false',
+            'missingok'     => 'true',
+            'path'          => '/var/log/radius/radacct/*/*.log',
+            'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+            'rotate'        => '7',
+            'rotate_every'  => 'day',
+            'sharedscripts' => 'true'
+          )
+      end
+
+      it do
+        is_expected.to contain_logrotate__rule('checkrad')
+          .with(
+            'compress'      => 'true',
+            'create'        => 'true',
+            'missingok'     => 'true',
+            'path'          => '/var/log/radius/checkrad.log',
+            'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+            'rotate'        => '1',
+            'rotate_every'  => 'week',
+            'sharedscripts' => 'true'
+          )
+      end
+
+      it do
+        is_expected.to contain_logrotate__rule('radiusd')
+          .with(
+            'compress'      => 'true',
+            'create'        => 'true',
+            'missingok'     => 'true',
+            'path'          => '/var/log/radius/radius*.log',
+            'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+            'rotate'        => '26',
+            'rotate_every'  => 'week',
+            'sharedscripts' => 'true'
+          )
+      end
+
+      it do
+        [
+          '/etc/raddb/certs/dh',
+          '/etc/raddb/certs/random'
+        ].each do |file|
+          is_expected.to contain_file(file)
+            .with(
+            )
+            .that_requires('Exec[dh]')
+            .that_requires('Exec[random]')
+        end
+      end
+
+      it do
+        is_expected.to contain_exec('dh')
+          .with(
+            'command' => 'openssl dhparam -out /etc/raddb/certs/dh 1024',
+            'creates' => '/etc/raddb/certs/dh',
+            'path'    => '/usr/bin',
+          )
+          .that_requires('File[/etc/raddb/certs]')
+      end
+
+      it do
+        is_expected.to contain_exec('random')
+          .with(
+            'command' => 'dd if=/dev/urandom of=/etc/raddb/certs/random count=10 >/dev/null 2>&1',
+            'creates' => '/etc/raddb/certs/random',
+            'path'    => '/bin',
+          )
+          .that_requires('File[/etc/raddb/certs]')
+      end
+
+      it do
+        is_expected.to contain_exec('radiusd-config-test')
+          .with(
+            'command'     => 'sudo radiusd -XC | grep \'Configuration appears to be OK.\' | wc -l',
+            'logoutput'   => 'on_failure',
+            'path'        => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
+            'refreshonly' => 'true',
+            'returns'     => '0'
+          )
+      end
+
+      it do
+        [
+          '/etc/raddb/clients.conf',
+          '/etc/raddb/sql.conf',
+        ].each do |file|
+          is_expected.to contain_file(file)
+            .with(
+              'content' => '# FILE INTENTIONALLY BLANK\n',
+              'group'   => 'radiusd',
+              'mode'    => '0644',
+              'notify'  => 'Service[radiusd]',
+              'owner'   => 'root',
+            )
+            .that_requires('Package[freeradius]')
+            .that_requires('Group[radiusd]')
+        end
+      end
+
+      context 'with mysql' do
+        let(:params) do
+          super().merge(
+            'mysql_support' => true,
+          )
+        end
+
+        it do
+          is_expected.to contain_package('freeradius-mysql')
+            .with(
+              'ensure' => 'installed'
+            )
+        end
+      end
+
+      context 'with pgsql' do
+        let(:params) do
+          super().merge(
+            'pgsql_support' => true,
+          )
+        end
+
+        it do
+          is_expected.to contain_package('freeradius-postgresql')
+            .with(
+              'ensure' => 'installed'
+            )
+        end
+      end
+
+      context 'with perl' do
+        let(:params) do
+          super().merge(
+            'perl_support' => true,
+          )
+        end
+
+        it do
+          is_expected.to contain_package('freeradius-perl')
+            .with(
+              'ensure' => 'installed'
+            )
+        end
+      end
+
+      context 'with utils' do
+        let(:params) do
+          super().merge(
+            'utils_support' => true,
+          )
+        end
+
+        it do
+          is_expected.to contain_package('freeradius-utils')
+            .with(
+              'ensure' => 'installed'
+            )
+        end
+      end
+
+      context 'with ldap' do
+        let(:params) do
+          super().merge(
+            'ldap_support' => true,
+          )
+        end
+
+        it do
+          is_expected.to contain_package('freeradius-ldap')
+            .with(
+              'ensure' => 'installed'
+            )
+        end
+      end
+
+      context 'with dhcp' do
+        let(:params) do
+          super().merge(
+            'dhcp_support' => true,
+          )
+        end
+
+        it do
+          is_expected.to contain_package('freeradius-dhcp')
+            .with(
+              'ensure' => 'installed'
+            )
+        end
+      end
+
+      context 'with krb5' do
+        let(:params) do
+          super().merge(
+            'krb5_support' => true,
+          )
+        end
+
+        it do
+          is_expected.to contain_package('freeradius-krb5')
+            .with(
+              'ensure' => 'installed'
+            )
+        end
+      end
+
+      context 'with wpa_supplicant' do
+        let(:params) do
+          super().merge(
+            'wpa_supplicant' => true,
+          )
+        end
+
+        it do
+          is_expected.to contain_package('wpa_supplicant')
+            .with(
+              'ensure' => 'installed',
+              'name'   => 'wpa_supplicant'
+            )
+          end
+      end
+
+      context 'with syslog' do
+        let(:params) do
+          super().merge(
+            'syslog' => true,
+          )
+        end
+
+        it do
+          is_expected.to contain_rsyslog__snippet('12-radiusd-log')
+            .with(
+              'content' => %r{^if \$programname == \'radiusd\' then /var/log/radius/radius.log},
+            )
+        end
+      end
+
+      case os_facts[:osfamily]
+      when 'Redhat'
+        it do
+          is_expected.to contain_exec('delete-radius-rpmnew')
+            .with(
+              'command' => 'find /etc/raddb -name *.rpmnew -delete',
+              'onlyif'  => 'find /etc/raddb -name *.rpmnew | grep rpmnew',
+              'path'    => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
+            )
+        end
+
+        it do
+          is_expected.to contain_exec('delete-radius-rpmsave')
+            .with(
+              'command' => 'find /etc/raddb -name *.rpmsave -delete',
+              'onlyif'  => 'find /etc/raddb -name *.rpmsave | grep rpmsave',
+              'path'    => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
+            )
+        end
+      end
+    end
   end
 end

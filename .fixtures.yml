@@ -1,8 +1,7 @@
 fixtures:
-    symlinks:
-      freeradius: "#{source_dir}"
-    repositories:
-      stdlib:
-        repo: https://github.com/puppetlabs/puppetlabs-stdlib.git
-        ref: 4.3.2
-    forge_modules:
+  forge_modules:
+    concat: "puppetlabs/concat"
+    firewall: "puppetlabs/firewall"
+    logrotate: "puppet/logrotate"
+    rsyslog: "saz/rsyslog"
+    stdlib: "puppetlabs/stdlib"
