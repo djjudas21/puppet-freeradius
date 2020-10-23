@@ -1,87 +1,84 @@
 require 'spec_helper'
-require 'shared_contexts'
 
 describe 'freeradius::sql' do
-  # by default the hiera integration uses hiera data from the shared_contexts.rb file
-  # but basically to mock hiera you first need to add a key/value pair
-  # to the specific context in the spec/shared_contexts.rb file
-  # Note: you can only use a single hiera context per describe/context block
-  # rspec-puppet does not allow you to swap out hiera data on a per test block
-  #include_context :hiera
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}" do
+      include_context 'freeradius_default'
 
-  let(:title) { 'XXreplace_meXX' }
-  
-  # below is the facts hash that gives you the ability to mock
-  # facts on a per describe/context block.  If you use a fact in your
-  # manifest you should mock the facts below.
-  let(:facts) do
-    {}
-  end
-  # below is a list of the resource parameters that you can override.
-  # By default all non-required parameters are commented out,
-  # while all required parameters will require you to add a value
-  let(:params) do
-    {
-      :database => 'place_value_here',
-      :password => 'place_value_here',
-      #:server => "localhost",
-      #:login => "radius",
-      #:radius_db => "radius",
-      #:num_sql_socks => "${thread[pool].max_servers}",
-      #:query_file => "sql/${database}/dialup.conf",
-      #:custom_query_file => "",
-      #:lifetime => "0",
-      #:max_queries => "0",
-      #:ensure => present,
-      #:acct_table1 => "radacct",
-      #:acct_table2 => "radacct",
-      #:postauth_table => "radpostauth",
-      #:authcheck_table => "radcheck",
-      #:authreply_table => "radreply",
-      #:groupcheck_table => "radgroupcheck",
-      #:groupreply_table => "radgroupreply",
-      #:usergroup_table => "radusergroup",
-      #:deletestalesessions => "yes",
-      #:sqltrace => "no",
-      #:sqltracefile => "${logdir}/sqltrace.sql",
-      #:connect_failure_retry_delay => "60",
-      #:nas_table => "nas",
-      #:read_groups => "yes",
-      #:port => "3306",
-      #:readclients => "no",
-    }
-  end
-  # add these two lines in a single test block to enable puppet and hiera debug mode
-  # Puppet::Util::Log.level = :debug
-  # Puppet::Util::Log.newdestination(:console)
-  it do
-    is_expected.to contain_file('$::osfamily ? { RedHat => /etc/raddb, Debian => /etc/freeradius, default => /etc/raddb }/$fr_version ? { 2 => modules, 3 => mods-enabled, default => modules }/XXreplace_meXX')
-      .with(
-        'content' => 'template(freeradius/sql.conf.fr$fr_version.erb)',
-        'ensure'  => 'present',
-        'group'   => '$::osfamily ? { RedHat => radiusd, Debian => freerad, default => radiusd }',
-        'mode'    => '0640',
-        'notify'  => 'Service[$fr_service]',
-        'owner'   => 'root',
-        'require' => '[Package[$fr_package], Group[$fr_group]]'
-      )
-  end
-  it do
-    is_expected.to contain___freeradius__config('XXreplace_meXX-queries.conf')
-      .with(
-        'source' => ''
-      )
-  end
-  it do
-    is_expected.to contain_logrotate__rule('sqltrace')
-      .with(
-        'compress'     => 'true',
-        'create'       => 'true',
-        'missingok'    => 'true',
-        'path'         => '$::osfamily ? { RedHat => /var/log/radius, Debian => /var/log/freeradius, default => /var/log/radius }/${logdir}/sqltrace.sql',
-        'postrotate'   => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
-        'rotate'       => '1',
-        'rotate_every' => 'week'
-      )
+      let(:facts) { os_facts }
+
+      let(:title) { 'test' }
+
+      let(:params) do
+        {
+          database: 'postgresql',
+          password: 'test_password',
+          port: 5432,
+        }
+      end
+
+      it do
+        is_expected.to contain_file('/etc/raddb/mods-available/test')
+          .with_content(%r{^sql test \{\n})
+          .with_content(%r{^\s+dialect = "postgresql"$})
+          .with_content(%r{^\s+server = "localhost"$})
+          .with_content(%r{^\s+port = "5432"$})
+          .with_content(%r{^\s+login = "radius"$})
+          .with_content(%r{^\s+password = "test_password"$})
+          .with_content(%r{^\s+postauth_table = "radpostauth"$})
+          .with_ensure('present')
+          .with_group('radiusd')
+          .with_mode('0640')
+          .with_owner('root')
+          .without_content(%r{^\s+logfile =})
+          .that_notifies('Service[radiusd]')
+          .that_requires('Package[freeradius]')
+          .that_requires('Group[radiusd]')
+      end
+
+      it do
+        is_expected.to contain_file('/etc/raddb/mods-enabled/test')
+          .with_ensure('link')
+          .with_target('../mods-available/test')
+      end
+
+      context 'with sqltrace' do
+        let(:params) do
+          super().merge({
+            sqltrace: 'yes',
+          })
+        end
+
+        it do
+          is_expected.to contain_file('/etc/raddb/mods-available/test')
+            .with_content(%r{^\s+logfile = \${logdir}/sqllog.sql$})
+        end
+
+        it do
+          is_expected.to contain_logrotate__rule('sqltrace')
+            .with_compress('true')
+            .with_create('true')
+            .with_missingok('true')
+            .with_path('/var/log/radius/${logdir}/sqllog.sql')
+            .with_postrotate('kill -HUP `cat /var/run/radiusd/radiusd.pid`')
+            .with_rotate('1')
+            .with_rotate_every('week')
+        end
+      end
+
+      context 'with custom query file' do
+        let(:params) do
+          super().merge({
+            custom_query_file: 'puppet:///modules/path/to/custom/query/file',
+          })
+        end
+
+
+        it do
+          is_expected.to contain_freeradius__config('test-queries.conf')
+            .with_source('puppet:///modules/path/to/custom/query/file')
+        end
+      end
+    end
   end
 end
