@@ -41,7 +41,7 @@
       "operatingsystemrelease": [
         "29",
         "30",
-	"31"
+        "31"
       ]
     },
     {
@@ -66,7 +66,7 @@
       "version_requirement": ">=4.0.0 <7.0.0"
     }
   ],
-  "pdk-version": "1.12.0",
-  "template-url": "pdk-default#1.12.0",
-  "template-ref": "1.12.0-0-g55d9ae2"
+  "pdk-version": "1.18.1",
+  "template-url": "pdk-default#1.18.1",
+  "template-ref": "tags/1.18.1-0-g3d2e75c"
 }

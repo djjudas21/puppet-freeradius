@@ -1,32 +1,58 @@
 client <%= @shortname %> {
-	<% if @ip %>ipaddr = <%= @ip %><% end %>
-	<% if @ip6 %>ipv6addr = <%= @ip6 %><% end %>
-  <% if @proto %>proto = <%= @proto %><% end %>
+	<%- if defined?(@ip) -%>
+	ipaddr = <%= @ip %>
+	<%- end -%>
+	<%- if defined?(@ip6) -%>
+	ipv6addr = <%= @ip6 %>
+	<%- end -%>
+	<%- if defined?(@proto) -%>
+	proto = <%= @proto %>
+	<%- end -%>
 	shortname = <%= @shortname %>
 	secret = "<%= @secret %>"
-	<% if @virtual_server %>virtual_server = <%= @virtual_server %><% end %>
-	<% if @nastype %>nas_type = <%= @nastype %><% end %>
-  <% if @require_message_authenticator %>require_message_authenticator = <%= @require_message_authenticator %><% end %>
-  <% if @login %>login = <%= @login %><% end %>
-  <% if @password %>password = <%= @password %><% end %>
-  <% if @coa_server %>coa_server = <%= @coa_server %><% end %>
-  <% if @response_window %>response_window = <%= @response_window %><% end %>
-  <%- if @lifetime or @idle_timeout or @max_connections -%>
-  limit {
-    <% if @max_connections %>max_connections = <%= @max_connections %><% end %>
-    <% if @lifetime %>lifetime = <%= @lifetime %><% end %>
-    <% if @idle_timeout %>idle_timeout = <%= @idle_timeout %><% end %>
-  }
-  <%- end -%>
-  <%- if @attributes and !@attributes.empty? -%>
-    <%- if @attributes.respond_to?('join') -%>
-  <%= @attributes.join("\n  ") %>
-    <%- elsif @attributes.is_a?(Hash) -%>
-      <%- @attributes.sort.each do |k, v| -%>
-  <%= k %> = <%= v %>
-      <%- end -%>
-    <%- elsif @attributes -%>
-  <%= @attributes %>
-    <%- end -%>
-  <%- end -%>
+	<%- if defined?(@virtual_server) -%>
+	virtual_server = <%= @virtual_server %>
+	<%- end -%>
+	<%- if defined?(@nastype) -%>
+	nas_type = <%= @nastype %>
+	<%- end -%>
+	<%- if defined?(@require_message_authenticator) -%>
+	require_message_authenticator = <%= @require_message_authenticator %>
+	<%- end -%>
+	<%- if defined?(@login) -%>
+	login = <%= @login %>
+	<%- end -%>
+	<%- if defined?(@password) -%>
+	password = <%= @password %>
+	<%- end -%>
+	<%- if defined?(@coa_server) -%>
+	coa_server = <%= @coa_server %>
+	<%- end -%>
+	<%- if defined?(@response_window) -%>
+	response_window = <%= @response_window %>
+	<%- end -%>
+	<%- if defined?(@lifetime) or @idle_timeout or @max_connections -%>
+	limit {
+		<%- if defined?(@max_connections) -%>
+		max_connections = <%= @max_connections %>
+		<%- end -%>
+		<%- if defined?(@lifetime) -%>
+		lifetime = <%= @lifetime -%>
+		<%- end -%>
+		<%- if defined?(@idle_timeout) -%>
+		idle_timeout = <%= @idle_timeout %>
+		<%- end -%>
+	}
+	<%- end -%>
+	<%- if defined?(@attributes) and !@attributes.empty? -%>
+		<%- if defined?(@attributes).respond_to?('join') -%>
+	<%= @attributes.join("\n  ") %>
+		<%- elsif defined?(@attributes).is_a?(Hash) -%>
+			<%- @attributes.sort.each do |k, v| -%>
+	<%= k %> = <%= v %>
+			<%- end -%>
+		<%- elsif defined?(@attributes) -%>
+	<%= @attributes %>
+		<%- end -%>
+	<%- end -%>
 }
