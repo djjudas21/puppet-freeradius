@@ -1,5 +1,6 @@
-# This file is managed by Puppet. DO NOT EDIT.
+# -*- text -*-
 #
+#  $Id: e3f3bf568d92eba8eb17bbad590f846f2d9e1ac8 $
 
 # Livingston-style 'users' file
 #
@@ -10,32 +11,37 @@ files {
 <%- else -%>
 files <%= @name %> {
 <%- end -%>
-  # Search for files in a subdirectory of mods-config which
-  # matches this instance of the files module.
-  moddir = <%= @moddir %>
+	# Search for files in a subdirectory of mods-config which
+	# matches this instance of the files module.
+	moddir = <%= @moddir %>
 
+	# The default key attribute to use for matches.  The content
+	# of this attribute is used to match the "name" of the
+	# entry.
+	#key = "%{%{Stripped-User-Name}:-%{User-Name}}"
 <%- if @key -%>
-  # The default key attribute to use for matches.  The content
-  # of this attribute is used to match the "name" of the
-  # entry.
-  key = "<%= @key %>"
+	key = "<%= @key %>"
 <%- end -%>
 
-  #  The old "users" style file is now located here.
-  filename = <%= @filename %>
+	#  The old "users" style file is now located here.
+#	filename = ${moddir}/authorize
+	filename = <%= @filename %>
 
+	#  This is accepted for backwards compatibility
+	#  It will be removed in a future release.
+#	usersfile = ${moddir}/authorize
 <%- if @usersfile -%>
-  #  This is accepted for backwards compatibility
-  #  It will be removed in a future release.
-  usersfile = <%= @usersfile %>
+	usersfile = <%= @usersfile %>
 <%- end -%>
 
-  #  These are accepted for backwards compatibility.
-  #  They will be renamed in a future release.
+	#  These are accepted for backwards compatibility.
+	#  They will be renamed in a future release.
+#	acctusersfile = ${moddir}/accounting
+#	preproxy_usersfile = ${moddir}/pre-proxy
 <%- if @acctusersfile -%>
-  acctusersfile = ${moddir}/accounting
+	acctusersfile = ${moddir}/accounting
 <%- end -%>
 <%- if @preproxy_usersfile -%>
-  preproxy_usersfile = ${moddir}/pre-proxy
+	preproxy_usersfile = ${moddir}/pre-proxy
 <%- end -%>
 }
