@@ -333,7 +333,7 @@ sql <%= @name %> {
 		#  unused for this length of time will be closed.
 #		idle_timeout = 60
 		idle_timeout = <%= @pool_idle_timeout %>
-
+<%- unless @resolved_pool_connect_timeout.nil? -%>
 		#  Connection timeout (in seconds).  The maximum amount of
 		#  time to wait for a new connection to be established.
 		#  Not supported by:
@@ -341,8 +341,9 @@ sql <%= @name %> {
 		#    rlm_sql_oracle - Not possible.
 		#    rlm_sql_postgresql - Should be set via the radius_db string instead.
 		#
-		connect_timeout = <%= @pool_connect_timeout %>
+		connect_timeout = <%= @resolved_pool_connect_timeout %>
 
+<%- end -%>
 		#  NOTE: All configuration settings are enforced.  If a
 		#  connection is closed because of "idle_timeout",
 		#  "uses", or "lifetime", then the total number of
