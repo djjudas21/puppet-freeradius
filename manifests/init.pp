@@ -27,6 +27,16 @@ class freeradius (
     notify { 'This module is only compatible with FreeRADIUS 3.': }
   }
 
+  # Guess if we are running FreeRADIUS 3.1.x
+  if (
+    ($package_ensure =~ /^3\.1\./) or
+    ($facts['freeradius_version'] and $facts['freeradius_version'] =~ /^3\.1\./)
+  ) {
+    $fr_3_1 = true
+  } else {
+    $fr_3_1 = false
+  }
+
   validate_re($log_destination, '^(files|syslog|stdout|stderr)$',
     "log_destination value (${log_destination}) is not a valid value")
 
