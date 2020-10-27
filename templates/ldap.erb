@@ -602,14 +602,16 @@ ldap <%= @name %> {
 		chase_referrals = <%= @chase_referrals %>
 		rebind = <%= @rebind %>
 
+<%- unless @resolved_use_referral_credentials.nil? -%>
 		#
 		#  On rebind, use the credentials from the rebind url instead
 		#  of admin credentials used during the initial bind.
 		#  Default 'no'
 		#
-		use_referral_credentials = <%= @use_referral_credentials %>
+		use_referral_credentials = <%= @resolved_use_referral_credentials %>
+<%- end -%>
 
-<%- if @session_tracking -%>
+<%- unless @resolved_session_tracking.nil? -%>
 		#
 		#  If 'yes', then include draft-wahl-ldap-session tracking
 		#  controls.
@@ -619,7 +621,7 @@ ldap <%= @name %> {
 		#  as session tracking controls, in applicable LDAP operations.
 		#  Default 'no'.
 		#
-		session_tracking = <%= @session_tracking %>
+		session_tracking = <%= @resolved_session_tracking %>
 <%- end -%>
 		# SASL Security Properties (see SASL_SECPROPS in ldap.conf man page).
 		# Note - uncomment when using GSS-API sasl mechanism along with TLS
@@ -783,12 +785,13 @@ ldap <%= @name %> {
 		#  unused for this length of time will be closed.
 #		idle_timeout = 60
 		idle_timeout = <%= @idle_timeout %>
-
+<% if @resolved_connect_timeout %>
 		#  Connection timeout (in seconds).  The maximum amount of
 		#  time to wait for a new connection to be established.
 		#  Sets LDAP_OPT_NETWORK_TIMEOUT in libldap.
-		connect_timeout = <%= @connect_timeout %>
+		connect_timeout = <%= @resolved_connect_timeout %>
 
+<% end -%>
 		#  NOTE: All configuration settings are enforced.  If a
 		#  connection is closed because of 'idle_timeout',
 		#  'uses', or 'lifetime', then the total number of
