@@ -31,6 +31,7 @@ define freeradius::sql (
   Optional[Integer] $pool_min                    = 1,
   Optional[Integer] $pool_spare                  = 1,
   Optional[Integer] $pool_idle_timeout           = 60,
+  Optional[Float] $pool_connect_timeout          = 3.0,
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service
