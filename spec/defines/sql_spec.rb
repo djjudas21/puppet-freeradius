@@ -5,7 +5,11 @@ describe 'freeradius::sql' do
     context "on #{os}" do
       include_context 'freeradius_default'
 
-      let(:facts) { os_facts }
+      let(:facts) do
+        os_facts.merge(
+          freeradius_version: '3.0.21',
+        )
+      end
 
       let(:title) { 'test' }
 
@@ -26,6 +30,7 @@ describe 'freeradius::sql' do
           .with_content(%r{^\s+login = "radius"$})
           .with_content(%r{^\s+password = "test_password"$})
           .with_content(%r{^\s+postauth_table = "radpostauth"$})
+          .without_content(%r{^\s+connect_timeout = .*})
           .with_ensure('present')
           .with_group('radiusd')
           .with_mode('0640')
@@ -78,6 +83,54 @@ describe 'freeradius::sql' do
             .with_source('puppet:///modules/path/to/custom/query/file')
         end
       end
+
+      context 'when freeradius::fr_3_1 is true' do
+        let(:facts) do
+          super().merge(
+            'freeradius_version' => '3.1.1',
+          )
+        end
+
+        let(:node_params) do
+          {
+            'freeradius::fr_3_1' => true,
+          }
+        end
+
+        it do
+          is_expected.to contain_file('/etc/raddb/mods-available/test')
+          .with_content(%r{^\s+connect_timeout = 3.0})
+        end
+
+        context 'with pool_connect_timeout specified' do
+          let(:params) do
+            super().merge(
+              pool_connect_timeout: 5.0,
+            )
+          end
+
+          it do
+            is_expected.to contain_file('/etc/raddb/mods-available/test')
+            .with_content(%r{^\s+connect_timeout = 5.0})
+          end
+
+          # it do
+          #   expect(catalogue).to satisfy('contain connect_timeout warning') { |c| c.resource_refs.any? { |r| r =~ %r{^warning_test: The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x.*In the future/} } }
+          # end
+        end
+      end
+
+      # context 'with pool_connect_timeout specified' do
+      #   let(:params) do
+      #     super().merge(
+      #       pool_connect_timeout: 5.0,
+      #     )
+      #   end
+
+      #   it do
+      #     is_expected.to compile.and_raise_error(%r{^The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x})
+      #   end
+      # end
     end
   end
 end

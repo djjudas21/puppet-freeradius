@@ -1539,6 +1539,7 @@ be closed. Default: 60.
 
 Connection timeout (in seconds). The maximum amount of time to wait for a new
 connection to be established. Default: '3.0'.
+This parameter should only be set when using FreeRADIUS 3.1.x.
 
 #### `freeradius::statusclient`
 
