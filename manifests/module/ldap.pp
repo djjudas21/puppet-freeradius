@@ -38,8 +38,6 @@ define freeradius::module::ldap (
   Optional[Enum['never','searching','finding','always']] $dereference = undef,
   Freeradius::Boolean $chase_referrals                                = 'yes',
   Freeradius::Boolean $rebind                                         = 'yes',
-  Freeradius::Boolean $use_referral_credentials                       = 'no',
-  Optional[Freeradius::Boolean] $session_tracking                     = undef,
   Integer $timeout                                                    = 10,
   Integer $timelimit                                                  = 3,
   Integer $idle                                                       = 60,
@@ -61,7 +59,6 @@ define freeradius::module::ldap (
   Integer $retry_delay                                                = 30,
   Integer $lifetime                                                   = 0,
   Integer $idle_timeout                                               = 60,
-  Float $connect_timeout                                              = 3.0,
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service
