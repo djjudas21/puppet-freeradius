@@ -1,118 +1,156 @@
 # This file is managed by Puppet. DO NOT EDIT.
 #
 listen {
-  #  Type of packets to listen for.
-  #  Allowed values are:
-  #  auth  listen for authentication packets
-  #  acct  listen for accounting packets
-  #  proxy   IP to use for sending proxied packets
-  #  detail  Read from the detail file.  For examples, see
-  #               raddb/sites-available/copy-acct-to-home-server
-  #  status  listen for Status-Server packets.  For examples,
-  #    see raddb/sites-available/status
-  #  coa     listen for CoA-Request and Disconnect-Request
-  #    packets.  For examples, see the file
-  #    raddb/sites-available/coa
-  #
-  type = <%= @type %>
+	#  Type of packets to listen for.
+	#  Allowed values are:
+	#	auth	listen for authentication packets
+	#	acct	listen for accounting packets
+	#	proxy   IP to use for sending proxied packets
+	#	detail  Read from the detail file.  For examples, see
+	#               raddb/sites-available/copy-acct-to-home-server
+	#	status  listen for Status-Server packets.  For examples,
+	#		see raddb/sites-available/status
+	#	coa     listen for CoA-Request and Disconnect-Request
+	#		packets.  For examples, see the file
+	#		raddb/sites-available/coa
+	#
+	type = <%= @type %>
 
-  #  Note: "type = proxy" lets you control the source IP used for
-  #        proxying packets, with some limitations:
-  #
-  #    * A proxy listener CANNOT be used in a virtual server section.
-  #    * You should probably set "port = 0".
-  #    * Any "clients" configuration will be ignored.
-  #
-  #  See also proxy.conf, and the "src_ipaddr" configuration entry
-  #  in the sample "home_server" section.  When you specify the
-  #  source IP address for packets sent to a home server, the
-  #  proxy listeners are automatically created.
+	#  Note: "type = proxy" lets you control the source IP used for
+	#        proxying packets, with some limitations:
+	#
+	#    * A proxy listener CANNOT be used in a virtual server section.
+	#    * You should probably set "port = 0".
+	#    * Any "clients" configuration will be ignored.
+	#
+	#  See also proxy.conf, and the "src_ipaddr" configuration entry
+	#  in the sample "home_server" section.  When you specify the
+	#  source IP address for packets sent to a home server, the
+	#  proxy listeners are automatically created.
 
-  #  IP address on which to listen.
-  #  Allowed values are:
-  #  dotted quad (1.2.3.4)
-  #       hostname    (radius.example.com)
-  #       wildcard    (*)
+	#  ipaddr/ipv4addr/ipv6addr - IP address on which to listen.
+	#  If multiple ones are listed, only the first one will
+	#  be used, and the others will be ignored.
+	#
+	#  The configuration options accept the following syntax:
+	#
+	#  ipv4addr - IPv4 address (e.g.192.0.2.3)
+	#  	    - wildcard (i.e. *)
+	#  	    - hostname (radius.example.com)
+	#  	      Only the A record for the host name is used.
+	#	      If there is no A record, an error is returned,
+	#	      and the server fails to start.
+	#
+	#  ipv6addr - IPv6 address (e.g. 2001:db8::1)
+	#  	    - wildcard (i.e. *)
+	#  	    - hostname (radius.example.com)
+	#  	      Only the AAAA record for the host name is used.
+	#	      If there is no AAAA record, an error is returned,
+	#	      and the server fails to start.
+	#
+	#  ipaddr   - IPv4 address as above
+	#  	    - IPv6 address as above
+	#  	    - wildcard (i.e. *), which means IPv4 wildcard.
+	#	    - hostname
+	#	      If there is only one A or AAAA record returned
+	#	      for the host name, it is used.
+	#	      If multiple A or AAAA records are returned
+	#	      for the host name, only the first one is used.
+	#	      If both A and AAAA records are returned
+	#	      for the host name, only the A record is used.
+	#
+	# ipv4addr = *
+	# ipv6addr = *
 <%- if !@ip6 and @ip -%>
-  ipaddr = <%= @ip %>
+	ipaddr = <%= @ip %>
 <%- elsif !@ip6 -%>
-  ipaddr = *
+	ipaddr = *
 <%- end -%>
 
-  #  OR, you can use an IPv6 address, but not both
-  #  at the same time.
-#  ipv6addr = ::  # any.  ::1 == localhost
 <%- if !@ip and @ip6 -%>
-  ipv6addr = <%= @ip6 %>
+	ipv6addr = <%= @ip6 %>
 <%- end -%>
 
-  #  Port on which to listen.
-  #  Allowed values are:
-  #  integer port number (1812)
-  #  0 means "use /etc/services for the proper port"
-  port = <%= @port %>
+	#  Port on which to listen.
+	#  Allowed values are:
+	#	integer port number (1812)
+	#	0 means "use /etc/services for the proper port"
+	port = <%= @port %>
 
+	#  Some systems support binding to an interface, in addition
+	#  to the IP address.  This feature isn't strictly necessary,
+	#  but for sites with many IP addresses on one interface,
+	#  it's useful to say "listen on all addresses for eth0".
+	#
+	#  If your system does not support this feature, you will
+	#  get an error if you try to use it.
+	#
+#	interface = eth0
 <%- if @interface -%>
-  #  Some systems support binding to an interface, in addition
-  #  to the IP address.  This feature isn't strictly necessary,
-  #  but for sites with many IP addresses on one interface,
-  #  it's useful to say "listen on all addresses for eth0".
-  #
-  #  If your system does not support this feature, you will
-  #  get an error if you try to use it.
-  #
-  interface = <%= @interface %>
+	interface = <%= @interface %>
 <%- end -%>
 
+	#  Per-socket lists of clients.  This is a very useful feature.
+	#
+	#  The name here is a reference to a section elsewhere in
+	#  radiusd.conf, or clients.conf.  Having the name as
+	#  a reference allows multiple sockets to use the same
+	#  set of clients.
+	#
+	#  If this configuration is used, then the global list of clients
+	#  is IGNORED for this "listen" section.  Take care configuring
+	#  this feature, to ensure you don't accidentally disable a
+	#  client you need.
+	#
+	#  See clients.conf for the configuration of "per_socket_clients".
+	#
+#	clients = per_socket_clients
 <%- if !@clients.empty? -%>
-  #  Per-socket lists of clients.  This is a very useful feature.
-  #
-  #  The name here is a reference to a section elsewhere in
-  #  radiusd.conf, or clients.conf.  Having the name as
-  #  a reference allows multiple sockets to use the same
-  #  set of clients.
-  #
-  #  If this configuration is used, then the global list of clients
-  #  is IGNORED for this "listen" section.  Take care configuring
-  #  this feature, to ensure you don't accidentally disable a
-  #  client you need.
-  #
-  #  See clients.conf for the configuration of "per_socket_clients".
-  #
-  clients = <%= @clients.join(',') %>
+	clients = <%= @clients.join(',') %>
 <%- end -%>
 
-  #
-  #  Connection limiting for sockets with "proto = tcp".
-  #
-  #  This section is ignored for other kinds of sockets.
-  #
-  limit {
-    #
-    #  Limit the number of simultaneous TCP connections to the socket
-    #
-    #  The default is 16.
-    #  Setting this to 0 means "no limit"
-    max_connections = <%= @max_connections %>
+	#
+	#  Set the default UDP receive buffer size.  In most cases,
+	#  the default values set by the kernel are fine.  However, in
+	#  some cases the NASes will send large packets, and many of
+	#  them at a time.  It is then possible to overflow the
+	#  buffer, causing the kernel to drop packets before they
+	#  reach FreeRADIUS.  Increasing the size of the buffer will
+	#  avoid these packet drops.
+	#
+#	recv_buff = 65536
 
-    #  The per-socket "max_requests" option does not exist.
+	#
+	#  Connection limiting for sockets with "proto = tcp".
+	#
+	#  This section is ignored for other kinds of sockets.
+	#
+	limit {
+		#
+		#  Limit the number of simultaneous TCP connections to the socket
+		#
+		#  The default is 16.
+		#  Setting this to 0 means "no limit"
+		max_connections = <%= @max_connections %>
 
-    #
-    #  The lifetime, in seconds, of a TCP connection.  After
-    #  this lifetime, the connection will be closed.
-    #
-    #  Setting this to 0 means "forever".
-    lifetime = <%= @lifetime %>
+		#  The per-socket "max_requests" option does not exist.
 
-    #
-    #  The idle timeout, in seconds, of a TCP connection.
-    #  If no packets have been received over the connection for
-    #  this time, the connection will be closed.
-    #
-    #  Setting this to 0 means "no timeout".
-    #
-    #  We STRONGLY RECOMMEND that you set an idle timeout.
-    #
-    idle_timeout = <%= @idle_timeout %>
-  }
+		#
+		#  The lifetime, in seconds, of a TCP connection.  After
+		#  this lifetime, the connection will be closed.
+		#
+		#  Setting this to 0 means "forever".
+		lifetime = <%= @lifetime %>
+
+		#
+		#  The idle timeout, in seconds, of a TCP connection.
+		#  If no packets have been received over the connection for
+		#  this time, the connection will be closed.
+		#
+		#  Setting this to 0 means "no timeout".
+		#
+		#  We STRONGLY RECOMMEND that you set an idle timeout.
+		#
+		idle_timeout = <%= @idle_timeout %>
+	}
 }

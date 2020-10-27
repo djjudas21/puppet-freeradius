@@ -1,5 +1,6 @@
-# File managed by puppet
-##############################################################
+# -*- text -*-
+#
+#  $Id: fa04cdabb71767050aaa0664da792fd6086adb19 $
 
 #  Persistent, embedded Perl interpreter.
 #
@@ -10,7 +11,19 @@ perl {
 	#  'rlm_exec' module, but it is persistent, and therefore
 	#  faster.
 	#
+#	filename = ${modconfdir}/${.:instance}/example.pl
 	filename = ${modconfdir}/${.:instance}/<%= @perl_filename %>
+
+	#
+	#  Options which are passed to the Perl interpreter.
+	#  These are (mostly) the same options as are passed
+	#  to the "perl" command line.
+	#
+	#  The most useful flag is "-T".  This sets tainting on.  And
+	#  as of 3.0.18, makes it impossible to leverage bad
+	#  User-Names into local command execution.
+	#
+	perl_flags = "-T"
 
 	#
 	#  The following hashes are given to the module and
@@ -58,11 +71,6 @@ perl {
 	#  Uncomment and change if you want to use function
 	#  names other than the defaults.
 	#
-	<% if defined?(@function_names) %>
-	<% @function_names.each_pair do |default, function| %>
-	<%=default%> = <%= function %>
-    <% end -%>
-    <% end %>
 	#func_authenticate = authenticate
 	#func_authorize = authorize
 	#func_preacct = preacct
@@ -75,6 +83,11 @@ perl {
 	#func_send_coa = send_coa
 	#func_xlat = xlat
 	#func_detach = detach
+	<% if defined?(@function_names) %>
+	<% @function_names.each_pair do |default, function| %>
+	<%=default%> = <%= function %>
+    <% end -%>
+    <% end %>
 
 	#
 	#  Uncomment the following lines if you wish
@@ -85,4 +98,3 @@ perl {
 	#func_start_accounting = accounting_start
 	#func_stop_accounting = accounting_stop
 }
-

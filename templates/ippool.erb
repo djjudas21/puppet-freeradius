@@ -1,3 +1,8 @@
+<%- require 'ipaddr' -%>
+# -*- text -*-
+#
+#  $Id: 1d3305ba45ec71336f55f8f1db05f183772e1b82 $
+
 #  Do server side ip pool management. Should be added in
 #  post-auth and accounting sections.
 #
@@ -13,56 +18,58 @@
 #
 # Example:
 # radiusd.conf: ippool students { [...] }
-#    ippool teachers { [...] }
+#		ippool teachers { [...] }
 # users file  : DEFAULT Group == students, Pool-Name := "students"
-#    DEFAULT Group == teachers, Pool-Name := "teachers"
-#    DEFAULT  Group == other, Pool-Name := "DEFAULT"
+#		DEFAULT Group == teachers, Pool-Name := "teachers"
+#		DEFAULT	Group == other, Pool-Name := "DEFAULT"
 #
 # Note: If you change the range parameters you must then erase the
 #       db files.
 #
 ippool <%= @name %> {
-  #  The main db file used to allocate addresses.
-  filename = <%= @filename %>
+	#  The main db file used to allocate addresses.
+	filename = <%= @filename %>
 
-  #  The start and end ip addresses for this pool.
-  range_start = <%= @range_start %>
-  range_stop = <%= @range_stop %>
+	#  The start and end ip addresses for this pool.
+	range_start = <%= @range_start %>
+	range_stop = <%= @range_stop %>
 
-  #  The network mask used for this pool.
-  netmask = <%= @netmask %>
+	#  The network mask used for this pool.
+	netmask = <%= @netmask %>
 
-  #  The gdbm cache size for the db files. Should
-  #  be equal to the number of ip's available in
-  #  the ip pool
-  cache_size = <%= @real_cache_size %>
+	#  The gdbm cache size for the db files. Should
+	#  be equal to the number of ip's available in
+	#  the ip pool
+	cache_size = <%= @real_cache_size %>
 
-  #  Helper db index file used in multilink
+	#  Helper db index file used in multilink
+#	ip_index = ${db_dir}/db.ipindex
 <%- if @ip_index -%>
-  ip_index = <%= @ip_index %>
+	ip_index = <%= @ip_index %>
 <%- else -%>
-  ip_index = ${db_dir}/db.<%= @name %>.index
+	ip_index = ${db_dir}/db.<%= @name %>.index
 <%- end -%>
 
-  #  If set, the Framed-IP-Address already in the
-  #  reply (if any) will be discarded, and replaced
-  #  ith a Framed-IP-Address assigned here.
-  override = <%= @override %>
+	#  If set, the Framed-IP-Address already in the
+	#  reply (if any) will be discarded, and replaced
+	#  ith a Framed-IP-Address assigned here.
+	override = <%= @override %>
 
-  #  Specifies the maximum time in seconds that an
-  #  entry may be active.  If set to zero, means
-  #  "no timeout".  The default value is 0
-  maximum_timeout = <%= @maximum_timeout %>
+	#  Specifies the maximum time in seconds that an
+	#  entry may be active.  If set to zero, means
+	#  "no timeout".  The default value is 0
+	maximum_timeout = <%= @maximum_timeout %>
 
+	#  The key to use for the session database (which
+	#  holds the allocated ip's) normally it should
+	#  just be the nas ip/port (which is the default).
+	#
+	#  If your NAS sends the same value of NAS-Port
+	#  all requests, the key should be based on some
+	#  other attribute that is in ALL requests, AND
+	#  is unique to each machine needing an IP address.
+#	key = "%{NAS-IP-Address} %{NAS-Port}"
 <%- if @key -%>
-  #  The key to use for the session database (which
-  #  holds the allocated ip's) normally it should
-  #  just be the nas ip/port (which is the default).
-  #
-  #  If your NAS sends the same value of NAS-Port
-  #  all requests, the key should be based on some
-  #  other attribute that is in ALL requests, AND
-  #  is unique to each machine needing an IP address.
-  key = "<%= @key %>"
+	key = "<%= @key %>"
 <%- end -%>
 }

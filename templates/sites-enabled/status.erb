@@ -1,10 +1,3 @@
-######################################################################
-######################################################################
-##   THIS FILE IS MANAGED BY PUPPET. DO NOT MAKE LOCAL EDITS!       ##
-######################################################################
-######################################################################
-
-
 # -*- text -*-
 ######################################################################
 #
@@ -24,18 +17,20 @@
 #	"status" port.
 #
 #	The server statistics are available ONLY on socket of type
-#	"status".  Qeuries for statistics sent to any other port
+#	"status".  Queries for statistics sent to any other port
 #	are ignored.
 #
 #	Similarly, a socket of type "status" will not process
 #	authentication or accounting packets.  This is for security.
 #
-#	$Id$
+#	$Id: e7d4346310b837d56bffe4c991b4e5680742ebc0 $
 #
 ######################################################################
 
 server status {
 	listen {
+		#  ONLY Status-Server is allowed to this port.
+		#  ALL other packets are ignored.
 		type = status
 		ipaddr = <%= @listen %>
 		port = <%= @port %>
@@ -54,7 +49,12 @@ server status {
 	#  Do you really want your partners seeing the internal details
 	#  of what your RADIUS server is doing?
 	#
-	
+
+	# client admin {
+	#	ipaddr = 127.0.0.1
+	#	secret = adminsecret
+	# }
+
 	$INCLUDE ${confdir}/statusclients.d/
 
 	#
@@ -86,11 +86,11 @@ server status {
 #
 #	All packets for a particular client (globally defined)
 #		FreeRADIUS-Statistics-Type = 35
-#		FreeRADIUS-Stats-Client-IP-Address = 192.168.1.1
+#		FreeRADIUS-Stats-Client-IP-Address = 192.0.2.1
 #
 #	All packets for a client attached to a "listen" ip/port
 #		FreeRADIUS-Statistics-Type = 35
-#		FreeRADIUS-Stats-Client-IP-Address = 192.168.1.1
+#		FreeRADIUS-Stats-Client-IP-Address = 192.0.2.1
 #		FreeRADIUS-Stats-Server-IP-Address = 127.0.0.1
 #		FreeRADIUS-Stats-Server-Port = 1812
 #
@@ -101,7 +101,7 @@ server status {
 #
 #	All packets for a home server IP / port
 #		FreeRADIUS-Statistics-Type = 131
-#		FreeRADIUS-Stats-Server-IP-Address = 192.168.1.2
+#		FreeRADIUS-Stats-Server-IP-Address = 192.0.2.2
 #		FreeRADIUS-Stats-Server-Port = 1812
 
 #
