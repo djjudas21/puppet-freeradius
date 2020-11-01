@@ -193,6 +193,22 @@ Whether the control socket should be read-only or read-write. Choose from `ro`, 
   }
 ```
 
+#### `freeradius::radsniff`
+
+The `freeradius::radsniff` class configures and runs the [RADSNIFF](https://freeradius.org/radiusd/man/radsniff.html) service.
+It requires freeradius-utils to be installed, so will fail if `utils_support` is not enabled on the `freeradius` class.
+
+Note: This is only supported on RedHat like systems at present.
+
+##### `options`
+Command line options to be passed to radsniff. Quotes are escaped
+```puppet
+  # Enable radsniff, with a filter, sending data to collectd (requires freeradius to be compiled for this)
+  class { 'freeradius::radsniff':
+    options => '-m -p1812,1813 -O unix:/var/run/collectd.sock -N freeradius -W 10 -i eth0 -f "src not 192.0.2.1"',
+  }
+```
+
 ### Resources
 
 #### `freeradius::attr`

@@ -53,6 +53,18 @@ shared_context 'freeradius_default' do
   end
 end
 
+# Same as above but enable utils
+shared_context 'freeradius_with_utils' do
+  let(:pre_condition) do
+    [
+      redhat_params_class,
+      'class { freeradius:
+        utils_support => true,
+      }',
+    ]
+  end
+end
+
 # Some common dependencies for things based on names for redhat systems
 shared_context 'redhat_common_dependencies' do
   let(:pre_condition) do
