@@ -32,7 +32,7 @@ define freeradius::dictionary (
   if ($ensure == 'present') {
     concat::fragment { "dictionary.${name}":
       target  => "${fr_basepath}/dictionary",
-      content => "\$INCLUDE ${fr_basepath}/dictionary.d/dictionary.${name}\n",
+      content => "\$INCLUDE ${fr_basepath}/dictionary.d/dictionary.${name}",
       order   => $order,
       require => File["${fr_basepath}/dictionary.d/dictionary.${name}"],
     }

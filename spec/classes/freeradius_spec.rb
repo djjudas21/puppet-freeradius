@@ -79,10 +79,11 @@ describe 'freeradius' do
       it do
         is_expected.to contain_concat('/etc/raddb/policy.conf')
           .with(
-            'group'   => 'radiusd',
-            'mode'    => '0640',
-            'notify'  => 'Service[radiusd]',
-            'owner'   => 'root',
+            'group'          => 'radiusd',
+            'mode'           => '0640',
+            'notify'         => 'Service[radiusd]',
+            'owner'          => 'root',
+            'ensure_newline' => true,
           )
           .that_requires('Package[freeradius]')
           .that_requires('Group[radiusd]')
@@ -109,10 +110,11 @@ describe 'freeradius' do
       it do
         is_expected.to contain_concat('/etc/raddb/proxy.conf')
           .with(
-            'group'   => 'radiusd',
-            'mode'    => '0640',
-            'notify'  => 'Service[radiusd]',
-            'owner'   => 'root',
+            'group'          => 'radiusd',
+            'mode'           => '0640',
+            'notify'         => 'Service[radiusd]',
+            'owner'          => 'root',
+            'ensure_newline' => true,
           )
           .that_requires('Package[freeradius]')
           .that_requires('Group[radiusd]')
@@ -121,7 +123,7 @@ describe 'freeradius' do
       it do
         is_expected.to contain_concat__fragment('proxy_header')
           .with(
-            'content' => "# Proxy config\n",
+            'content' => '# Proxy config',
             'order'   => '05',
             'target'  => '/etc/raddb/proxy.conf',
           )
@@ -130,10 +132,11 @@ describe 'freeradius' do
       it do
         is_expected.to contain_concat('/etc/raddb/mods-available/attr_filter')
           .with(
-            'group'   => 'radiusd',
-            'mode'    => '0640',
-            'notify'  => 'Service[radiusd]',
-            'owner'   => 'root',
+            'group'          => 'radiusd',
+            'mode'           => '0640',
+            'notify'         => 'Service[radiusd]',
+            'owner'          => 'root',
+            'ensure_newline' => true,
           )
           .that_requires('Package[freeradius]')
           .that_requires('Group[radiusd]')
@@ -150,9 +153,10 @@ describe 'freeradius' do
       it do
         is_expected.to contain_concat('/etc/raddb/dictionary')
           .with(
-            'group'   => 'radiusd',
-            'mode'    => '0644',
-            'owner'   => 'root',
+            'group'          => 'radiusd',
+            'mode'           => '0644',
+            'owner'          => 'root',
+            'ensure_newline' => true,
           )
           .that_requires('Package[freeradius]')
           .that_requires('Group[radiusd]')
@@ -364,7 +368,7 @@ describe 'freeradius' do
         ].each do |file|
           is_expected.to contain_file(file)
             .with(
-              'content' => "# FILE INTENTIONALLY BLANK\n",
+              'content' => '# FILE INTENTIONALLY BLANK',
               'group'   => 'radiusd',
               'mode'    => '0644',
               'notify'  => 'Service[radiusd]',
