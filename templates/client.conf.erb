@@ -45,13 +45,13 @@ client <%= @shortname %> {
 	}
 	<%- end -%>
 	<%- if defined?(@attributes) and !@attributes.empty? -%>
-		<%- if defined?(@attributes).respond_to?('join') -%>
+		<%- if @attributes.respond_to?('join') -%>
 	<%= @attributes.join("\n  ") %>
-		<%- elsif defined?(@attributes).is_a?(Hash) -%>
+		<%- elsif @attributes.is_a?(Hash) -%>
 			<%- @attributes.sort.each do |k, v| -%>
 	<%= k %> = <%= v %>
 			<%- end -%>
-		<%- elsif defined?(@attributes) -%>
+		<%- else -%>
 	<%= @attributes %>
 		<%- end -%>
 	<%- end -%>
