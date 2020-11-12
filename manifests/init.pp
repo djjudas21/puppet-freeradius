@@ -240,7 +240,7 @@ class freeradius (
   concat { "${freeradius::fr_basepath}/dictionary":
     owner   => 'root',
     group   => $freeradius::fr_group,
-    mode    => '0640',
+    mode    => '0644',
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
   }
   concat::fragment { 'dictionary_header':
