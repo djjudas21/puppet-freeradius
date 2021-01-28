@@ -5,6 +5,7 @@ define freeradius::home_server (
   Enum['none', 'status-server', 'request'] $status_check = 'none',
   Enum['auth', 'acct', 'auth+acct', 'coa'] $type         = 'auth',
   Optional[Integer] $check_interval                      = undef,
+  Optional[Integer] $check_timeout                       = undef,
   Optional[String] $ipaddr                               = undef,
   Optional[String] $ipv6addr                             = undef,
   Optional[Integer] $max_outstanding                     = undef,

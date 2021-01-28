@@ -39,6 +39,9 @@ home_server <%= @name %> {
 <% if defined?(@check_interval) -%>
     check_interval = <%= @check_interval %>
 <% end -%>
+<% if defined?(@check_timeout) -%>
+    check_timeout = <%= @check_timeout %>
+<% end -%>
 <% if defined?(@num_answers_to_alive) -%>
     num_answers_to_alive = <%= @num_answers_to_alive %>
 <% end -%>
