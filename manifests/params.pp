@@ -35,6 +35,7 @@ class freeradius::params {
         '15.04' => '2',
         '15.10' => '2',
         '18.04' => '3',
+        '20.04' => '3',
         default => '2',
       }
     }
@@ -90,6 +91,7 @@ class freeradius::params {
         '10'         => '/etc/freeradius/3.0',
         'buster/sid' => '/etc/freeradius/3.0',
         '18.04'      => '/etc/freeradius/3.0',
+        '20.04'      => '/etc/freeradius/3.0',
         default      => '/etc/freeradius',
       }
       $fr_raddbdir = $::operatingsystemmajrelease ? {
@@ -97,6 +99,7 @@ class freeradius::params {
         '10'         => "\${sysconfdir}/freeradius/3.0",
         'buster/sid' => "\${sysconfdir}/freeradius/3.0",
         '18.04'      => "\${sysconfdir}/freeradius/3.0",
+        '20.04'      => "\${sysconfdir}/freeradius/3.0",
         default      => "\${sysconfdir}/freeradius",
       }
     }
