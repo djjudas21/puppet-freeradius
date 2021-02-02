@@ -179,7 +179,7 @@ class freeradius (
   }
   concat::fragment { 'proxy_header':
     target  => "${freeradius::fr_basepath}/proxy.conf",
-    content => '# Proxy config\n',
+    content => "# Proxy config\n",
     order   => '05',
   }
 
@@ -436,7 +436,7 @@ class freeradius (
     "${freeradius::fr_basepath}/clients.conf",
     "${freeradius::fr_basepath}/sql.conf",
   ]:
-    content => '# FILE INTENTIONALLY BLANK\n',
+    content => "# FILE INTENTIONALLY BLANK\n",
     mode    => '0644',
     owner   => 'root',
     group   => $freeradius::fr_group,

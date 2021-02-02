@@ -121,7 +121,7 @@ describe 'freeradius' do
       it do
         is_expected.to contain_concat__fragment('proxy_header')
           .with(
-            'content' => '# Proxy config\n',
+            'content' => "# Proxy config\n",
             'order'   => '05',
             'target'  => '/etc/raddb/proxy.conf'
           )
@@ -364,7 +364,7 @@ describe 'freeradius' do
         ].each do |file|
           is_expected.to contain_file(file)
             .with(
-              'content' => '# FILE INTENTIONALLY BLANK\n',
+              'content' => "# FILE INTENTIONALLY BLANK\n",
               'group'   => 'radiusd',
               'mode'    => '0644',
               'notify'  => 'Service[radiusd]',
