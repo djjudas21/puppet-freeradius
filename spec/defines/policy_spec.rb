@@ -7,7 +7,7 @@ describe 'freeradius::policy' do
 
   let(:params) do
     {
-      :source => 'puppet:///modules/test/path/to/policy',
+      source:  'puppet:///modules/test/path/to/policy',
     }
   end
 

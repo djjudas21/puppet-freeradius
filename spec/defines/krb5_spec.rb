@@ -7,8 +7,8 @@ describe 'freeradius::krb5' do
 
   let(:params) do
     {
-      :keytab => 'test_keytab',
-      :principal => 'test_principal',
+      keytab: 'test_keytab',
+      principal: 'test_principal',
     }
   end
 

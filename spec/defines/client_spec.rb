@@ -7,9 +7,9 @@ describe 'freeradius::client' do
 
   let(:params) do
     {
-      :shortname => 'test_short',
-      :secret => 'secret_value',
-      :ip => '1.2.3.4',
+      shortname: 'test_short',
+      secret: 'secret_value',
+      ip: '1.2.3.4',
     }
   end
 

@@ -7,7 +7,7 @@ describe 'freeradius::dictionary' do
 
   let(:params) do
     {
-      :source => 'puppet:///modules/test/path/to/dict',
+      source: 'puppet:///modules/test/path/to/dict',
     }
   end
 
