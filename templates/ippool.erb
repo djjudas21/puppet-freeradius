@@ -1,5 +1,3 @@
-<%- require 'ipaddr' -%>
-
 #  Do server side ip pool management. Should be added in
 #  post-auth and accounting sections.
 #
@@ -37,11 +35,7 @@ ippool <%= @name %> {
   #  The gdbm cache size for the db files. Should
   #  be equal to the number of ip's available in
   #  the ip pool
-<%- if @cache_size -%>
-  cache_size = <%= @cache_size %>
-<%- else -%>
-  cache_size = <%= (IPAddr.new @range_stop).to_i() - (IPAddr.new @range_start).to_i() + 1 %>
-<%- end -%>
+  cache_size = <%= @real_cache_size %>
 
   #  Helper db index file used in multilink
 <%- if @ip_index -%>
