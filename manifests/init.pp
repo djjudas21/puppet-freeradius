@@ -15,6 +15,7 @@ class freeradius (
   Boolean $winbind_support         = false,
   String $log_destination          = 'files',
   Boolean $syslog                  = false,
+  String $syslog_facility          = 'daemon',
   Freeradius::Boolean $log_auth    = 'no',
   Boolean $preserve_mods           = true,
   Boolean $correct_escapes         = true,

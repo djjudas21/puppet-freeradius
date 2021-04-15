@@ -130,6 +130,9 @@ Add the radius user to the winbind privileged group. You must install winbind se
 ##### `log_destination`
 Configure destination of log messages. Valid values are `files`, `syslog`, `stdout` and `stderr`. Default: `files`.
 
+##### `syslog_facility`
+Configure which syslog facility to use when `log_destination` is set to `syslog`. Default: `daemon`.
+
 ##### `syslog`
 Add a syslog rule (using the `saz/rsyslog` module). Default: `false`.
 
