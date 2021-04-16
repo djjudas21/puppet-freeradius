@@ -30,7 +30,7 @@ ldap <%= @name %> {
 	identity = '<%= @identity %>'
 <%- end -%>
 <%- if @password -%>
-	password = <%= @password %>
+	password = '<%= @password %>'
 <%- end -%>
 
 	#  Unless overridden in another section, the dn from which all
