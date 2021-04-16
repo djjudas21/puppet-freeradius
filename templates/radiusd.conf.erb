@@ -327,7 +327,7 @@ log {
 	#  The exact values permitted here are OS-dependent.  You probably
 	#  don't want to change this.
 	#
-	syslog_facility = daemon
+	syslog_facility = <%= @syslog_facility %>
 
 	#  Log the full User-Name attribute, as it was found in the request.
 	#
