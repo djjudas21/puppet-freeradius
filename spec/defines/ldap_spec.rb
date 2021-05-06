@@ -25,7 +25,7 @@ describe 'freeradius::ldap' do
       .with_content(%r{^ldap test \{\n})
       .with_content(%r{^\s+server = 'localhost'\n})
       .with_content(%r{^\s+identity = 'cn=root,dc=example,dc=com'\n})
-      .with_content(%r{^\s+password = test password\n})
+      .with_content(%r{^\s+password = 'test password'\n})
       .with_content(%r{^\s+base_dn = 'dc=example,dc=com'\n})
       .with_ensure('present')
       .with_group('radiusd')
