@@ -37,7 +37,7 @@ client <%= @shortname %> {
 		max_connections = <%= @max_connections %>
 		<%- end -%>
 		<%- if defined?(@lifetime) -%>
-		lifetime = <%= @lifetime -%>
+		lifetime = <%= @lifetime %>
 		<%- end -%>
 		<%- if defined?(@idle_timeout) -%>
 		idle_timeout = <%= @idle_timeout %>
