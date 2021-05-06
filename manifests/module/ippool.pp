@@ -12,6 +12,13 @@ define freeradius::module::ippool (
   Integer $maximum_timeout      = 0,
   Optional[String] $key         = undef,
 ) {
+  if ($cache_size !~ Undef) {
+    $real_cache_size = $cache_size
+  } else {
+    $real_cache_size = inline_template(@("IPADDRRANGE"/L))
+      <%- require 'ipaddr' -%><%=(IPAddr.new @range_stop).to_i - (IPAddr.new @range_start).to_i + 1 %>
+    |-IPADDRRANGE
+  }
 
   freeradius::module { "ippool_${name}":
     ensure  => $ensure,

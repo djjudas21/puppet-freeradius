@@ -7,7 +7,7 @@ describe 'freeradius::module' do
 
   let(:params) do
     {
-      :source => 'puppet:///modules/test/path/to/module',
+      source:  'puppet:///modules/test/path/to/module',
     }
   end
 

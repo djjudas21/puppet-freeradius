@@ -32,7 +32,11 @@ class freeradius (
     "log_destination value (${log_destination}) is not a valid value")
 
   if $control_socket == true {
-    warning('Use of the control_socket parameter in the freeradius class is deprecated. Please use the freeradius::control_socket class instead.')
+    warning(@(WARN/L)
+      Use of the control_socket parameter in the freeradius class is deprecated. \
+      Please use the freeradius::control_socket class instead.
+      |-WARN
+    )
   }
 
   # Always restart the service after every module operation
@@ -324,12 +328,13 @@ class freeradius (
   # We don't want to create the radiusd user, just add it to the
   # wbpriv group if the user needs winbind support. We depend on
   # the FreeRADIUS package to be sure that the user has been created
+  $fr_user_group = $winbind_support ? {
+    true    => $freeradius::fr_wbpriv_user,
+    default => undef,
+  }
   user { $freeradius::fr_user:
     ensure  => present,
-    groups  => $winbind_support ? {
-      true    => $freeradius::fr_wbpriv_user,
-      default => undef,
-    },
+    groups  => $fr_user_group,
     require => Package[$freeradius::fr_package],
   }
 
@@ -344,7 +349,7 @@ class freeradius (
   # Syslog rules
   if $syslog == true {
     rsyslog::snippet { '12-radiusd-log':
-      content => "if \$programname == \'radiusd\' then ${freeradius::fr_logpath}/radius.log\n\&\~",
+      content => "if \$programname == \'radiusd\' then ${freeradius::fr_logpath}/radius.log\n\\&\\~",
     }
   }
 

@@ -7,8 +7,8 @@ describe 'freeradius::home_server' do
 
   let(:params) do
     {
-      :secret => 'test_secret',
-      :ipaddr => '1.2.3.4',
+      secret: 'test_secret',
+      ipaddr: '1.2.3.4',
     }
   end
 

@@ -7,7 +7,7 @@ describe 'freeradius::attr' do
 
   let(:params) do
     {
-      :source => 'puppet:///modules/test/path/to/file',
+      source: 'puppet:///modules/test/path/to/file',
     }
   end
 

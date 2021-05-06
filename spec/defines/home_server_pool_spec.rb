@@ -7,7 +7,7 @@ describe 'freeradius::home_server_pool' do
 
   let(:params) do
     {
-      :home_server => [
+      home_server: [
         'test_home_server_1',
         'test_home_server_2',
       ],

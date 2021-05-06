@@ -44,7 +44,7 @@ shared_context 'freeradius_default' do
   let(:pre_condition) do
     [
       redhat_params_class,
-      'class { freeradius: }'
+      'class { freeradius: }',
     ]
   end
 end

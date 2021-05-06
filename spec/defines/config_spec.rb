@@ -7,7 +7,7 @@ describe 'freeradius::config' do
 
   let(:params) do
     {
-      :content => 'test content',
+      content: 'test content',
     }
   end
 

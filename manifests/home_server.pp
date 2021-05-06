@@ -1,7 +1,7 @@
 # Configure a home_server for proxy config
 define freeradius::home_server (
-  Enum['udp', 'tcp'] $proto                              = 'udp',
   String $secret,
+  Enum['udp', 'tcp'] $proto                              = 'udp',
   Enum['none', 'status-server', 'request'] $status_check = 'none',
   Enum['auth', 'acct', 'auth+acct', 'coa'] $type         = 'auth',
   Optional[Integer] $check_interval                      = undef,

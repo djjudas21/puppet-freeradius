@@ -44,9 +44,9 @@ describe 'freeradius::sql' do
 
       context 'with sqltrace' do
         let(:params) do
-          super().merge({
+          super().merge(
             sqltrace: 'yes',
-          })
+          )
         end
 
         it do
@@ -68,11 +68,10 @@ describe 'freeradius::sql' do
 
       context 'with custom query file' do
         let(:params) do
-          super().merge({
+          super().merge(
             custom_query_file: 'puppet:///modules/path/to/custom/query/file',
-          })
+          )
         end
-
 
         it do
           is_expected.to contain_freeradius__config('test-queries.conf')
