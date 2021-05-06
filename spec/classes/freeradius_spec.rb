@@ -254,6 +254,8 @@ describe 'freeradius' do
           is_expected.to contain_file(file)
             .with(
               'mode'    => '0750',
+              'owner' => 'radiusd',
+              'group' => 'radiusd',
             )
             .that_requires('Package[freeradius]')
         end

@@ -354,7 +354,9 @@ class freeradius (
       $freeradius::fr_logpath,
       "${freeradius::fr_logpath}/radacct",
     ]:
+      group   => $freeradius::fr_group,
       mode    => '0750',
+      owner   => $freeradius::fr_user,
       require => Package[$freeradius::fr_package],
     }
 
