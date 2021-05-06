@@ -99,7 +99,7 @@ describe 'freeradius::sql' do
 
         it do
           is_expected.to contain_file('/etc/raddb/mods-available/test')
-          .with_content(%r{^\s+connect_timeout = 3.0})
+            .with_content(%r{^\s+connect_timeout = 3.0})
         end
 
         context 'with pool_connect_timeout specified' do
@@ -111,11 +111,13 @@ describe 'freeradius::sql' do
 
           it do
             is_expected.to contain_file('/etc/raddb/mods-available/test')
-            .with_content(%r{^\s+connect_timeout = 5.0})
+              .with_content(%r{^\s+connect_timeout = 5.0})
           end
 
           # it do
-          #   expect(catalogue).to satisfy('contain connect_timeout warning') { |c| c.resource_refs.any? { |r| r =~ %r{^warning_test: The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x.*In the future/} } }
+          #   expect(catalogue).to satisfy('contain connect_timeout warning') do |c|
+          #     c.resource_refs.any? { |r| r =~ %r{^warning_test: The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x.*In the future/} }
+          #   end
           # end
         end
       end
