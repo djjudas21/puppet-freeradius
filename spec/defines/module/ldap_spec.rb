@@ -64,9 +64,9 @@ describe 'freeradius::module::ldap' do
 
     it do
       is_expected.to contain_file('/etc/raddb/mods-available/test')
-      .with_content(%r{^\s+connect_timeout = 3.0})
-      .with_content(%r{^\s+use_referral_credentials = no})
-      .without_content(%r{^\s+session_tracking = .*})
+        .with_content(%r{^\s+connect_timeout = 3.0})
+        .with_content(%r{^\s+use_referral_credentials = no})
+        .without_content(%r{^\s+session_tracking = .*})
     end
 
     context 'with connect_timeout, session_tracking, and use_referral_credentials specified' do
@@ -80,9 +80,9 @@ describe 'freeradius::module::ldap' do
 
       it do
         is_expected.to contain_file('/etc/raddb/mods-available/test')
-        .with_content(%r{^\s+connect_timeout = 5.0})
-        .with_content(%r{^\s+use_referral_credentials = yes})
-        .with_content(%r{^\s+session_tracking = yes})
+          .with_content(%r{^\s+connect_timeout = 5.0})
+          .with_content(%r{^\s+use_referral_credentials = yes})
+          .with_content(%r{^\s+session_tracking = yes})
       end
 
       # it do
