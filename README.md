@@ -46,7 +46,7 @@
 
 This module installs and configures [FreeRADIUS](http://freeradius.org/) server
 on Linux. It supports FreeRADIUS 3.x only. It was designed with CentOS in mind
-but should work on other distributions. 
+but should work on other distributions.
 
 This module requires Puppet 4.0.0 or greater. Puppet 3.x was
 [discontinued](https://puppet.com/misc/puppet-enterprise-lifecycle) at
@@ -444,7 +444,7 @@ be "acct", or they all have to be "auth+acct".
 The type of this pool controls how home servers are chosen.
 
 * `fail-over` the request is sent to the first live home server in the list.  i.e. If the first home server is marked "dead", the second one is chosen, etc.
-* `load-balance` the least busy home server is chosen For non-EAP auth methods, and for acct packets, we recommend using "load-balance". It will ensure the highest availability for your network. 
+* `load-balance` the least busy home server is chosen For non-EAP auth methods, and for acct packets, we recommend using "load-balance". It will ensure the highest availability for your network.
 * `client-balance` the home server is chosen by hashing the source IP address of the packet. This configuration is most useful to do simple load balancing for EAP sessions
 * `client-port-balance` the home server is chosen by hashing the source IP address and source port of the packet.
 * `keyed-balance` the home server is chosen by hashing (FNV) the contents of the Load-Balance-Key attribute from the control items.
@@ -634,9 +634,11 @@ With `chase_referrals` control whether the server follows references returned by
 
 ##### `use_referral_credentials`
 On rebind, use the credentials from the rebind url instead of admin credentials. Default: `no`.
+This parameter should only be set when using FreeRADIUS 3.1.x.
 
 ##### `session_tracking`
 If `yes`, then include draft-wahl-ldap-session tracking controls. Default: `undef`.
+This parameter should only be set when using FreeRADIUS 3.1.x.
 
 ##### `uses`
 How many times the connection can be used before being re-established. This is useful for things
@@ -653,6 +655,7 @@ Idle timeout (in seconds). A connection which is unused for this length of time 
 
 ##### `connect_timeout`
 Connection timeout (in seconds). The maximum amount of time to wait for a new connection to be established. Default: `3.0`.
+This parameter should only be set when using FreeRADIUS 3.1.x.
 
 ##### `idle`
 Sets the idle time before keepalive probes are sent. Default `60`
@@ -1415,7 +1418,7 @@ Default: `radius`. Name of the database. Normally you should leave this alone. I
 
 ##### `num_sql_socks`
 
-Default: same as `max_servers`. Number of sql connections to make to the database server. 
+Default: same as `max_servers`. Number of sql connections to make to the database server.
 Setting this to LESS than the number of threads means that some threads may starve, and
 you will see errors like "No connections available and at max connection limit". Setting
 this to MORE than the number of threads means that there are more connections than necessary.
