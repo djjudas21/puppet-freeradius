@@ -14,7 +14,8 @@ describe 'freeradius::krb5' do
 
   it do
     is_expected.to contain_file('/etc/raddb/mods-available/test')
-      .with_content(%r{^krb5 test \{\n\s+keytab = test_keytab\n\s+service_principal = test_principal\n})
+      .with_content(%r{^\s+keytab = test_keytab$})
+      .with_content(%r{^\s+service_principal = test_principal$})
       .with_ensure('present')
       .with_group('radiusd')
       .with_mode('0640')

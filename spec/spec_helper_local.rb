@@ -40,11 +40,15 @@ end
 
 # Set up a default freeradius instance, so we can test other classes which
 # require freeradius to exist first
+#
+# function warning() allows us to test for warnings being raised, by
+# translating it to a notify - though this is not yet working
 shared_context 'freeradius_default' do
   let(:pre_condition) do
     [
       redhat_params_class,
       'class { freeradius: }',
+      # 'function warning($message) { notify { "warning_test: ${message}": } }'
     ]
   end
 end

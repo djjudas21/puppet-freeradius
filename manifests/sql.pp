@@ -31,7 +31,7 @@ define freeradius::sql (
   Optional[Integer] $pool_min                    = 1,
   Optional[Integer] $pool_spare                  = 1,
   Optional[Integer] $pool_idle_timeout           = 60,
-  Optional[Float] $pool_connect_timeout          = 3.0,
+  Optional[Float] $pool_connect_timeout          = undef,
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service
@@ -51,6 +51,40 @@ define freeradius::sql (
   unless is_integer($num_sql_socks) or $num_sql_socks == "\${thread[pool].max_servers}" {
     fail('$num_sql_socks must be an integer')
   }
+
+  # Warn if the user tries to set a FreeRADIUS 3.1.x specific parameter, and
+  # we detect that they are not on (or not installing) a FreeRADIUS 3.1.x
+  # then show them some errors
+  # Additionally, if we are on FreeRADIUS 3.1.x then allow defaults for some
+  # parameters, otherwise leave them set as specified when this define
+  # is called.
+  if $::freeradius::fr_3_1 {
+    if $pool_connect_timeout != undef {
+      warning(@("WARN"/L)
+        The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x, \
+        i.e. the experimental branch. You are running \
+        `${facts['freeradius_version']}`. In the future, attempting to set \
+        it on this version may fail.
+        |-WARN
+      )
+    }
+
+    $resolved_pool_connect_timeout = $pool_connect_timeout ? {
+      undef   => 3.0,
+      default => $pool_connect_timeout,
+    }
+
+  } else {
+    if $pool_connect_timeout != undef {
+      fail(@("FAIL"/L)
+        The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x, \
+        i.e. the experimental branch. You are running \
+        `${facts['freeradius_version']}`.
+        |-FAIL
+      )
+    }
+  }
+
 
   # Determine default location of query file
   $queryfile = "${fr_basepath}/sql/queries.conf"
