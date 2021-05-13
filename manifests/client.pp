@@ -30,7 +30,7 @@ define freeradius::client (
   Optional[Integer] $lifetime                        = undef,
   Optional[Integer] $idle_timeout                    = undef,
   Optional[String] $redirect                         = undef,
-  Optional[Integer] $port                            = undef,
+  Optional[Variant[Integer,Array[Integer]]] $port    = undef,
   Optional[String] $srcip                            = undef,
   Boolean $firewall                                  = false,
   Freeradius::Ensure $ensure                         = present,
@@ -53,16 +53,22 @@ define freeradius::client (
   }
 
   if ($firewall and $ensure == 'present') {
+    if $port =~ Array {
+      $port_description = $port.join(',')
+    } else {
+      $port_description = $port
+    }
+
     if $port {
       if $ip {
-        firewall { "100 ${shortname} ${port} v4":
+        firewall { "100 ${shortname} ${port_description} v4":
           proto  => 'udp',
           dport  => $port,
           action => 'accept',
           source => $ip,
         }
       } elsif $ip6 {
-        firewall { "100 ${shortname} ${port} v6":
+        firewall { "100 ${shortname} ${port_description} v6":
           proto    => 'udp',
           dport    => $port,
           action   => 'accept',
