@@ -16,8 +16,8 @@ class freeradius::radsniff (
   if $envfile {
     $final_envfile = $envfile
   } else {
-    if $freeradius::fr_radsniff_envfile {
-      $final_envfile = $freeradius::fr_radsniff_envfile
+    if $freeradius::radsniff::fr_radsniff_envfile {
+      $final_envfile = $freeradius::radsniff::fr_radsniff_envfile
     } else {
       fail('freeradius::radsniff requires envfile to be explicitly set on this OS')
     }
@@ -27,8 +27,8 @@ class freeradius::radsniff (
   if $pidfile {
     $final_pidfile = $pidfile
   } else {
-    if $freeradius::fr_radsniff_pidfile {
-      $final_pidfile = $freeradius::fr_radsniff_pidfile
+    if $freeradius::radsniff::fr_radsniff_pidfile {
+      $final_pidfile = $freeradius::radsniff::fr_radsniff_pidfile
     } else {
       fail('freeradius::radsniff requires pidfile to be explicitly set on this OS')
     }
@@ -36,7 +36,7 @@ class freeradius::radsniff (
 
   $escaped_cmd = $options.regsubst('"','\\\\"','G')
 
-  file { $envfile:
+  file { $final_envfile:
     content => @("SYSCONFIG"),
       RADSNIFF_OPTIONS="${escaped_cmd}"
       | SYSCONFIG
@@ -51,7 +51,7 @@ class freeradius::radsniff (
   }
 
   systemd::unit_file {'radsniff.service':
-    source => 'puppet:///modules/freeradius/radsniff.service',
-    notify => Service['radsniff'],
+    content => template('freeradius/radsniff.service.erb'),
+    notify  => Service['radsniff'],
   }
 }

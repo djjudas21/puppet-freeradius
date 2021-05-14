@@ -2,15 +2,43 @@ require 'spec_helper'
 
 describe 'freeradius::radsniff' do
   on_supported_os.each do |os, os_facts|
-    context "on #{os}" do
-      include_context 'freeradius_with_utils'
+    include_context 'freeradius_with_utils'
 
+    context "on #{os}" do
       let(:facts) { os_facts }
 
       let(:params) do
         {
           options: 'radsniff cmd "line" options',
         }
+      end
+
+      let(:pre_condition) do
+        precondition = case os_facts[:osfamily]
+                       when 'RedHat'
+                         'class freeradius::params {
+                             $fr_basepath = "/etc/raddb"
+                             $fr_radsniff_pidfile = "/var/run/radiusd/radsniff.pid"
+                             $fr_radsniff_envfile = "/etc/sysconfig/radsniff"
+                           }
+                           include freeradius::params'
+                       when 'Debian'
+                         'class freeradius::params {
+                             $fr_basepath = "/etc/freeradius"
+                             $fr_radsniff_pidfile = "/var/run/freeradius/radsniff.pid"
+                             $fr_radsniff_envfile = "/etc/defaults/radsniff"
+                           }
+                           include freeradius::params'
+                       else
+                         'class freeradius::params {
+                             $fr_basepath = "/etc/raddb"
+                             $fr_radsniff_pidfile = "/var/run/radiusd/radsniff.pid"
+                             $fr_radsniff_envfile = undef
+                           }
+                           include freeradius::params'
+                       end
+
+        super().push(precondition)
       end
 
       if os_facts[:osfamily] =~ %r{^RedHat|Debian$}
@@ -34,7 +62,7 @@ describe 'freeradius::radsniff' do
           is_expected.to contain_systemd__unit_file('radsniff.service')
             .with_content(%r{^Pidfile=/var/run/radiusd/radsniff.pid$})
             .with_content(%r{^EnvironmentFile=/etc/sysconfig/radsniff$})
-            .with_content(%r{^ExecStart=/usr/bin/radsniff -P /var/run/radiusd/radsniff.pid -d /etc/raddb $RADSNIFF_OPTIONS$})
+            .with_content(%r{^ExecStart=/usr/bin/radsniff -P /var/run/radiusd/radsniff.pid -d /etc/raddb \$RADSNIFF_OPTIONS$})
             .that_notifies('Service[radsniff]')
         end
       when 'Debian'
@@ -49,7 +77,7 @@ describe 'freeradius::radsniff' do
           is_expected.to contain_systemd__unit_file('radsniff.service')
             .with_content(%r{^Pidfile=/var/run/freeradius/radsniff.pid$})
             .with_content(%r{^EnvironmentFile=/etc/defaults/radsniff$})
-            .with_content(%r{^ExecStart=/usr/bin/radsniff -P /var/run/freeradius/radsniff.pid -d /etc/freeradius $RADSNIFF_OPTIONS$})
+            .with_content(%r{^ExecStart=/usr/bin/radsniff -P /var/run/freeradius/radsniff.pid -d /etc/freeradius \$RADSNIFF_OPTIONS$})
             .that_notifies('Service[radsniff]')
         end
       else
@@ -86,7 +114,7 @@ describe 'freeradius::radsniff' do
           is_expected.to contain_systemd__unit_file('radsniff.service')
             .with_content(%r{^Pidfile=/a/pid/file$})
             .with_content(%r{^EnvironmentFile=/test/env/file$})
-            .with_content(%r{^ExecStart=/usr/bin/radsniff -P /a/pid/file -d /etc/freeradius $RADSNIFF_OPTIONS$})
+            .with_content(%r{^ExecStart=/usr/bin/radsniff -P /a/pid/file -d .* \$RADSNIFF_OPTIONS$})
             .that_notifies('Service[radsniff]')
         end
       end

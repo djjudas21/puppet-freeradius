@@ -57,10 +57,12 @@ end
 shared_context 'freeradius_with_utils' do
   let(:pre_condition) do
     [
-      redhat_params_class,
-      'class { freeradius:
-        utils_support => true,
-      }',
+      'class freeradius {
+        $utils_support = true
+      }
+      include freeradius
+
+      package { "freeradius-utils": }',
     ]
   end
 end
