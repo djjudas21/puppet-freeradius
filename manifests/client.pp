@@ -42,6 +42,10 @@ define freeradius::client (
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
+  if ($secret !~ /\A[^\n]+\z/) {
+    fail('Secrets cannot have newlines in them')
+  }
+
   file { "${fr_basepath}/clients.d/${shortname}.conf":
     ensure  => $ensure,
     mode    => '0640',
