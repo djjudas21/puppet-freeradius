@@ -17,7 +17,7 @@ define freeradius::module::eap (
   Optional[String] $gtc_challenge                                   = undef,
   String $gtc_auth_type                                             = 'PAP',
   String $tls_config_name                                           = 'tls-common',
-  Optional[String] $tls_private_key_password                        = undef,
+  Optional[Freeradius::Password] $tls_private_key_password          = undef,
   String $tls_private_key_file                                      = "\${certdir}/server.pem",
   String $tls_certificate_file                                      = "\${certdir}/server.pem",
   String $tls_ca_file                                               = "\${certdir}/ca.pem",

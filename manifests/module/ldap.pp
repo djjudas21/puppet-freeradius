@@ -5,7 +5,7 @@ define freeradius::module::ldap (
   Array[String] $server                                               = ['localhost'],
   Integer $port                                                       = 389,
   Optional[String] $identity                                          = undef,
-  Optional[String] $password                                          = undef,
+  Optional[Freeradius::Password] $password                            = undef,
   Optional[Freeradius::Sasl] $sasl                                    = {},
   Optional[String] $valuepair_attribute                               = undef,
   Optional[Array[String]] $update                                     = undef,

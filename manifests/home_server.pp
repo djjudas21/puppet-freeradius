@@ -1,6 +1,6 @@
 # Configure a home_server for proxy config
 define freeradius::home_server (
-  String $secret,
+  Freeradius::Secret $secret,
   Enum['udp', 'tcp'] $proto                              = 'udp',
   Enum['none', 'status-server', 'request'] $status_check = 'none',
   Enum['auth', 'acct', 'auth+acct', 'coa'] $type         = 'auth',
@@ -11,7 +11,7 @@ define freeradius::home_server (
   Optional[Integer] $max_outstanding                     = undef,
   Optional[Enum['no', 'yes']] $no_response_fail          = undef,
   Optional[Integer] $num_answers_to_alive                = undef,
-  Optional[String] $password                             = undef,
+  Optional[Freeradius::Password] $password               = undef,
   Optional[Integer] $port                                = 1812,
   Optional[Integer] $response_window                     = undef,
   Optional[Integer] $revive_interval                     = undef,

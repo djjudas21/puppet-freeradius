@@ -1,6 +1,6 @@
 # Install FreeRADIUS clients (WISMs or testing servers)
 define freeradius::client (
-  String $secret,
+  Freeradius::Secret $secret,
   Optional[String] $shortname                        = $title,
   Optional[String] $ip                               = undef,
   Optional[String] $ip6                              = undef,
@@ -23,7 +23,7 @@ define freeradius::client (
     'other',
   ]] $nastype = undef,
   Optional[String] $login                            = undef,
-  Optional[String] $password                         = undef,
+  Optional[Freeradius::Password] $password           = undef,
   Optional[String] $coa_server                       = undef,
   Optional[String] $response_window                  = undef,
   Optional[Integer] $max_connections                 = undef,
@@ -41,10 +41,6 @@ define freeradius::client (
   $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
-
-  if ($secret !~ /\A[^\n]+\z/) {
-    fail('Secrets cannot have newlines in them')
-  }
 
   file { "${fr_basepath}/clients.d/${shortname}.conf":
     ensure  => $ensure,

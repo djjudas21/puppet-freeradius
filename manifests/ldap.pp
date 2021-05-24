@@ -1,7 +1,7 @@
 # Configure LDAP support for FreeRADIUS
 define freeradius::ldap (
   String $identity,
-  String $password,
+  Freeradius::Password $password,
   String $basedn,
   Array[String] $server         = ['localhost'],
   Integer $port                 = 389,
