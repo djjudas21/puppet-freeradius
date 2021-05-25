@@ -151,7 +151,7 @@ describe 'freeradius' do
         is_expected.to contain_concat('/etc/raddb/dictionary')
           .with(
             'group'   => 'radiusd',
-            'mode'    => '0640',
+            'mode'    => '0644',
             'owner'   => 'root',
           )
           .that_requires('Package[freeradius]')

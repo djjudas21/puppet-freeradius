@@ -172,4 +172,14 @@ class freeradius::params {
   }
 
   $radacctdir = "\${logdir}/radacct"
+
+  # Default radsniff environment file location
+  $fr_radsniff_envfile = $::osfamily ? {
+    'RedHat' => '/etc/sysconfig/radsniff',
+    'Debian' => '/etc/defaults/radsniff',
+    default  => undef,
+  }
+
+  # Default radsniff pid file location
+  $fr_radsniff_pidfile = "/var/run/${fr_service}/radsniff.pid"
 }
