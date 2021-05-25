@@ -133,6 +133,18 @@ describe 'freeradius::sql' do
       #     is_expected.to compile.and_raise_error(%r{^The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x})
       #   end
       # end
+
+      context 'with password containing a newline' do
+        let(:params) do
+          super().merge(
+            password: "foo\nbar",
+          )
+        end
+
+        it do
+          is_expected.to compile.and_raise_error(%r{parameter 'password' expects a match for Freeradius::Password})
+        end
+      end
     end
   end
 end

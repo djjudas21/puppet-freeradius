@@ -1,7 +1,7 @@
 # Configure SQL support for FreeRADIUS
 define freeradius::sql (
   Enum['mysql', 'mssql', 'oracle', 'postgresql'] $database,
-  String $password,
+  Freeradius::Password $password,
   Optional[String] $server                       = 'localhost',
   Optional[String] $login                        = 'radius',
   Optional[String] $radius_db                    = 'radius',

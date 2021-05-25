@@ -24,4 +24,28 @@ describe 'freeradius::client' do
       .that_requires('File[/etc/raddb/clients.d]')
       .that_requires('Group[radiusd]')
   end
+
+  context 'with secret containing a newline' do
+    let(:params) do
+      super().merge(
+        secret: "foo\nbar",
+      )
+    end
+
+    it do
+      is_expected.to compile.and_raise_error(%r{parameter 'secret' expects a match for Freeradius::Secret})
+    end
+  end
+
+  context 'with password containing a newline' do
+    let(:params) do
+      super().merge(
+        password: "foo\nbar",
+      )
+    end
+
+    it do
+      is_expected.to compile.and_raise_error(%r{parameter 'password' expects a match for Freeradius::Password})
+    end
+  end
 end
