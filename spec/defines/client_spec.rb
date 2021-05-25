@@ -48,4 +48,86 @@ describe 'freeradius::client' do
       is_expected.to compile.and_raise_error(%r{parameter 'password' expects a match for Freeradius::Password})
     end
   end
+
+  context 'with firewall' do
+    let(:params) do
+      super().merge(
+        firewall: true,
+      )
+    end
+
+    it do
+      is_expected.to compile.and_raise_error(%r{Must specify \$port if you specify \$firewall})
+    end
+
+    context 'with integer port' do
+      let(:params) do
+        super().merge(
+          port: 1234,
+        )
+      end
+
+      it do
+        is_expected.to contain_firewall('100 test_short 1234 v4')
+          .with_proto('udp')
+          .with_dport(1234)
+          .with_action('accept')
+          .with_source('1.2.3.4')
+      end
+
+      context 'with ipv6' do
+        let(:params) do
+          super().reject { |k, _| k == :ip }.merge(
+            ip6: '2001:db8::100',
+          )
+        end
+
+        it do
+          is_expected.not_to contain_firewall('100 test_short 1234 v4')
+
+          is_expected.to contain_firewall('100 test_short 1234 v6')
+            .with_proto('udp')
+            .with_dport(1234)
+            .with_action('accept')
+            .with_source('2001:db8::100')
+            .with_provider('ip6tables')
+        end
+      end
+    end
+
+    context 'with array port' do
+      let(:params) do
+        super().merge(
+          port: [1234, 4321],
+        )
+      end
+
+      it do
+        is_expected.to contain_firewall('100 test_short 1234,4321 v4')
+          .with_proto('udp')
+          .with_dport([1234, 4321])
+          .with_action('accept')
+          .with_source('1.2.3.4')
+      end
+
+      context 'with ipv6' do
+        let(:params) do
+          super().reject { |k, _| k == :ip }.merge(
+            ip6: '2001:db8::100',
+          )
+        end
+
+        it do
+          is_expected.not_to contain_firewall('100 test_short 1234,4321 v4')
+
+          is_expected.to contain_firewall('100 test_short 1234,4321 v6')
+            .with_proto('udp')
+            .with_dport([1234, 4321])
+            .with_action('accept')
+            .with_source('2001:db8::100')
+            .with_provider('ip6tables')
+        end
+      end
+    end
+  end
 end
