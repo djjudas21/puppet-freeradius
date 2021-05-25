@@ -25,7 +25,7 @@ describe 'freeradius::policy' do
 
   it do
     is_expected.to contain_concat__fragment('policy-test')
-      .with_content(%r{\s+\$INCLUDE /etc/raddb/policy.d/test\n})
+      .with_content(%r{\s+\$INCLUDE /etc/raddb/policy.d/test$})
       .with_order('50')
       .with_target('/etc/raddb/policy.conf')
       .that_requires('File[/etc/raddb/policy.d/test]')

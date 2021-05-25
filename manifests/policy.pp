@@ -25,7 +25,7 @@ define freeradius::policy (
   if ($ensure == 'present') {
     concat::fragment { "policy-${name}":
       target  => "${fr_basepath}/policy.conf",
-      content => "\t\$INCLUDE ${fr_basepath}/policy.d/${name}\n",
+      content => "\t\$INCLUDE ${fr_basepath}/policy.d/${name}",
       order   => $order,
       require => File["${fr_basepath}/policy.d/${name}"],
     }

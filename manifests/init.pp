@@ -147,11 +147,12 @@ class freeradius (
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
   concat { "${freeradius::fr_basepath}/policy.conf":
-    owner   => 'root',
-    group   => $freeradius::fr_group,
-    mode    => '0640',
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify  => Service[$freeradius::fr_service],
+    owner          => 'root',
+    group          => $freeradius::fr_group,
+    mode           => '0640',
+    ensure_newline => true,
+    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify         => Service[$freeradius::fr_service],
   }
   concat::fragment { 'policy_header':
     target  => "${freeradius::fr_basepath}/policy.conf",
@@ -166,11 +167,12 @@ class freeradius (
 
   # Set up concat template file
   concat { "${freeradius::fr_basepath}/templates.conf":
-    owner   => 'root',
-    group   => $freeradius::fr_group,
-    mode    => '0640',
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify  => Service[$freeradius::fr_service],
+    owner          => 'root',
+    group          => $freeradius::fr_group,
+    mode           => '0640',
+    ensure_newline => true,
+    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify         => Service[$freeradius::fr_service],
   }
   concat::fragment { 'template_header':
     target => "${freeradius::fr_basepath}/templates.conf",
@@ -186,25 +188,27 @@ class freeradius (
 
   # Set up concat proxy file
   concat { "${freeradius::fr_basepath}/proxy.conf":
-    owner   => 'root',
-    group   => $freeradius::fr_group,
-    mode    => '0640',
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify  => Service[$freeradius::fr_service],
+    owner          => 'root',
+    group          => $freeradius::fr_group,
+    mode           => '0640',
+    ensure_newline => true,
+    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify         => Service[$freeradius::fr_service],
   }
   concat::fragment { 'proxy_header':
     target  => "${freeradius::fr_basepath}/proxy.conf",
-    content => "# Proxy config\n",
+    content => '# Proxy config',
     order   => '05',
   }
 
   # Set up attribute filter file
   concat { "${freeradius::fr_basepath}/mods-available/attr_filter":
-    owner   => 'root',
-    group   => $freeradius::fr_group,
-    mode    => '0640',
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify  => Service[$freeradius::fr_service],
+    owner          => 'root',
+    group          => $freeradius::fr_group,
+    mode           => '0640',
+    ensure_newline => true,
+    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify         => Service[$freeradius::fr_service],
   }
   file { "${freeradius::fr_modulepath}/attr_filter":
     ensure => link,
@@ -238,10 +242,11 @@ class freeradius (
   # Install a slightly tweaked stock dictionary that includes
   # our custom dictionaries
   concat { "${freeradius::fr_basepath}/dictionary":
-    owner   => 'root',
-    group   => $freeradius::fr_group,
-    mode    => '0644',
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    owner          => 'root',
+    group          => $freeradius::fr_group,
+    mode           => '0644',
+    ensure_newline => true,
+    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
   }
   concat::fragment { 'dictionary_header':
     target => "${freeradius::fr_basepath}/dictionary",
@@ -256,11 +261,12 @@ class freeradius (
 
   # Install a huntgroups file
   concat { "${freeradius::fr_basepath}/mods-config/preprocess/huntgroups":
-    owner   => 'root',
-    group   => $freeradius::fr_group,
-    mode    => '0640',
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify  => Service[$freeradius::fr_service],
+    owner          => 'root',
+    group          => $freeradius::fr_group,
+    mode           => '0640',
+    ensure_newline => true,
+    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify         => Service[$freeradius::fr_service],
   }
   concat::fragment { 'huntgroups_header':
     target => "${freeradius::fr_basepath}/mods-config/preprocess/huntgroups",
@@ -454,7 +460,7 @@ class freeradius (
     "${freeradius::fr_basepath}/clients.conf",
     "${freeradius::fr_basepath}/sql.conf",
   ]:
-    content => "# FILE INTENTIONALLY BLANK\n",
+    content => '# FILE INTENTIONALLY BLANK',
     mode    => '0644',
     owner   => 'root',
     group   => $freeradius::fr_group,
