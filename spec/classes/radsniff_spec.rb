@@ -60,7 +60,7 @@ describe 'freeradius::radsniff' do
 
         it do
           is_expected.to contain_systemd__unit_file('radsniff.service')
-            .with_content(%r{^Pidfile=/var/run/radiusd/radsniff.pid$})
+            .with_content(%r{^PIDFile=/var/run/radiusd/radsniff.pid$})
             .with_content(%r{^EnvironmentFile=/etc/sysconfig/radsniff$})
             .with_content(%r{^ExecStart=/usr/bin/radsniff -P /var/run/radiusd/radsniff.pid -d /etc/raddb \$RADSNIFF_OPTIONS$})
             .that_notifies('Service[radsniff]')
@@ -75,7 +75,7 @@ describe 'freeradius::radsniff' do
 
         it do
           is_expected.to contain_systemd__unit_file('radsniff.service')
-            .with_content(%r{^Pidfile=/var/run/freeradius/radsniff.pid$})
+            .with_content(%r{^PIDFile=/var/run/freeradius/radsniff.pid$})
             .with_content(%r{^EnvironmentFile=/etc/defaults/radsniff$})
             .with_content(%r{^ExecStart=/usr/bin/radsniff -P /var/run/freeradius/radsniff.pid -d /etc/freeradius \$RADSNIFF_OPTIONS$})
             .that_notifies('Service[radsniff]')
@@ -112,7 +112,7 @@ describe 'freeradius::radsniff' do
 
         it do
           is_expected.to contain_systemd__unit_file('radsniff.service')
-            .with_content(%r{^Pidfile=/a/pid/file$})
+            .with_content(%r{^PIDFile=/a/pid/file$})
             .with_content(%r{^EnvironmentFile=/test/env/file$})
             .with_content(%r{^ExecStart=/usr/bin/radsniff -P /a/pid/file -d .* \$RADSNIFF_OPTIONS$})
             .that_notifies('Service[radsniff]')
