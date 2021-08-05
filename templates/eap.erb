@@ -216,7 +216,7 @@ eap {
 #		private_key_password = whatever
 #		private_key_file = ${certdir}/server.pem
 <%- if @tls_private_key_password -%>
-		private_key_password = <%= @tls_private_key_password %>
+		private_key_password = "<%= @tls_private_key_password %>"
 <%- end -%>
 		private_key_file = <%= @tls_private_key_file %>
 		private_key_password = whatever

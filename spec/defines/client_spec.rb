@@ -48,4 +48,17 @@ describe 'freeradius::client' do
       is_expected.to compile.and_raise_error(%r{parameter 'password' expects a match for Freeradius::Password})
     end
   end
+
+  context 'with password' do
+    let(:params) do
+      super().merge(
+        password: "foo bar",
+      )
+    end
+
+    it do
+      is_expected.to contain_file('/etc/raddb/clients.d/test_short.conf')
+        .with_content(%r{^\s+password = "foo bar"$})
+    end
+  end
 end
