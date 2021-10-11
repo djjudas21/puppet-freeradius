@@ -4,7 +4,7 @@ define freeradius::attr (
   Freeradius::Ensure $ensure           = present,
   Optional[String] $key                = 'User-Name',
   Optional[String] $prefix             = 'filter',
-  Optional[Enum['yes', 'no']] $relaxed = 'no',
+  Optional[Enum['yes', 'no']] $relaxed = undef,
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service

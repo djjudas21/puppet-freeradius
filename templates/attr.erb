@@ -1,6 +1,8 @@
 attr_filter <%= @prefix %>.<%= @name %> {
 	key = "%{<%= @key %>}"
 	filename = ${modconfdir}/${.:name}/<%= @name %>
+<% if defined?(@relaxed) -%>
 	relaxed = <%= @relaxed %>
+<% end -%>
 }
 
