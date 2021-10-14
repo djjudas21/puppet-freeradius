@@ -11,7 +11,7 @@ home_server <%= @name %> {
 <% end -%>
     port = <%= @port %>
     proto = <%= @proto %>
-    secret = <%= @secret %>
+    secret = "<%= @secret %>"
 <% if defined?(@src_ipaddr) -%>
     src_ipaddr = <%= @src_ipaddr %>
 <% end -%>
@@ -34,7 +34,7 @@ home_server <%= @name %> {
     username = <%= @username %>
 <% end -%>
 <% if defined?(@password) -%>
-    password = <%= @password %>
+    password = "<%= @password %>"
 <% end -%>
 <% if defined?(@check_interval) -%>
     check_interval = <%= @check_interval %>

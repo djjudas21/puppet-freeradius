@@ -23,7 +23,7 @@ client <%= @shortname %> {
 	login = <%= @login %>
 	<%- end -%>
 	<%- if defined?(@password) -%>
-	password = <%= @password %>
+	password = "<%= @password %>"
 	<%- end -%>
 	<%- if defined?(@coa_server) -%>
 	coa_server = <%= @coa_server %>
