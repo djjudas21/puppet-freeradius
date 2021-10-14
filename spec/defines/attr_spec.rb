@@ -26,7 +26,30 @@ describe 'freeradius::attr' do
   it do
     is_expected.to contain_concat__fragment('attr-test')
       .with_content(%r{^attr_filter filter.test {\n\s+key = "\%{User-Name}"\n\s+filename = \${modconfdir}/\${\.:name}/test\n}})
+      .without_content(%r{^\s+relaxed\s+.*$})
       .with_order('20')
       .with_target('/etc/raddb/mods-available/attr_filter')
+  end
+
+  context 'with relaxed = no' do
+    let(:params) do
+      super().merge(relaxed: 'no')
+    end
+
+    it do
+      is_expected.to contain_concat__fragment('attr-test')
+        .with_content(%r{^\s+relaxed\s+=\s+no$})
+    end
+  end
+
+  context 'with relaxed = yes' do
+    let(:params) do
+      super().merge(relaxed: 'yes')
+    end
+
+    it do
+      is_expected.to contain_concat__fragment('attr-test')
+        .with_content(%r{^\s+relaxed\s+=\s+yes$})
+    end
   end
 end

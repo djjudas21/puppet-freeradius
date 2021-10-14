@@ -90,6 +90,12 @@ listen {
 	interface = <%= @interface %>
 <%- end -%>
 
+<%- if @virtual_server -%>
+	#  Configure the virtual server to send traffic from this listener to.
+	#
+	virtual_server = <%= @virtual_server %>
+<%- end -%>
+
 	#  Per-socket lists of clients.  This is a very useful feature.
 	#
 	#  The name here is a reference to a section elsewhere in

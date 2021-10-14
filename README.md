@@ -233,6 +233,10 @@ freeradius::attr { 'eduroamlocal':
 }
 ```
 
+##### `relaxed`
+Whether the filter removes or copies unmatched attributes, relaxed = no or yes respectively. An undefined value results in no
+explicit statement, causing the default behaviour of FreeRADIUS equivalent to 'relaxed = no'. Default: `undef`.
+
 #### `freeradius::blank`
 
 Selectively blank certain stock config files that aren't required. This is preferable to deleting them

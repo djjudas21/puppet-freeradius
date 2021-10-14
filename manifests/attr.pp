@@ -1,9 +1,10 @@
 # Install FreeRADIUS config snippets
 define freeradius::attr (
   String $source,
-  Freeradius::Ensure $ensure = present,
-  Optional[String] $key      = 'User-Name',
-  Optional[String] $prefix   = 'filter',
+  Freeradius::Ensure $ensure             = present,
+  Optional[String] $key                  = 'User-Name',
+  Optional[String] $prefix               = 'filter',
+  Optional[Freeradius::Boolean] $relaxed = undef,
 ) {
   $fr_package          = $::freeradius::params::fr_package
   $fr_service          = $::freeradius::params::fr_service

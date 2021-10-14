@@ -7,6 +7,7 @@ define freeradius::listen (
   Optional[String] $ip6                                     = undef,
   Integer $port                                             = 0,
   Optional[String] $interface                               = undef,
+  Optional[String] $virtual_server                          = undef,
   Array[String] $clients                                    = [],
   Integer $max_connections                                  = 16,
   Integer $lifetime                                         = 0,
