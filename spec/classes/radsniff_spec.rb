@@ -41,7 +41,7 @@ describe 'freeradius::radsniff' do
         super().push(precondition)
       end
 
-      if os_facts[:osfamily] =~ %r{^RedHat|Debian$}
+      if os_facts[:osfamily].match? %r{^RedHat|Debian$}
         it do
           is_expected.to contain_service('radsniff')
             .with_ensure('running')
@@ -95,7 +95,7 @@ describe 'freeradius::radsniff' do
           )
         end
 
-        if os_facts[:osfamily] !~ %r{^RedHat|Debian$}
+        unless os_facts[:osfamily].match? %r{^RedHat|Debian$}
           it do
             is_expected.to contain_service('radsniff')
               .with_ensure('running')
