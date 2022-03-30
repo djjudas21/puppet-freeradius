@@ -8,6 +8,7 @@ class freeradius::params {
         5       => '2',
         6       => '2',
         7       => '3',
+        8       => '3',
         default => '3',
       }
     }
