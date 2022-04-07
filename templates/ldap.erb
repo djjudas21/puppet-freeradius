@@ -16,7 +16,7 @@ ldap <%= @name %> {
 	#  - ldaps:// (LDAP over SSL)
 	#  - ldapi:// (LDAP over Unix socket)
 	#  - ldapc:// (Connectionless LDAP)
-	server = 'localhost'
+#	server = 'localhost'
 #	server = 'ldap.rrdns.example.org'
 #	server = 'ldap.rrdns.example.org'
 <% @serverconcatarray.each do |srv| -%>	server = '<%= srv %>'
@@ -147,7 +147,7 @@ ldap <%= @name %> {
 	#  Note: LDAP attribute names should be single quoted unless you want
 	#  the name value to be derived from an xlat expansion, or an
 	#  attribute ref.
-	update {
+#	update {
 #		control:Password-With-Header	+= 'userPassword'
 #		control:NT-Password		:= 'ntPassword'
 #		reply:Reply-Message		:= 'radiusReplyMessage'
@@ -161,6 +161,7 @@ ldap <%= @name %> {
 #		control:			+= 'radiusControlAttribute'
 #		request:			+= 'radiusRequestAttribute'
 #		reply:				+= 'radiusReplyAttribute'
+#	}
 <%- if @update -%>
 		<%= @update.join("\n		") %>
 <%- else -%>
@@ -172,7 +173,6 @@ ldap <%= @name %> {
 	}
 <%- end -%>
 
-	}
 
 	#  Set to yes if you have eDirectory and want to use the universal
 	#  password mechanism.
