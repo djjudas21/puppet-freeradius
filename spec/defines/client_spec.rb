@@ -66,6 +66,8 @@ describe 'freeradius::client' do
     let(:params) do
       super().merge(
         firewall: true,
+      )
+    end
 
     it do
       is_expected.to compile.and_raise_error(%r{Must specify \$port if you specify \$firewall})
