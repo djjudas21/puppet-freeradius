@@ -40,7 +40,6 @@
        * [`freeradius::template`](#freeradiustemplate)
        * [`freeradius::virtual_module`](#freeradiusvirtual_module)
 4. [Limitations - OS compatibility, etc.](#limitations)
-5. [Development - Guide for contributing to the module](#development)
 
 ## Overview
 
@@ -1625,10 +1624,3 @@ might work. Likely sticking points with other distros are the names of packages,
 services and file paths.
 
 This module requires Puppet 4 or greater.
-
-## Development
-
-This module was written primarily for internal use - features we haven't needed to
-use probably haven't been written. Please send pull requests with new features and
-bug fixes. You are also welcome to file issues but I make no guarantees of
-development effort if the features aren't useful to my employer.

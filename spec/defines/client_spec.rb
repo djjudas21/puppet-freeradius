@@ -52,7 +52,7 @@ describe 'freeradius::client' do
   context 'with password' do
     let(:params) do
       super().merge(
-        password: "foo bar",
+        password: 'foo bar',
       )
     end
 

@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.9.2
+  * Bugfix: Restart FreeRADIUS after any huntgroups modification
+
 ### 3.9.1
   * Various bugfixes in parameter type validation (thanks @craigwatson and @amateo)
 
