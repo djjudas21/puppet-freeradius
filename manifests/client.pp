@@ -42,7 +42,7 @@ define freeradius::client (
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
-  file { "${fr_basepath}/clients.d/${shortname}.conf":
+  file { "${fr_basepath}/clients.d/${name}.conf":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
@@ -61,14 +61,14 @@ define freeradius::client (
 
     if $port {
       if $ip {
-        firewall { "100 ${shortname} ${port_description} v4":
+        firewall { "100 ${name} ${port_description} v4":
           proto  => 'udp',
           dport  => $port,
           action => 'accept',
           source => $ip,
         }
       } elsif $ip6 {
-        firewall { "100 ${shortname} ${port_description} v6":
+        firewall { "100 ${name} ${port_description} v6":
           proto    => 'udp',
           dport    => $port,
           action   => 'accept',
@@ -83,7 +83,7 @@ define freeradius::client (
 
   if $huntgroups {
     $huntgroups.each |$index, $huntgroup| {
-      freeradius::huntgroup { "huntgroup.client.${shortname}.${index}":
+      freeradius::huntgroup { "huntgroup.client.${name}.${index}":
         * => $huntgroup
       }
     }
