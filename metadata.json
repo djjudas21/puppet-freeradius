@@ -9,6 +9,10 @@
   "issues_url": "https://github.com/djjudas21/puppet-freeradius/issues",
   "dependencies": [
     {
+      "name": "puppet/systemd",
+      "version_requirement": ">=3.0.0 <4.0.0"
+    },
+    {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">=4.0.0 <7.0.0"
     },
