@@ -1,6 +1,5 @@
 # Default parameters for freeradius
 class freeradius::params {
-
   # Make an educated guess which version of FR we are running, based on the OS
   case $::operatingsystem {
     /RedHat|CentOS|Rocky/: {

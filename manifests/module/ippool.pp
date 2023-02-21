@@ -33,13 +33,13 @@ define freeradius::module::ippool (
     true    => $ip_index,
     default => regsubst($ip_index, /\${db_dir}/, $freeradius::params::fr_basepath),
   }
-  file {$_file_path:
+  file { $_file_path:
     ensure => 'present',
     owner  => $freeradius::params::fr_user,
     group  => $freeradius::params::fr_group,
     mode   => '0640',
   }
-  file {$_index_path:
+  file { $_index_path:
     ensure => 'present',
     owner  => $freeradius::params::fr_user,
     group  => $freeradius::params::fr_group,

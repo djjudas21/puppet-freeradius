@@ -23,7 +23,6 @@ class freeradius (
   Optional[String] $package_ensure = 'installed',
   String $radacctdir               = $freeradius::params::radacctdir,
 ) inherits freeradius::params {
-
   if $freeradius::fr_version !~ /^3/ {
     notify { 'This module is only compatible with FreeRADIUS 3.': }
   }
@@ -184,7 +183,6 @@ class freeradius (
     content => '}',
     order   => '95',
   }
-
 
   # Set up concat proxy file
   concat { "${freeradius::fr_basepath}/proxy.conf":

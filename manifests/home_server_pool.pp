@@ -14,4 +14,3 @@ define freeradius::home_server_pool (
     order   => 20,
   }
 }
-

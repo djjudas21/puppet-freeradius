@@ -15,7 +15,7 @@ class freeradius::module::preprocess (
   $fr_group            = $::freeradius::params::fr_group
   $fr_service          = $::freeradius::params::fr_service
 
-  freeradius::module {'preprocess':
+  freeradius::module { 'preprocess':
     ensure  => $ensure,
     content => template('freeradius/preprocess.erb'),
   }

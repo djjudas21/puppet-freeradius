@@ -14,7 +14,7 @@ define freeradius::module::perl (
   $fr_group            = $::freeradius::params::fr_group
   $fr_service          = $::freeradius::params::fr_service
   $source              = "${path}/${perl_filename}"
-  freeradius::module {'perl':
+  freeradius::module { 'perl':
     ensure  => $ensure,
     content => template('freeradius/perl.erb'),
   }

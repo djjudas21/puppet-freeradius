@@ -73,7 +73,6 @@ define freeradius::sql (
       undef   => 3.0,
       default => $pool_connect_timeout,
     }
-
   } else {
     if $pool_connect_timeout != undef {
       fail(@("FAIL"/L)
@@ -84,7 +83,6 @@ define freeradius::sql (
       )
     }
   }
-
 
   # Determine default location of query file
   $queryfile = "${fr_basepath}/sql/queries.conf"

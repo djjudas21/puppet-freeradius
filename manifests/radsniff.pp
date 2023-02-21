@@ -50,7 +50,7 @@ class freeradius::radsniff (
     enable => true,
   }
 
-  systemd::unit_file {'radsniff.service':
+  systemd::unit_file { 'radsniff.service':
     content => template('freeradius/radsniff.service.erb'),
     notify  => Service['radsniff'],
   }

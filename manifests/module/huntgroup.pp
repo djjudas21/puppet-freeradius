@@ -7,7 +7,7 @@ define freeradius::module::huntgroup (
 ) {
   warning('Use of freeradius::module::huntgroup is deprecated. Use freeradius::huntgroup instead')
 
-  freeradius::huntgroup {$name:
+  freeradius::huntgroup { $name:
     conditions => $conditions,
     order      => $order,
   }
