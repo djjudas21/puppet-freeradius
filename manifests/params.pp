@@ -2,12 +2,13 @@
 class freeradius::params {
   # Make an educated guess which version of FR we are running, based on the OS
   case $::operatingsystem {
-    /RedHat|CentOS|Rocky/: {
+    /RedHat|CentOS|Rocky|AlmaLinux/: {
       $fr_guessversion = $::operatingsystemmajrelease ? {
         5       => '2',
         6       => '2',
         7       => '3',
         8       => '3',
+        9       => '3',
         default => '3',
       }
     }
