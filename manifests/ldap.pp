@@ -23,7 +23,7 @@ define freeradius::ldap (
 ) {
   warning('The use of freeradius::ldap is deprecated. You must use freeradius::module::ldap instead')
 
-  freeradius::module::ldap {$name:
+  freeradius::module::ldap { $name:
     ensure      => $ensure,
     identity    => $identity,
     password    => $password,

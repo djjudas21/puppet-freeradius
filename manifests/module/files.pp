@@ -39,12 +39,12 @@ define freeradius::module::files (
     $usersdir  = dirname($filename)
   }
 
-  freeradius::module {$name:
+  freeradius::module { $name:
     ensure  => $ensure,
     content => template('freeradius/files.erb'),
   }
 
-  file {$usersdir:
+  file { $usersdir:
     ensure  => $manage_dir,
     owner   => 'root',
     group   => $fr_group,
@@ -52,7 +52,7 @@ define freeradius::module::files (
     require => Freeradius::Module[$name],
   }
 
-  file {$userspath:
+  file { $userspath:
     ensure  => $ensure,
     owner   => 'root',
     group   => $fr_group,

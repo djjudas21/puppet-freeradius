@@ -75,8 +75,7 @@ define freeradius::module::eap (
   Boolean $eap_gtc                                                  = true,
   Boolean $eap_peap                                                 = true,
 ) {
-
-  freeradius::module{$name:
+  freeradius::module { $name:
     ensure  => $ensure,
     content => template('freeradius/eap.erb'),
   }

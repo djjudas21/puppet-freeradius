@@ -1,4 +1,3 @@
-
 # == Define: freeradius::module::detail
 #
 define freeradius::module::detail (
@@ -16,7 +15,7 @@ define freeradius::module::detail (
     validate_array($suppress)
   }
 
-  freeradius::module {"detail.${name}":
+  freeradius::module { "detail.${name}":
     ensure  => $ensure,
     content => template('freeradius/detail.erb'),
   }
