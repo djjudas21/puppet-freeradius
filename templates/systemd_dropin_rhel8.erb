@@ -1,0 +1,5 @@
+[Service]
+ExecStartPre=
+ExecStartPre=-/bin/chown -R radiusd.radiusd /var/run/radiusd
+ExecStartPre=/usr/sbin/radiusd -C
+

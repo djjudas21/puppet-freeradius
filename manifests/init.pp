@@ -108,6 +108,16 @@ class freeradius (
     notify  => Service[$freeradius::fr_service],
   }
 
+  # Add systemd unit to override default file on RHEL8 systems.
+  if ($facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '8') {
+    systemd::dropin_file { 'freeradius remove bootstrap':
+      ensure   => present,
+      filename => 'remove_bootstrap.conf',
+      unit     => 'radiusd.service', #@todo programmatically determine the service name
+      content  => template('freeradius/systemd_dropin_rhel8.erb'),
+    }
+  }
+
   # Preserve some stock modules
   if ($preserve_mods) {
     freeradius::module { [
