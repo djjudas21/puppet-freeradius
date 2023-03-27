@@ -163,7 +163,9 @@ ldap <%= @name %> {
 #		reply:				+= 'radiusReplyAttribute'
 #	}
 <%- if @update -%>
+	update {
 		<%= @update.join("\n		") %>
+	}
 <%- else -%>
 	update {
 		control:Password-With-Header	+= 'userPassword'
