@@ -33,6 +33,7 @@ describe 'freeradius::module::ldap' do
       .with_content(%r{^\s+identity = 'cn=root,dc=example,dc=com'\n})
       .with_content(%r{^\s+password = 'test password'\n})
       .with_content(%r{^\s+base_dn = 'dc=example,dc=com'\n})
+      .with_content(%r{^\s+update \{\n})
       .without_content(%r{^\s+connect_timeout = .*})
       .with_ensure('present')
       .with_group('radiusd')
@@ -144,6 +145,22 @@ describe 'freeradius::module::ldap' do
 
     it do
       is_expected.to compile.and_raise_error(%r{parameter 'password' expects a match for Freeradius::Password})
+    end
+  end
+
+  context 'with update passed' do
+    let(:params) do
+      super().merge(
+        update: [
+          "reply:Framed-IP-Address := 'radiusFramedIPAddress'",
+          "control:Password-With-Header	+= 'userPassword'",
+        ],
+      )
+    end
+
+    it do
+      is_expected.to contain_file('/etc/raddb/mods-available/test')
+        .with_content(%r{^\s+update \{\n\s+control:Password-With-Header	\+= 'userPassword'\n\s+reply:Framed-IP-Address := 'radiusFramedIPAddress'\n\s+\}\n})
     end
   end
 end
