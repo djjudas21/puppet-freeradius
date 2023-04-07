@@ -33,8 +33,6 @@ define freeradius::sql (
   Optional[Integer] $pool_idle_timeout                                              = 60,
   Optional[Float] $pool_connect_timeout                                             = undef,
 ) {
-  $fr_package          = $::freeradius::params::fr_package
-  $fr_service          = $::freeradius::params::fr_service
   $fr_basepath         = $::freeradius::params::fr_basepath
   $fr_modulepath       = $::freeradius::params::fr_modulepath
   $fr_group            = $::freeradius::params::fr_group
@@ -86,17 +84,19 @@ define freeradius::sql (
   }
 
   # Generate a module config, based on sql.conf
-  file { "${fr_basepath}/mods-available/${name}":
+  file { "freeradius mods-available/${name}":
     ensure  => $ensure,
+    path    => "${fr_basepath}/mods-available/${name}",
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
     content => template('freeradius/sql.conf.erb'),
-    require => [Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    require => [Package['freeradius'], Group['radiusd']],
+    notify  => Service['radiusd'],
   }
-  file { "${fr_modulepath}/${name}":
+  file { "freeradius mods-enabled/${name}":
     ensure => link,
+    path   => "${fr_modulepath}/${name}",
     target => "../mods-available/${name}",
   }
 

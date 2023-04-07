@@ -13,7 +13,8 @@ describe 'freeradius::krb5' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/mods-available/test')
+    is_expected.to contain_file('freeradius mods-available/test')
+      .with_path('/etc/raddb/mods-available/test')
       .with_content(%r{^\s+keytab = test_keytab$})
       .with_content(%r{^\s+service_principal = test_principal$})
       .with_ensure('present')
@@ -26,7 +27,8 @@ describe 'freeradius::krb5' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/mods-enabled/test')
+    is_expected.to contain_file('freeradius mods-enabled/test')
+      .with_path('/etc/raddb/mods-enabled/test')
       .with_ensure('link')
       .with_target('../mods-available/test')
   end

@@ -153,8 +153,9 @@ define freeradius::module::ldap (
   }
 
   # Generate a module config, based on ldap.conf
-  file { "${fr_basepath}/mods-available/${name}":
+  file { "freeradius mods-available/${name}":
     ensure  => $ensure,
+    path    => "${fr_basepath}/mods-available/${name}",
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
@@ -162,8 +163,9 @@ define freeradius::module::ldap (
     require => [Package[$fr_package], Group[$fr_group]],
     notify  => Service[$fr_service],
   }
-  file { "${fr_modulepath}/${name}":
+  file { "freeradius mods-enabled/${name}":
     ensure => link,
+    path   => "${fr_modulepath}/${name}",
     target => "../mods-available/${name}",
   }
 }

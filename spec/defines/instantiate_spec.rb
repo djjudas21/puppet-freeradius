@@ -8,7 +8,8 @@ describe 'freeradius::instantiate' do
   let(:params) { {} }
 
   it do
-    is_expected.to contain_file('/etc/raddb/instantiate/test')
+    is_expected.to contain_file('freeradius instantiate/test')
+      .with_path('/etc/raddb/instantiate/test')
       .with_content('test')
       .with_ensure('present')
       .with_group('radiusd')
