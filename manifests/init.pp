@@ -1,27 +1,27 @@
 # Base class to install FreeRADIUS
 class freeradius (
-  Boolean $control_socket          = false,
-  Integer $max_servers             = 4096,
-  Integer $max_requests            = 4096,
-  Integer $max_request_time        = 30,
-  Boolean $mysql_support           = false,
-  Boolean $pgsql_support           = false,
-  Boolean $perl_support            = false,
-  Boolean $utils_support           = false,
-  Boolean $ldap_support            = false,
-  Boolean $dhcp_support            = false,
-  Boolean $krb5_support            = false,
-  Boolean $wpa_supplicant          = false,
-  Boolean $winbind_support         = false,
-  String $log_destination          = 'files',
-  Boolean $syslog                  = false,
-  String $syslog_facility          = 'daemon',
-  Freeradius::Boolean $log_auth    = 'no',
-  Boolean $preserve_mods           = true,
-  Boolean $correct_escapes         = true,
-  Boolean $manage_logpath          = true,
-  Optional[String] $package_ensure = 'installed',
-  String $radacctdir               = $freeradius::params::radacctdir,
+  Boolean $control_socket                                      = false,
+  Integer $max_servers                                         = 4096,
+  Integer $max_requests                                        = 4096,
+  Integer $max_request_time                                    = 30,
+  Boolean $mysql_support                                       = false,
+  Boolean $pgsql_support                                       = false,
+  Boolean $perl_support                                        = false,
+  Boolean $utils_support                                       = false,
+  Boolean $ldap_support                                        = false,
+  Boolean $dhcp_support                                        = false,
+  Boolean $krb5_support                                        = false,
+  Boolean $wpa_supplicant                                      = false,
+  Boolean $winbind_support                                     = false,
+  Enum['files', 'syslog', 'stdout', 'stderr'] $log_destination = 'files',
+  Boolean $syslog                                              = false,
+  String $syslog_facility                                      = 'daemon',
+  Freeradius::Boolean $log_auth                                = 'no',
+  Boolean $preserve_mods                                       = true,
+  Boolean $correct_escapes                                     = true,
+  Boolean $manage_logpath                                      = true,
+  Optional[String] $package_ensure                             = 'installed',
+  String $radacctdir                                           = $freeradius::params::radacctdir,
 ) inherits freeradius::params {
   if $freeradius::fr_version !~ /^3/ {
     notify { 'This module is only compatible with FreeRADIUS 3.': }
@@ -36,9 +36,6 @@ class freeradius (
   } else {
     $fr_3_1 = false
   }
-
-  validate_re($log_destination, '^(files|syslog|stdout|stderr)$',
-    "log_destination value (${log_destination}) is not a valid value")
 
   if $control_socket == true {
     warning(@(WARN/L)
