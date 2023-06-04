@@ -9,7 +9,7 @@ define freeradius::module::detail (
   String $header                                   = '%t',
   Optional[Freeradius::Boolean] $locking           = undef,
   Optional[Freeradius::Boolean] $log_packet_header = undef,
-  Optional[Array[String]] $suppress                = [],
+  Array[String] $suppress                          = [],
 ) {
   freeradius::module { "detail.${name}":
     ensure  => $ensure,
