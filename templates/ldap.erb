@@ -162,16 +162,16 @@ ldap <%= @name %> {
 #		request:			+= 'radiusRequestAttribute'
 #		reply:				+= 'radiusReplyAttribute'
 #	}
-<%- if @update -%>
-		<%= @update.join("\n		") %>
-<%- else -%>
 	update {
+<%- if @update -%>
+		<%= @update.sort.join("\n		") %>
+<%- else -%>
 		control:Password-With-Header	+= 'userPassword'
 		control:			+= 'radiusControlAttribute'
 		request:			+= 'radiusRequestAttribute'
 		reply:				+= 'radiusReplyAttribute'
-	}
 <%- end -%>
+	}
 
 
 	#  Set to yes if you have eDirectory and want to use the universal
