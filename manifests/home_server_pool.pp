@@ -1,4 +1,9 @@
-# Configure home server pools
+# @summary Configure home server pools
+#
+# @param home_server
+# @param type
+# @param virtual_server
+# @param fallback
 define freeradius::home_server_pool (
   Variant[String, Array[String]] $home_server,
   Enum['fail-over', 'load-balance', 'client-balance', 'client-port-balance', 'keyed-balance'] $type = 'fail-over',

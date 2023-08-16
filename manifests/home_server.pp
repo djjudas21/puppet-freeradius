@@ -1,4 +1,24 @@
-# Configure a home_server for proxy config
+# @summary Configure a home_server for proxy config
+#
+# @param secret
+# @param proto
+# @param status_check
+# @param type
+# @param check_interval
+# @param check_timeout
+# @param ipaddr
+# @param ipv6addr
+# @param max_outstanding
+# @param no_response_fail
+# @param num_answers_to_alive
+# @param password
+# @param port
+# @param response_window
+# @param revive_interval
+# @param src_ipaddr
+# @param username
+# @param virtual_server
+# @param zombie_period
 define freeradius::home_server (
   Freeradius::Secret $secret,
   Enum['udp', 'tcp'] $proto                              = 'udp',

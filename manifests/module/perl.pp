@@ -1,7 +1,11 @@
-# == Define freeradius::module::perl
+# @summary Create the perl module configuration for FreeRADIUS
 #
-# Create the perl module configuration for FreeRADIUS
-#
+# @param ensure
+# @param moddir
+# @param perl_filename
+# @param path
+# @param content
+# @param function_names
 define freeradius::module::perl (
   Optional[String] $ensure                       = file,
   String $moddir                                 = "${fr_moduleconfigpath}/perl",
@@ -10,10 +14,11 @@ define freeradius::module::perl (
   Optional[String] $content                      = undef,
   Optional[Hash[String, String]] $function_names = undef,
 ) {
-  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
-  $fr_group            = $::freeradius::params::fr_group
-  $fr_service          = $::freeradius::params::fr_service
+  $fr_moduleconfigpath = $freeradius::params::fr_moduleconfigpath
+  $fr_group            = $freeradius::params::fr_group
+  $fr_service          = $freeradius::params::fr_service
   $source              = "${path}/${perl_filename}"
+
   freeradius::module { 'perl':
     ensure  => $ensure,
     content => template('freeradius/perl.erb'),

@@ -1,4 +1,25 @@
-# Configure LDAP support for FreeRADIUS
+# @summary Configure LDAP support for FreeRADIUS
+#
+# @param identity
+# @param password
+# @param basedn
+# @param server
+# @param port
+# @param uses
+# @param idle
+# @param probes
+# @param interval
+# @param timeout
+# @param start
+# @param min
+# @param max
+# @param spare
+# @param ensure
+# @param starttls
+# @param cafile
+# @param certfile
+# @param keyfile
+# @param requirecert
 define freeradius::ldap (
   String $identity,
   Freeradius::Password $password,
@@ -19,7 +40,7 @@ define freeradius::ldap (
   Optional[String] $cafile      = undef,
   Optional[String] $certfile    = undef,
   Optional[String] $keyfile     = undef,
-  $requirecert = 'allow',
+  Enum['never','allow','demand','hard'] $requirecert = 'allow',
 ) {
   warning('The use of freeradius::ldap is deprecated. You must use freeradius::module::ldap instead')
 

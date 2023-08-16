@@ -1,4 +1,12 @@
-# Configure Kerberos support for FreeRADIUS
+# @summary Configure Kerberos support for FreeRADIUS
+#
+# @param keytab
+# @param principal
+# @param start
+# @param min
+# @param max
+# @param spare
+# @param ensure
 define freeradius::krb5 (
   String $keytab,
   String $principal,
@@ -8,9 +16,9 @@ define freeradius::krb5 (
   Freeradius::Integer  $spare = "\${thread[pool].max_spare_servers}",
   Freeradius::Ensure $ensure  = 'present',
 ) {
-  $fr_modulepath       = $::freeradius::params::fr_modulepath
-  $fr_basepath         = $::freeradius::params::fr_basepath
-  $fr_group            = $::freeradius::params::fr_group
+  $fr_modulepath       = $freeradius::params::fr_modulepath
+  $fr_basepath         = $freeradius::params::fr_basepath
+  $fr_group            = $freeradius::params::fr_group
 
   # Generate a module config
   file { "freeradius mods-available/${name}":

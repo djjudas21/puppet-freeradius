@@ -1,4 +1,7 @@
-# Enable status-server
+# @summary Enable status-server
+#
+# @param port
+# @param listen
 class freeradius::status_server (
   Optional[Integer] $port  = 18121,
   Optional[String] $listen = '*',

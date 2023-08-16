@@ -1,4 +1,10 @@
-# Install FreeRADIUS config snippets
+# @summary Install FreeRADIUS config snippets
+#
+# @param source
+# @param ensure
+# @param key
+# @param prefix
+# @param relaxed
 define freeradius::attr (
   String $source,
   Freeradius::Ensure $ensure             = present,
@@ -6,8 +12,8 @@ define freeradius::attr (
   Optional[String] $prefix               = 'filter',
   Optional[Freeradius::Boolean] $relaxed = undef,
 ) {
-  $fr_group            = $::freeradius::params::fr_group
-  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
+  $fr_group            = $freeradius::params::fr_group
+  $fr_moduleconfigpath = $freeradius::params::fr_moduleconfigpath
 
   # Install the attribute filter snippet
   file { "freeradius attr_filter/${name}":

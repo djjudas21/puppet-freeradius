@@ -1,12 +1,17 @@
-# Install FreeRADIUS certificates
+# @summary Install FreeRADIUS certificates
+#
+# @param source
+# @param content
+# @param type
+# @param ensure
 define freeradius::cert (
   Optional[String] $source   = undef,
   Optional[String] $content  = undef,
   Optional[String] $type     = 'key',
   Freeradius::Ensure $ensure = present,
 ) {
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_basepath = $freeradius::params::fr_basepath
+  $fr_group    = $freeradius::params::fr_group
 
   $permission = $type ? {
     'key'   => '0640',

@@ -1,4 +1,17 @@
-# Install FreeRADIUS virtual servers (sites)
+# @summary Install FreeRADIUS virtual servers (sites)
+#
+# @param ensure
+# @param source
+# @param content
+# @param authorize
+# @param authenticate
+# @param preacct
+# @param accounting
+# @param session
+# @param post_auth
+# @param pre_proxy
+# @param post_proxy
+# @param listen
 define freeradius::site (
   Freeradius::Ensure $ensure  = present,
   Optional[String] $source    = undef,
@@ -13,8 +26,8 @@ define freeradius::site (
   Array[String] $post_proxy   = [],
   Array[Hash] $listen         = [],
 ) {
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_basepath = $freeradius::params::fr_basepath
+  $fr_group    = $freeradius::params::fr_group
 
   $manage_content = $source ? {
     undef   => $content ? {

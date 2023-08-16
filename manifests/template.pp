@@ -1,4 +1,7 @@
-# Configure a template snippet
+# @summary Configure a template snippet
+#
+# @param source
+# @param content
 define freeradius::template (
   Optional[String] $source  = undef,
   Optional[String] $content = undef,

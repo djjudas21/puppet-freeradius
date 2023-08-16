@@ -1,4 +1,9 @@
-# Install FreeRADIUS huntgroups
+# @summary Install FreeRADIUS huntgroups
+#
+# @param ensure
+# @param huntgroup
+# @param conditions
+# @param order
 define freeradius::huntgroup (
   Freeradius::Ensure $ensure                = present,
   Optional[String] $huntgroup               = $title,

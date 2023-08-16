@@ -1,4 +1,27 @@
-# Base class to install FreeRADIUS
+# @summary Base class to install FreeRADIUS
+#
+# @param control_socket
+# @param max_servers
+# @param max_requests
+# @param max_request_time
+# @param mysql_support
+# @param pgsql_support
+# @param perl_support
+# @param utils_support
+# @param ldap_support
+# @param dhcp_support
+# @param krb5_support
+# @param wpa_supplicant
+# @param winbind_support
+# @param log_destination
+# @param syslog
+# @param syslog_facility
+# @param log_auth
+# @param preserve_mods
+# @param correct_escapes
+# @param manage_logpath
+# @param package_ensure
+# @param radacctdir
 class freeradius (
   Boolean $control_socket                                      = false,
   Integer $max_servers                                         = 4096,
@@ -39,15 +62,10 @@ class freeradius (
 
   if $control_socket == true {
     warning(@(WARN/L)
-      Use of the control_socket parameter in the freeradius class is deprecated. \
-      Please use the freeradius::control_socket class instead.
-      |-WARN
+        Use of the control_socket parameter in the freeradius class is deprecated. \
+        Please use the freeradius::control_socket class instead.
+        |-WARN
     )
-  }
-
-  # Always restart the service after every module operation
-  Freeradius::Module {
-    notify => Service['radiusd']
   }
 
   file { 'freeradius radiusd.conf':
@@ -126,35 +144,35 @@ class freeradius (
   # Preserve some stock modules
   if ($preserve_mods) {
     freeradius::module { [
-      'always',
-      'cache_eap',
-      'chap',
-      'detail',
-      'detail.log',
-      'digest',
-      'dynamic_clients',
-      'echo',
-      'exec',
-      'expiration',
-      'expr',
-      'files',
-      'linelog',
-      'logintime',
-      'mschap',
-      'ntlm_auth',
-      'pap',
-      'passwd',
-      'preprocess',
-      'radutmp',
-      'realm',
-      'replicate',
-      'soh',
-      'sradutmp',
-      'unix',
-      'unpack',
-      'utf8',
-    ]:
-      preserve => true,
+        'always',
+        'cache_eap',
+        'chap',
+        'detail',
+        'detail.log',
+        'digest',
+        'dynamic_clients',
+        'echo',
+        'exec',
+        'expiration',
+        'expr',
+        'files',
+        'linelog',
+        'logintime',
+        'mschap',
+        'ntlm_auth',
+        'pap',
+        'passwd',
+        'preprocess',
+        'radutmp',
+        'realm',
+        'replicate',
+        'soh',
+        'sradutmp',
+        'unix',
+        'unpack',
+        'utf8',
+      ]:
+        preserve => true,
     }
   }
 
@@ -251,7 +269,7 @@ class freeradius (
   }
   $attr_filter_files.each |$name, $path| {
     file { $name:
-      ensure  => present,
+      ensure  => file,
       path    => $path,
       mode    => '0640',
       owner   => 'root',
@@ -300,7 +318,7 @@ class freeradius (
 
   # Fix the permissions on the hints file
   file { 'freeradius mods-config/preprocess/hints':
-    ensure  => present,
+    ensure  => file,
     path    => "${freeradius::fr_basepath}/mods-config/preprocess/hints",
     mode    => '0640',
     owner   => 'root',
@@ -523,7 +541,7 @@ class freeradius (
   # This should be fixed in FreeRADIUS 2.2.0
   # http://lists.freeradius.org/pipermail/freeradius-users/2012-October/063232.html
   # Only affects RPM-based systems
-  if $::osfamily == 'RedHat' {
+  if $facts['os']['family'] == 'RedHat' {
     exec { 'delete-radius-rpmnew':
       command => "find ${freeradius::fr_basepath} -name *.rpmnew -delete",
       onlyif  => "find ${freeradius::fr_basepath} -name *.rpmnew | grep rpmnew",

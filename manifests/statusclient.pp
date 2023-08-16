@@ -1,4 +1,11 @@
-# Install FreeRADIUS clients (WISMs or testing servers)
+# @summary Install FreeRADIUS clients (WISMs or testing servers)
+#
+# @param secret
+# @param ip
+# @param ip6
+# @param port
+# @param shortname
+# @param ensure
 define freeradius::statusclient (
   Freeradius::Secret $secret,
   Optional[String] $ip        = undef,
@@ -7,8 +14,8 @@ define freeradius::statusclient (
   Optional[String] $shortname = $name,
   Freeradius::Ensure $ensure  = present,
 ) {
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_basepath = $freeradius::params::fr_basepath
+  $fr_group    = $freeradius::params::fr_group
 
   file { "freeradius statusclients.d/${name}.conf":
     ensure  => $ensure,

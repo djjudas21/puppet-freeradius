@@ -1,10 +1,79 @@
-# == Class: freeradius::eap
+# @summary Define to configure eap FreeRADIUS module
 #
-# Define to configure eap FreeRADIUS module
-#
+# @param ensure
+# @param default_eap_type
+# @param timer_expire
+# @param ignore_unknown_eap_types
+# @param cisco_accounting_username_bug
+# @param max_sessions
+# @param eap_pwd
+# @param pwd_group
+# @param pwd_server_id
+# @param pwd_fragment_size
+# @param pwd_virtual_server
+# @param gtc_challenge
+# @param gtc_auth_type
+# @param tls_config_name
+# @param tls_private_key_password
+# @param tls_private_key_file
+# @param tls_certificate_file
+# @param tls_ca_file
+# @param tls_auto_chain
+# @param tls_psk_identity
+# @param tls_psk_hexphrase
+# @param tls_dh_file
+# @param tls_random_file
+# @param tls_fragment_size
+# @param tls_include_length
+# @param tls_check_crl
+# @param tls_check_all_crl
+# @param tls_allow_expired_crl
+# @param tls_ca_path
+# @param tls_check_cert_issuer
+# @param tls_check_cert_cn
+# @param tls_cipher_list
+# @param tls_disable_tlsv1_2
+# @param tls_min_version
+# @param tls_max_version
+# @param tls_ecdh_curve
+# @param tls_cache_enable
+# @param tls_cache_lifetime
+# @param tls_cache_max_entries
+# @param tls_cache_name
+# @param tls_cache_persist_dir
+# @param tls_verify_skip_if_ocsp_ok
+# @param tls_verify_tmpdir
+# @param tls_verify_client
+# @param tls_ocsp_enable
+# @param tls_ocsp_override_cert_url
+# @param tls_ocsp_url
+# @param tls_ocsp_use_nonce
+# @param tls_ocsp_timeout
+# @param tls_ocsp_softfail
+# @param tls_virtual_server
+# @param ttls_default_eap_type
+# @param ttls_copy_request_to_tunnel
+# @param ttls_use_tunneled_reply
+# @param ttls_virtual_server
+# @param ttls_include_length
+# @param ttls_require_client_cert
+# @param peap_default_eap_type
+# @param peap_copy_request_to_tunnel
+# @param peap_use_tunneled_reply
+# @param peap_proxy_tunneled_request_as_eap
+# @param peap_virtual_server
+# @param peap_soh
+# @param peap_soh_virtual_server
+# @param peap_require_client_cert
+# @param mschapv2_send_error
+# @param mschapv2_identity
+# @param eap_md5
+# @param eap_leap
+# @param eap_gtc
+# @param eap_peap
 define freeradius::module::eap (
-  $ensure                                                           = 'present',
-  $default_eap_type                                                 = 'md5',
+  String $ensure                                                    = 'present',
+  String $default_eap_type                                          = 'md5',
   Integer $timer_expire                                             = 60,
   Freeradius::Boolean $ignore_unknown_eap_types                     = 'no',
   Freeradius::Boolean $cisco_accounting_username_bug                = 'no',

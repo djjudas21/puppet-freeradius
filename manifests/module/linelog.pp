@@ -1,7 +1,16 @@
-# == Define freeradius::module::linelog
+# @summary Specific define to configure linelog module
 #
-# Specific define to configure linelog module
-#
+# @param ensure
+# @param filename
+# @param escape_filenames
+# @param permissions
+# @param group
+# @param syslog_facility
+# @param syslog_severity
+# @param format
+# @param reference
+# @param messages
+# @param accounting_request
 define freeradius::module::linelog (
   Enum['present','absent'] $ensure      = 'present',
   String $filename                      = "\${logdir}/linelog",

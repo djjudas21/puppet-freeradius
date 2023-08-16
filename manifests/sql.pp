@@ -1,4 +1,37 @@
-# Configure SQL support for FreeRADIUS
+# @summary Configure SQL support for FreeRADIUS
+#
+# @param database
+# @param password
+# @param server
+# @param login
+# @param radius_db
+# @param num_sql_socks
+# @param query_file
+# @param custom_query_file
+# @param lifetime
+# @param max_queries
+# @param ensure
+# @param acct_table1
+# @param acct_table2
+# @param postauth_table
+# @param authcheck_table
+# @param authreply_table
+# @param groupcheck_table
+# @param groupreply_table
+# @param usergroup_table
+# @param deletestalesessions
+# @param sqltrace
+# @param sqltracefile
+# @param connect_failure_retry_delay
+# @param nas_table
+# @param read_groups
+# @param port
+# @param readclients
+# @param pool_start
+# @param pool_min
+# @param pool_spare
+# @param pool_idle_timeout
+# @param pool_connect_timeout
 define freeradius::sql (
   Enum['mysql', 'mssql', 'oracle', 'postgresql'] $database,
   Freeradius::Password $password,
@@ -6,7 +39,7 @@ define freeradius::sql (
   Optional[String] $login                                                           = 'radius',
   Optional[String] $radius_db                                                       = 'radius',
   Variant[Freeradius::Integer, Enum["\${thread[pool].max_servers}"]] $num_sql_socks = "\${thread[pool].max_servers}",
-  Optional[String] $query_file                                                      = "\${modconfdir}/\${.:name}/main/\${dialect}/queries.conf",
+  Optional[String] $query_file                                                      = "\${modconfdir}/\${.:name}/main/\${dialect}/queries.conf", # lint:ignore:140chars
   Optional[String] $custom_query_file                                               = undef,
   Optional[Integer] $lifetime                                                       = 0,
   Optional[Integer] $max_queries                                                    = 0,
@@ -33,11 +66,11 @@ define freeradius::sql (
   Optional[Integer] $pool_idle_timeout                                              = 60,
   Optional[Float] $pool_connect_timeout                                             = undef,
 ) {
-  $fr_basepath         = $::freeradius::params::fr_basepath
-  $fr_modulepath       = $::freeradius::params::fr_modulepath
-  $fr_group            = $::freeradius::params::fr_group
-  $fr_logpath          = $::freeradius::params::fr_logpath
-  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
+  $fr_basepath         = $freeradius::params::fr_basepath
+  $fr_modulepath       = $freeradius::params::fr_modulepath
+  $fr_group            = $freeradius::params::fr_group
+  $fr_logpath          = $freeradius::params::fr_logpath
+  $fr_moduleconfigpath = $freeradius::params::fr_moduleconfigpath
 
   # Warn if the user tries to set a FreeRADIUS 3.1.x specific parameter, and
   # we detect that they are not on (or not installing) a FreeRADIUS 3.1.x
@@ -45,14 +78,14 @@ define freeradius::sql (
   # Additionally, if we are on FreeRADIUS 3.1.x then allow defaults for some
   # parameters, otherwise leave them set as specified when this define
   # is called.
-  if $::freeradius::fr_3_1 {
+  if $freeradius::fr_3_1 {
     if $pool_connect_timeout != undef {
       warning(@("WARN"/L)
-        The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x, \
-        i.e. the experimental branch. You are running \
-        `${facts['freeradius_version']}`. In the future, attempting to set \
-        it on this version may fail.
-        |-WARN
+          The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x, \
+          i.e. the experimental branch. You are running \
+          `${facts['freeradius_version']}`. In the future, attempting to set \
+          it on this version may fail.
+          |-WARN
       )
     }
 
@@ -63,10 +96,10 @@ define freeradius::sql (
   } else {
     if $pool_connect_timeout != undef {
       fail(@("FAIL"/L)
-        The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x, \
-        i.e. the experimental branch. You are running \
-        `${facts['freeradius_version']}`.
-        |-FAIL
+          The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x, \
+          i.e. the experimental branch. You are running \
+          `${facts['freeradius_version']}`.
+          |-FAIL
       )
     }
   }
@@ -78,7 +111,7 @@ define freeradius::sql (
   if ($custom_query_file and $custom_query_file != '') {
     $custom_query_file_path = "${fr_moduleconfigpath}/${name}-queries.conf"
 
-    ::freeradius::config { "${name}-queries.conf":
+    freeradius::config { "${name}-queries.conf":
       source => $custom_query_file,
     }
   }

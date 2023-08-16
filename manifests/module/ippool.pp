@@ -1,5 +1,15 @@
-# == Define: freeradius::module::ippool
+# @summary freeradius::module::ippool
 #
+# @param range_start
+# @param range_stop
+# @param netmask
+# @param ensure
+# @param cache_size
+# @param filename
+# @param ip_index
+# @param override
+# @param maximum_timeout
+# @param key
 define freeradius::module::ippool (
   String $range_start,
   String $range_stop,
@@ -15,9 +25,10 @@ define freeradius::module::ippool (
   if ($cache_size !~ Undef) {
     $real_cache_size = $cache_size
   } else {
-    $real_cache_size = inline_template(@("IPADDRRANGE"/L))
-      <%- require 'ipaddr' -%><%=(IPAddr.new @range_stop).to_i - (IPAddr.new @range_start).to_i + 1 %>
-    |-IPADDRRANGE
+    $real_cache_size = inline_template(@("IPADDRRANGE"/L)
+        <%- require 'ipaddr' -%><%=(IPAddr.new @range_stop).to_i - (IPAddr.new @range_start).to_i + 1 %>
+        |-IPADDRRANGE
+    )
   }
 
   freeradius::module { "ippool_${name}":
@@ -34,13 +45,13 @@ define freeradius::module::ippool (
     default => regsubst($ip_index, /\${db_dir}/, $freeradius::params::fr_basepath),
   }
   file { $_file_path:
-    ensure => 'present',
+    ensure => file,
     owner  => $freeradius::params::fr_user,
     group  => $freeradius::params::fr_group,
     mode   => '0640',
   }
   file { $_index_path:
-    ensure => 'present',
+    ensure => file,
     owner  => $freeradius::params::fr_user,
     group  => $freeradius::params::fr_group,
     mode   => '0640',

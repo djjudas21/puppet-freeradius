@@ -1,7 +1,7 @@
-# Blank unneeded config files to reduce complexity
+# @summary Blank unneeded config files to reduce complexity
 define freeradius::blank {
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_basepath = $freeradius::params::fr_basepath
+  $fr_group    = $freeradius::params::fr_group
 
   file { "freeradius ${name}":
     path    => "${fr_basepath}/${name}",

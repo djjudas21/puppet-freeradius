@@ -1,11 +1,15 @@
-# Install FreeRADIUS config snippets
+# @summary Install FreeRADIUS config snippets
+#
+# @param source
+# @param content
+# @param ensure
 define freeradius::config (
   Optional[String] $source   = undef,
   Optional[String] $content  = undef,
   Freeradius::Ensure $ensure = present,
 ) {
-  $fr_group            = $::freeradius::params::fr_group
-  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
+  $fr_group            = $freeradius::params::fr_group
+  $fr_moduleconfigpath = $freeradius::params::fr_moduleconfigpath
 
   file { "freeradius mods-config/${name}":
     ensure  => $ensure,

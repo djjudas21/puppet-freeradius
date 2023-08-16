@@ -1,5 +1,8 @@
-# == Define: freeradius::module::huntgroup
+# @summary freeradius::module::huntgroup
 #
+# @param conditions
+# @param order
+# @param huntgroup
 define freeradius::module::huntgroup (
   Variant[String,Array] $conditions,
   Variant[String,Integer] $order     = 50,

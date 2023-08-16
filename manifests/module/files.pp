@@ -1,9 +1,17 @@
-# == Define freeradius::module::files
+# @summary Create e file module configuration for FreeRADIUS
 #
-# Create e file module configuration for FreeRADIUS
-#
+# @param ensure
+# @param moddir
+# @param key
+# @param filename
+# @param usersfile
+# @param acctusersfile
+# @param preproxy_usersfile
+# @param users
+# @param source
+# @param content
 define freeradius::module::files (
-  $ensure                              = 'present',
+  String $ensure                       = 'present',
   String $moddir                       = "\${modconfdir}/\${.:instance}",
   Optional[String] $key                = undef,
   String $filename                     = "\${moddir}/authorize",
@@ -14,9 +22,9 @@ define freeradius::module::files (
   Optional[String] $source             = undef,
   Optional[String] $content            = undef,
 ) {
-  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
-  $fr_group            = $::freeradius::params::fr_group
-  $fr_service          = $::freeradius::params::fr_service
+  $fr_moduleconfigpath = $freeradius::params::fr_moduleconfigpath
+  $fr_group            = $freeradius::params::fr_group
+  $fr_service          = $freeradius::params::fr_service
 
   $manage_content = $content ? {
     undef     => $source ? {

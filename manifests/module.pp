@@ -1,13 +1,18 @@
-# Install FreeRADIUS modules
+# @summary Install FreeRADIUS modules
+#
+# @param source
+# @param content
+# @param ensure
+# @param preserve
 define freeradius::module (
   Optional[String] $source   = undef,
   Optional[String] $content  = undef,
   Freeradius::Ensure $ensure = present,
   Boolean $preserve          = false,
 ) {
-  $fr_modulepath = $::freeradius::params::fr_modulepath
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_modulepath = $freeradius::params::fr_modulepath
+  $fr_basepath   = $freeradius::params::fr_basepath
+  $fr_group      = $freeradius::params::fr_group
 
   $ensure_link = $ensure ? {
     'absent' => 'absent',

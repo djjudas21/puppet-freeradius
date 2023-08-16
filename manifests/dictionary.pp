@@ -1,12 +1,17 @@
-# Install FreeRADIUS custom dictionaries
+# @summary Install FreeRADIUS custom dictionaries
+#
+# @param source
+# @param content
+# @param order
+# @param ensure
 define freeradius::dictionary (
   Optional[String] $source   = undef,
   Optional[String] $content  = undef,
   Optional[Integer] $order   = 50,
   Freeradius::Ensure $ensure = 'present',
 ) {
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_basepath = $freeradius::params::fr_basepath
+  $fr_group    = $freeradius::params::fr_group
 
   if !$source and !$content {
     fail('source or content parameter must be provided')

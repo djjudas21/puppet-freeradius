@@ -1,4 +1,27 @@
-# Install FreeRADIUS clients (WISMs or testing servers)
+# @summary Install FreeRADIUS clients (WISMs or testing servers)
+#
+# @param secret
+# @param shortname
+# @param ip
+# @param ip6
+# @param proto
+# @param require_message_authenticator
+# @param virtual_server
+# @param nastype
+# @param login
+# @param password
+# @param coa_server
+# @param response_window
+# @param max_connections
+# @param lifetime
+# @param idle_timeout
+# @param redirect
+# @param port
+# @param srcip
+# @param firewall
+# @param ensure
+# @param attributes
+# @param huntgroups
 define freeradius::client (
   Freeradius::Secret $secret,
   Optional[String] $shortname                        = $title,
@@ -8,19 +31,19 @@ define freeradius::client (
   Freeradius::Boolean $require_message_authenticator = 'no',
   Optional[String] $virtual_server                   = undef,
   Optional[Enum[
-    'cisco',
-    'computone',
-    'livingston',
-    'juniper',
-    'max40xx',
-    'multitech',
-    'netserver',
-    'pathras',
-    'patton',
-    'portslave',
-    'tc',
-    'usrhiper',
-    'other',
+      'cisco',
+      'computone',
+      'livingston',
+      'juniper',
+      'max40xx',
+      'multitech',
+      'netserver',
+      'pathras',
+      'patton',
+      'portslave',
+      'tc',
+      'usrhiper',
+      'other',
   ]] $nastype = undef,
   Optional[String] $login                            = undef,
   Optional[Freeradius::Password] $password           = undef,
@@ -37,8 +60,8 @@ define freeradius::client (
   Variant[Array, Hash, String] $attributes           = [],
   Optional[String] $huntgroups                       = undef,
 ) {
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_basepath = $freeradius::params::fr_basepath
+  $fr_group    = $freeradius::params::fr_group
 
   file { "freeradius clients.d/${shortname}.conf":
     ensure  => $ensure,
@@ -83,7 +106,7 @@ define freeradius::client (
   if $huntgroups {
     $huntgroups.each |$index, $huntgroup| {
       freeradius::huntgroup { "huntgroup.client.${name}.${index}":
-        * => $huntgroup
+        * => $huntgroup,
       }
     }
   }

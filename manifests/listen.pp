@@ -1,5 +1,16 @@
-# == Define freeradius::listen
+# @summary freeradius::listen
 #
+# @param ensure
+# @param type
+# @param ip
+# @param ip6
+# @param port
+# @param interface
+# @param virtual_server
+# @param clients
+# @param max_connections
+# @param lifetime
+# @param idle_timeout
 define freeradius::listen (
   Freeradius::Ensure $ensure                                = 'present',
   Enum['auth','acct','proxy','detail','status','coa'] $type = 'auth',
@@ -13,8 +24,8 @@ define freeradius::listen (
   Integer $lifetime                                         = 0,
   Integer $idle_timeout                                     = 30,
 ) {
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_basepath = $freeradius::params::fr_basepath
+  $fr_group    = $freeradius::params::fr_group
 
   # Parameter validation
   if $ip and $ip != '*' and !is_ip_address($ip) {

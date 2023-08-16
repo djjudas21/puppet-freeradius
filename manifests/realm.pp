@@ -1,4 +1,11 @@
-# Set up proxy realms
+# @summary Set up proxy realms
+#
+# @param virtual_server
+# @param auth_pool
+# @param acct_pool
+# @param pool
+# @param nostrip
+# @param order
 define freeradius::realm (
   Optional[String] $virtual_server = undef,
   Optional[String] $auth_pool      = undef,

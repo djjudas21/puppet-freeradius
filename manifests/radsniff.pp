@@ -2,13 +2,13 @@
 #
 # @param envfile path to the environment file, used by the systemd unit
 # @param options commandline options passed to radsniff when it runs
-# @param
+# @param pidfile
 class freeradius::radsniff (
   Optional[String] $envfile = undef,
-  String $options = '',
+  String $options = '', # lint:ignore:params_empty_string_assignment
   Optional[String] $pidfile = undef,
 ) inherits freeradius::params {
-  unless $::freeradius::utils_support {
+  unless $freeradius::utils_support {
     fail('freeradius::radsniff requires freeradius have utils_support enabled')
   }
 
