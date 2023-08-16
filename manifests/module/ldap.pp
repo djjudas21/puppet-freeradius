@@ -63,11 +63,11 @@ define freeradius::module::ldap (
   Integer $idle_timeout                                               = 60,
   Optional[Float] $connect_timeout                                    = undef,
 ) {
-  $fr_package          = $::freeradius::params::fr_package
-  $fr_service          = $::freeradius::params::fr_service
-  $fr_modulepath       = $::freeradius::params::fr_modulepath
-  $fr_basepath         = $::freeradius::params::fr_basepath
-  $fr_group            = $::freeradius::params::fr_group
+  $package_name          = $freeradius::package_name
+  $service_name          = $freeradius::service_name
+  $modulepath       = $freeradius::modulepath
+  $basepath         = $freeradius::basepath
+  $group            = $freeradius::group
 
   # Validate our inputs
   # FR3.0 format server = 'ldap1.example.com, ldap1.example.com, ldap1.example.com'
@@ -153,16 +153,16 @@ define freeradius::module::ldap (
   }
 
   # Generate a module config, based on ldap.conf
-  file { "${fr_basepath}/mods-available/${name}":
+  file { "${basepath}/mods-available/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
-    group   => $fr_group,
+    group   => $group,
     content => template('freeradius/ldap.erb'),
-    require => [Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    require => [Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
   }
-  file { "${fr_modulepath}/${name}":
+  file { "${modulepath}/${name}":
     ensure => link,
     target => "../mods-available/${name}",
   }

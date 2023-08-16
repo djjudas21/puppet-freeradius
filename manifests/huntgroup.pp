@@ -5,13 +5,13 @@ define freeradius::huntgroup (
   Optional[Array[String]] $conditions       = [],
   Optional[Variant[String, Integer]] $order = 50,
 ) {
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_service  = $::freeradius::params::fr_service
+  $basepath = $freeradius::basepath
+  $service_name  = $freeradius::service_name
 
   concat::fragment { "huntgroup.${title}":
-    target  => "${fr_basepath}/mods-config/preprocess/huntgroups",
+    target  => "${basepath}/mods-config/preprocess/huntgroups",
     content => template('freeradius/huntgroup.erb'),
     order   => $order,
-    notify  => Service[$fr_service],
+    notify  => Service[$service_name],
   }
 }

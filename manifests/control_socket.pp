@@ -2,8 +2,8 @@
 class freeradius::control_socket (
   $mode = 'ro',
 ) {
-  $fr_user  = $::freeradius::params::fr_user
-  $fr_group = $::freeradius::params::fr_group
+  $user  = $freeradius::user
+  $group = $freeradius::group
 
   unless $mode in ['ro', 'rw'] {
     fail('$mode must be ro or rw')

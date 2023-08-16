@@ -8,23 +8,23 @@ define freeradius::krb5 (
   Freeradius::Integer  $spare = "\${thread[pool].max_spare_servers}",
   Freeradius::Ensure $ensure  = 'present',
 ) {
-  $fr_package          = $::freeradius::params::fr_package
-  $fr_service          = $::freeradius::params::fr_service
-  $fr_modulepath       = $::freeradius::params::fr_modulepath
-  $fr_basepath         = $::freeradius::params::fr_basepath
-  $fr_group            = $::freeradius::params::fr_group
+  $package_name          = $freeradius::package_name
+  $service_name          = $freeradius::service_name
+  $modulepath       = $freeradius::modulepath
+  $basepath         = $freeradius::basepath
+  $group            = $freeradius::group
 
   # Generate a module config
-  file { "${fr_basepath}/mods-available/${name}":
+  file { "${basepath}/mods-available/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
-    group   => $fr_group,
+    group   => $group,
     content => template('freeradius/krb5.erb'),
-    require => [Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    require => [Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
   }
-  file { "${fr_modulepath}/${name}":
+  file { "${modulepath}/${name}":
     ensure => link,
     target => "../mods-available/${name}",
   }

@@ -5,11 +5,11 @@ define freeradius::home_server_pool (
   Optional[String] $virtual_server = undef,
   Optional[String] $fallback       = undef,
 ) {
-  $fr_basepath = $::freeradius::params::fr_basepath
+  $basepath = $freeradius::basepath
 
   # Configure config fragment for this home server
   concat::fragment { "homeserverpool-${name}":
-    target  => "${fr_basepath}/proxy.conf",
+    target  => "${basepath}/proxy.conf",
     content => template('freeradius/home_server_pool.erb'),
     order   => 20,
   }

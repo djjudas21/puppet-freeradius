@@ -5,11 +5,11 @@ define freeradius::module (
   Freeradius::Ensure $ensure = present,
   Boolean $preserve          = false,
 ) {
-  $fr_package  = $::freeradius::params::fr_package
-  $fr_service  = $::freeradius::params::fr_service
-  $fr_modulepath = $::freeradius::params::fr_modulepath
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $package_name  = $freeradius::package_name
+  $service_name  = $freeradius::service_name
+  $modulepath = $freeradius::modulepath
+  $basepath = $freeradius::basepath
+  $group    = $freeradius::group
 
   $ensure_link = $ensure ? {
     'absent' => 'absent',
@@ -18,28 +18,28 @@ define freeradius::module (
 
   if ($preserve) {
     # Symlink to mods-available for stock modules
-    file { "${fr_modulepath}/${name}":
+    file { "${modulepath}/${name}":
       ensure => $ensure_link,
       target => "../mods-available/${name}",
-      notify => Service[$fr_service],
+      notify => Service[$service_name],
     }
   } else {
     # Deploy actual module to mods-available, and link it to mods-enabled
-    file { "${fr_basepath}/mods-available/${name}":
+    file { "${basepath}/mods-available/${name}":
       ensure  => $ensure,
       mode    => '0640',
       owner   => 'root',
-      group   => $fr_group,
+      group   => $group,
       source  => $source,
       content => $content,
-      require => [Package[$fr_package], Group[$fr_group]],
-      notify  => Service[$fr_service],
+      require => [Package[$package_name], Group[$group]],
+      notify  => Service[$service_name],
     }
-    file { "${fr_modulepath}/${name}":
+    file { "${modulepath}/${name}":
       ensure  => $ensure_link,
       target  => "../mods-available/${name}",
-      require => File["${fr_basepath}/mods-available/${name}"],
-      notify  => Service[$fr_service],
+      require => File["${basepath}/mods-available/${name}"],
+      notify  => Service[$service_name],
     }
   }
 }

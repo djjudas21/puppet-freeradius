@@ -33,13 +33,13 @@ define freeradius::sql (
   Optional[Integer] $pool_idle_timeout                                              = 60,
   Optional[Float] $pool_connect_timeout                                             = undef,
 ) {
-  $fr_package          = $::freeradius::params::fr_package
-  $fr_service          = $::freeradius::params::fr_service
-  $fr_basepath         = $::freeradius::params::fr_basepath
-  $fr_modulepath       = $::freeradius::params::fr_modulepath
-  $fr_group            = $::freeradius::params::fr_group
-  $fr_logpath          = $::freeradius::params::fr_logpath
-  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
+  $package_name          = $freeradius::package_name
+  $service_name          = $freeradius::service_name
+  $basepath         = $freeradius::basepath
+  $modulepath       = $freeradius::modulepath
+  $group            = $freeradius::group
+  $logpath          = $freeradius::logpath
+  $moduleconfigpath = $freeradius::moduleconfigpath
 
   # Warn if the user tries to set a FreeRADIUS 3.1.x specific parameter, and
   # we detect that they are not on (or not installing) a FreeRADIUS 3.1.x
@@ -47,7 +47,7 @@ define freeradius::sql (
   # Additionally, if we are on FreeRADIUS 3.1.x then allow defaults for some
   # parameters, otherwise leave them set as specified when this define
   # is called.
-  if $::freeradius::fr_3_1 {
+  if $freeradius::fr_3_1 {
     if $pool_connect_timeout != undef {
       warning(@("WARN"/L)
         The `pool_connect_timeout` parameter requires FreeRADIUS 3.1.x, \
@@ -74,11 +74,11 @@ define freeradius::sql (
   }
 
   # Determine default location of query file
-  $queryfile = "${fr_basepath}/sql/queries.conf"
+  $queryfile = "${basepath}/sql/queries.conf"
 
   # Install custom query file
   if ($custom_query_file and $custom_query_file != '') {
-    $custom_query_file_path = "${fr_moduleconfigpath}/${name}-queries.conf"
+    $custom_query_file_path = "${moduleconfigpath}/${name}-queries.conf"
 
     ::freeradius::config { "${name}-queries.conf":
       source => $custom_query_file,
@@ -86,16 +86,16 @@ define freeradius::sql (
   }
 
   # Generate a module config, based on sql.conf
-  file { "${fr_basepath}/mods-available/${name}":
+  file { "${basepath}/mods-available/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
-    group   => $fr_group,
+    group   => $group,
     content => template('freeradius/sql.conf.erb'),
-    require => [Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    require => [Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
   }
-  file { "${fr_modulepath}/${name}":
+  file { "${modulepath}/${name}":
     ensure => link,
     target => "../mods-available/${name}",
   }
@@ -103,13 +103,13 @@ define freeradius::sql (
   # Install rotation for sqltrace if we are using it
   if ($sqltrace == 'yes') {
     logrotate::rule { 'sqltrace':
-      path         => "${fr_logpath}/${sqltracefile}",
+      path         => "${logpath}/${sqltracefile}",
       rotate_every => 'week',
       rotate       => 1,
       create       => true,
       compress     => true,
       missingok    => true,
-      postrotate   => "kill -HUP `cat ${freeradius::fr_pidfile}`",
+      postrotate   => "kill -HUP `cat ${freeradius::pidfile}`",
     }
   }
 }

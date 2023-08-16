@@ -14,9 +14,9 @@ define freeradius::module::files (
   Optional[String] $source             = undef,
   Optional[String] $content            = undef,
 ) {
-  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
-  $fr_group            = $::freeradius::params::fr_group
-  $fr_service          = $::freeradius::params::fr_service
+  $moduleconfigpath = $freeradius::moduleconfigpath
+  $group            = $freeradius::group
+  $service_name          = $freeradius::service_name
 
   $manage_content = $content ? {
     undef     => $source ? {
@@ -32,8 +32,8 @@ define freeradius::module::files (
   }
 
   if $filename =~ /^\$\{moddir\}\/(.+)$/ {
-    $userspath = "${fr_moduleconfigpath}/${name}/${1}"
-    $usersdir  = "${fr_moduleconfigpath}/${name}"
+    $userspath = "${moduleconfigpath}/${name}/${1}"
+    $usersdir  = "${moduleconfigpath}/${name}"
   } else {
     $userspath = $filename
     $usersdir  = dirname($filename)
@@ -47,7 +47,7 @@ define freeradius::module::files (
   file { $usersdir:
     ensure  => $manage_dir,
     owner   => 'root',
-    group   => $fr_group,
+    group   => $group,
     mode    => '0750',
     require => Freeradius::Module[$name],
   }
@@ -55,11 +55,11 @@ define freeradius::module::files (
   file { $userspath:
     ensure  => $ensure,
     owner   => 'root',
-    group   => $fr_group,
+    group   => $group,
     mode    => '0640',
     source  => $source,
     content => $manage_content,
     require => File[$usersdir],
-    notify  => Service[$fr_service],
+    notify  => Service[$service_name],
   }
 }

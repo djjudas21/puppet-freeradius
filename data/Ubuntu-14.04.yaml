@@ -1,0 +1,4 @@
+---
+freeradius::guessversion: '2'
+freeradius::basepath: '/etc/freeradius'
+freeradius::raddbdir: '${sysconfdir}/freeradius'

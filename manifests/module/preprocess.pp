@@ -11,9 +11,9 @@ class freeradius::module::preprocess (
   Freeradius::Boolean $with_specialix_jetstream_hack = 'no',
   Freeradius::Boolean $with_cisco_vsa_hack           = 'no',
 ) {
-  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
-  $fr_group            = $::freeradius::params::fr_group
-  $fr_service          = $::freeradius::params::fr_service
+  $moduleconfigpath = $freeradius::moduleconfigpath
+  $group            = $freeradius::group
+  $service_name          = $freeradius::service_name
 
   freeradius::module { 'preprocess':
     ensure  => $ensure,
