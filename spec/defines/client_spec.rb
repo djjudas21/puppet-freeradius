@@ -14,7 +14,7 @@ describe 'freeradius::client' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/clients.d/test_short.conf')
+    is_expected.to contain_file('/etc/raddb/clients.d/test.conf')
       .with_content(%r{^client test_short {\n\s+ipaddr = 1.2.3.4\n\s+proto = \*\n\s+shortname = test_short\n\s+secret = "secret_value"\n\s+require_message_authenticator = no\n}\n})
       .with_ensure('present')
       .with_group('radiusd')
@@ -57,7 +57,7 @@ describe 'freeradius::client' do
     end
 
     it do
-      is_expected.to contain_file('/etc/raddb/clients.d/test_short.conf')
+      is_expected.to contain_file('/etc/raddb/clients.d/test.conf')
         .with_content(%r{^\s+password = "foo bar"$})
     end
   end
@@ -81,7 +81,7 @@ describe 'freeradius::client' do
       end
 
       it do
-        is_expected.to contain_firewall('100 test_short 1234 v4')
+        is_expected.to contain_firewall('100 test 1234 v4')
           .with_proto('udp')
           .with_dport(1234)
           .with_action('accept')
@@ -96,9 +96,9 @@ describe 'freeradius::client' do
         end
 
         it do
-          is_expected.not_to contain_firewall('100 test_short 1234 v4')
+          is_expected.not_to contain_firewall('100 test 1234 v4')
 
-          is_expected.to contain_firewall('100 test_short 1234 v6')
+          is_expected.to contain_firewall('100 test 1234 v6')
             .with_proto('udp')
             .with_dport(1234)
             .with_action('accept')
@@ -116,7 +116,7 @@ describe 'freeradius::client' do
       end
 
       it do
-        is_expected.to contain_firewall('100 test_short 1234,4321 v4')
+        is_expected.to contain_firewall('100 test 1234,4321 v4')
           .with_proto('udp')
           .with_dport([1234, 4321])
           .with_action('accept')
@@ -131,9 +131,9 @@ describe 'freeradius::client' do
         end
 
         it do
-          is_expected.not_to contain_firewall('100 test_short 1234,4321 v4')
+          is_expected.not_to contain_firewall('100 test 1234,4321 v4')
 
-          is_expected.to contain_firewall('100 test_short 1234,4321 v6')
+          is_expected.to contain_firewall('100 test 1234,4321 v6')
             .with_proto('udp')
             .with_dport([1234, 4321])
             .with_action('accept')
