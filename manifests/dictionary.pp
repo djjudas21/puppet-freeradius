@@ -1,5 +1,13 @@
 # @summary Install FreeRADIUS custom dictionaries
 #
+# Install custom dictionaries without breaking the default FreeRADIUS dictionary.
+# Custom dictionaries are installed in `dictionary.d` and automatically included in the global dictionary.
+#
+# @example
+#   freeradius::dictionary { 'mydict':
+#     source => 'puppet:///modules/site_freeradius/dictionary.mydict',
+#   }
+#
 # @param source
 # @param content
 # @param order

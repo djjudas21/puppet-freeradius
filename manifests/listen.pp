@@ -1,9 +1,12 @@
-# @summary freeradius::listen
+# @summary Define listening interface
 #
 # @param ensure
 # @param type
+#   Type of listener.
 # @param ip
+#   The IPv4 address of the interface to listen. `ip` and `ip6` are mutually exclusive.
 # @param ip6
+#   The IPv6 address of the interface to listen. `ip` and `ip6` are mutually exclusive.
 # @param port
 # @param interface
 # @param virtual_server

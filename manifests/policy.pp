@@ -1,5 +1,7 @@
 # @summary Install FreeRADIUS policies
 #
+# Install a policy from a flat file.
+#
 # @param source
 # @param order
 # @param ensure

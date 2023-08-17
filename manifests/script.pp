@@ -1,5 +1,8 @@
 # @summary Install FreeRADIUS helper scripts
 #
+# Install a helper script, e.g. which might be called upon by a virtual server. These are
+# placed in `scripts` and are not automatically included by the server.
+#
 # @param source
 # @param ensure
 define freeradius::script (

@@ -1,10 +1,22 @@
 # @summary Install FreeRADIUS config snippets
 #
+# @example
+#   freeradius::attr { 'eduroamlocal':
+#     key    => 'User-Name',
+#     prefix => 'attr_filter',
+#     source => 'puppet:///modules/site_freeradius/eduroamlocal',
+#   }
+#
 # @param source
 # @param ensure
 # @param key
+#   Specify a RADIUS attribute to be the key for this attribute filter. Enter only the string part of the name.
 # @param prefix
+#   Specify the prefix for the attribute filter name before the dot, e.g. `filter.post_proxy`. This is usually set to `filter` on FR2 and
+#   `attr_filter` on FR3.
 # @param relaxed
+#   Whether the filter removes or copies unmatched attributes, relaxed = no or yes respectively. An undefined value results in no
+#   explicit statement, causing the default behaviour of FreeRADIUS equivalent to 'relaxed = no'.
 define freeradius::attr (
   String $source,
   Freeradius::Ensure $ensure             = present,

@@ -1,11 +1,19 @@
 # @summary Configure Kerberos support for FreeRADIUS
 #
 # @param keytab
+#   Full path to the Kerberos keytab file
 # @param principal
+#   Name of the service principal
 # @param start
+#   Connections to create during module instantiation. If the server cannot create specified number of
+#   connections during instantiation it will exit. Set to 0 to allow the server to start without the
+#   directory being available.
 # @param min
+#   Minimum number of connections to keep open.
 # @param max
+#   Maximum number of connections.
 # @param spare
+#   Spare connections to be left idle.
 # @param ensure
 define freeradius::krb5 (
   String $keytab,

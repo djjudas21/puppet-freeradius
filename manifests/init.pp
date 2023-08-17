@@ -1,26 +1,48 @@
 # @summary Base class to install FreeRADIUS
 #
+# Installs the base server. In the early releases, this class does not have many parameters as most values are hard-coded. I am working on
+# parameterising more of the global settings to increase flexibility. Patches are welcome.
+#
 # @param control_socket
+#   Use of the `control_socket` parameter in the freeradius class is deprecated. Use the `freeradius::control_socket` class instead.
 # @param max_servers
+#   Limit on the total number of servers running.
 # @param max_requests
+#   The maximum number of requests which the server keeps track of. This should be 256 multiplied by the number of clients.
 # @param max_request_time
+#   The maximum time (in seconds) to handle a request.
 # @param mysql_support
+#   Install support for MySQL. Note this only installs the package. Use `freeradius::sql` to configure SQL support.
 # @param pgsql_support
 # @param perl_support
+#   Install support for Perl.
 # @param utils_support
+#   Install FreeRADIUS utils.
 # @param ldap_support
+#   Install support for LDAP.
 # @param dhcp_support
+#   Install support for DHCP.
 # @param krb5_support
+#   Install support for Kerberos.
 # @param wpa_supplicant
+#   Install `wpa_supplicant` utility.
 # @param winbind_support
+#   Add the radius user to the winbind privileged group. You must install winbind separately.
 # @param log_destination
+#   Configure destination of log messages.
 # @param syslog
+#   Add a syslog rule (using the `saz/rsyslog` module).
 # @param syslog_facility
+#   Configure which syslog facility to use when `log_destination` is set to `syslog`
 # @param log_auth
+#   Log authentication requests (yes/no).
 # @param preserve_mods
+#   Leave recommended stock modules enabled.
 # @param correct_escapes
+#   Use correct backslash escaping in unlang.
 # @param manage_logpath
 # @param package_ensure
+#   Choose whether the package is just installed and left (`installed`), or updated every Puppet run (`latest`)
 # @param radacctdir
 class freeradius (
   Boolean $control_socket                                      = false,

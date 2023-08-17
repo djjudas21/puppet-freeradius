@@ -1,4 +1,19 @@
 # @summary Blank unneeded config files to reduce complexity
+#
+# Selectively blank certain stock config files that aren't required. This is preferable to deleting them
+# because the package manager will replace certain files next time the package is upgraded, potentially
+# causing unexpected behaviour.
+#
+# The resource title should be the relative path from the FreeRADIUS config directory to the file(s) you
+# want to blank. You can pass multiple files in an array.
+#
+# @example
+#   freeradius::blank { 'sites-enabled/default': }
+#
+#   freeradius::blank { [
+#     'sites-enabled/default',
+#     'eap.conf',
+#   ]: }
 define freeradius::blank {
   $fr_basepath = $freeradius::params::fr_basepath
   $fr_group    = $freeradius::params::fr_group

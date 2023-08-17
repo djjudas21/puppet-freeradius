@@ -1,3 +1,4 @@
+# @summary Sasl type of FreeRADIUS
 type Freeradius::Sasl = Struct[
   {
     mech  => Optional[String],

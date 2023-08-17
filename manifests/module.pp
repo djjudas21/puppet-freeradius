@@ -1,5 +1,25 @@
 # @summary Install FreeRADIUS modules
 #
+# Install a module from a flat file, or enable a stock module that came with your distribution of
+# FreeRADIUS. Modules are installed into `mods-available` and automatically symlinked into
+# `mods-enabled`, to ensure compatibility with package managers. Any files in this directory that
+# are *not* managed by Puppet will be removed.
+#
+# @example Enable a stock module
+#   freeradius::module { 'pap':
+#     preserve => true,
+#   }
+#
+# @example Install a custom module from a flat file
+#   freeradius::module { 'buffered-sql':
+#     source => 'puppet:///modules/site_freeradius/buffered-sql',
+#   }
+#
+# @example Install a custom module from a template
+#   freeradius::module { 'buffered-sql':
+#     content => template('some_template.erb)',
+#   }
+#
 # @param source
 # @param content
 # @param ensure

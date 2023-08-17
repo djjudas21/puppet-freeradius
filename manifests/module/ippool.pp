@@ -1,15 +1,26 @@
-# @summary freeradius::module::ippool
+# @summary Install a `ippool` module
 #
 # @param range_start
+#   The first IP address of the pool.
 # @param range_stop
+#   The last IP address of the pool.
 # @param netmask
+#   The network mask used for the pool
 # @param ensure
+#   If the module should `present` or `absent`.
 # @param cache_size
+#   The gdbm cache size for the db files.
+#   Defaults to the number of IP addresses in the range.
 # @param filename
+#   The main db file used to allocate address.
 # @param ip_index
+#   Helper db index file.
 # @param override
+#   If set, the Framed-IP-Address already in the reply (if any) will be discarded.
 # @param maximum_timeout
+#   Maximum time in seconds that an entry may be active.
 # @param key
+#   The key to use for the session database.
 define freeradius::module::ippool (
   String $range_start,
   String $range_stop,

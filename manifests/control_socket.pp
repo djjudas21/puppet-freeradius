@@ -1,6 +1,7 @@
 # @summary Configure the FreeRADIUS control_socket
 #
 # @param mode
+#   Whether the control socket should be read-only or read-write.
 class freeradius::control_socket (
   Enum['ro', 'rw'] $mode = 'ro',
 ) {

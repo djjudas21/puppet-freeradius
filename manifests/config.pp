@@ -1,5 +1,17 @@
 # @summary Install FreeRADIUS config snippets
 #
+# Install arbitrary config snippets from a flat file. These are installed in `mods-config`
+#
+# @example
+#   freeradius::config { 'realm-checks.conf':
+#     source => 'puppet:///modules/site_freeradius/realm-checks.conf',
+#   }
+#
+# @example
+#   freeradius::config { 'realm-checks.conf':
+#     content => template('your_template),
+#   }
+#
 # @param source
 # @param content
 # @param ensure

@@ -1,8 +1,24 @@
 # @summary Install FreeRADIUS certificates
 #
+# Install certificates as provided. These are installed in `certs`.
+# Beware that any certificates *not* deployed by Puppet will be purged from this directory.
+#
+# @example
+#   freeradius::cert { 'mycert.pem':
+#     source => 'puppet:///modules/site_freeradius/mycert.pem',
+#     type   => 'key',
+#   }
+#
+# @example
+#   freeradius::cert { 'mycert.pem':
+#     content => '<your key/cert content here>',
+#     type    => 'key',
+#   }
+#
 # @param source
 # @param content
 # @param type
+#   Set file permissions on the installed certificate differently depending on whether this is a private key or a public certificate.
 # @param ensure
 define freeradius::cert (
   Optional[String] $source   = undef,
