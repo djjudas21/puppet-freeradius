@@ -1,34 +1,42 @@
 require 'spec_helper'
 
 describe 'freeradius::dictionary' do
-  include_context 'redhat_common_dependencies'
+  on_supported_os.each do |os, os_facts|
+    freeradius_hash = freeradius_settings_hash(os_facts)
 
-  let(:title) { 'test' }
+    context "on #{os}" do
+      include_context 'freeradius_default'
 
-  let(:params) do
-    {
-      source: 'puppet:///modules/test/path/to/dict',
-    }
-  end
+      let(:facts) { os_facts }
 
-  it do
-    is_expected.to contain_file('/etc/raddb/dictionary.d/dictionary.test')
-      .with_ensure('present')
-      .with_group('radiusd')
-      .with_mode('0644')
-      .with_owner('root')
-      .with_source('puppet:///modules/test/path/to/dict')
-      .that_notifies('Service[radiusd]')
-      .that_requires('File[/etc/raddb/dictionary.d]')
-      .that_requires('Package[freeradius]')
-      .that_requires('Group[radiusd]')
-  end
+      let(:title) { 'test' }
 
-  it do
-    is_expected.to contain_concat__fragment('dictionary.test')
-      .with_content(%r{^\$INCLUDE /etc/raddb/dictionary\.d/dictionary\.test$})
-      .with_order('50')
-      .with_target('/etc/raddb/dictionary')
-      .that_requires('File[/etc/raddb/dictionary.d/dictionary.test]')
+      let(:params) do
+        {
+          source: 'puppet:///modules/test/path/to/dict',
+        }
+      end
+
+      it do
+        is_expected.to contain_file("#{freeradius_hash[:basepath]}/dictionary.d/dictionary.test")
+          .with_ensure('present')
+          .with_group(freeradius_hash[:group])
+          .with_mode('0644')
+          .with_owner('root')
+          .with_source('puppet:///modules/test/path/to/dict')
+          .that_notifies("Service[#{freeradius_hash[:service_name]}]")
+          .that_requires("File[#{freeradius_hash[:basepath]}/dictionary.d]")
+          .that_requires('Package[freeradius]')
+          .that_requires("Group[#{freeradius_hash[:group]}]")
+      end
+
+      it do
+        is_expected.to contain_concat__fragment('dictionary.test')
+          .with_content(%r{^\$INCLUDE #{freeradius_hash[:basepath]}/dictionary\.d/dictionary\.test$})
+          .with_order('50')
+          .with_target("#{freeradius_hash[:basepath]}/dictionary")
+          .that_requires("File[#{freeradius_hash[:basepath]}/dictionary.d/dictionary.test]")
+      end
+    end
   end
 end

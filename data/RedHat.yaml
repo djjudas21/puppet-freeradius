@@ -1,3 +1,2 @@
 ---
 freeradius::service_has_status: true
-freeradius::radsniff::envfile: '/etc/sysconfig/radsniff'

@@ -14,5 +14,5 @@ freeradius::wbpriv_user: 'wbpriv'
 freeradius::libdir: '/usr/lib64/freeradius'
 freeradius::db_dir: '${localstatedir}/lib/radiusd'
 freeradius::radacctdir: '${logdir}/radacct'
-freeradius::radsniff::envfile: ~
+freeradius::radsniff::envfile: '/etc/sysconfig/radsniff'
 freeradius::radsniff::pidfile: "/var/run/%{lookup('freeradius::service_name')}/radsniff.pid"

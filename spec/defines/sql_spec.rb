@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'freeradius::sql' do
   on_supported_os.each do |os, os_facts|
+    freeradius_hash = freeradius_settings_hash(os_facts)
+
     context "on #{os}" do
       include_context 'freeradius_default'
 
@@ -22,7 +24,7 @@ describe 'freeradius::sql' do
       end
 
       it do
-        is_expected.to contain_file('/etc/raddb/mods-available/test')
+        is_expected.to contain_file("#{freeradius_hash[:basepath]}/mods-available/test")
           .with_content(%r{^sql test \{\n})
           .with_content(%r{^\s+dialect = "postgresql"$})
           .with_content(%r{^\s+server = "localhost"$})
@@ -32,17 +34,17 @@ describe 'freeradius::sql' do
           .with_content(%r{^\s+postauth_table = "radpostauth"$})
           .without_content(%r{^\s+connect_timeout = .*})
           .with_ensure('present')
-          .with_group('radiusd')
+          .with_group(freeradius_hash[:group])
           .with_mode('0640')
           .with_owner('root')
           .without_content(%r{^\s+logfile =})
-          .that_notifies('Service[radiusd]')
+          .that_notifies("Service[#{freeradius_hash[:service_name]}]")
           .that_requires('Package[freeradius]')
-          .that_requires('Group[radiusd]')
+          .that_requires("Group[#{freeradius_hash[:group]}]")
       end
 
       it do
-        is_expected.to contain_file('/etc/raddb/mods-enabled/test')
+        is_expected.to contain_file("#{freeradius_hash[:basepath]}/mods-enabled/test")
           .with_ensure('link')
           .with_target('../mods-available/test')
       end
@@ -55,7 +57,7 @@ describe 'freeradius::sql' do
         end
 
         it do
-          is_expected.to contain_file('/etc/raddb/mods-available/test')
+          is_expected.to contain_file("#{freeradius_hash[:basepath]}/mods-available/test")
             .with_content(%r{^\s+logfile = \${logdir}/sqllog.sql$})
         end
 
@@ -64,8 +66,8 @@ describe 'freeradius::sql' do
             .with_compress('true')
             .with_create('true')
             .with_missingok('true')
-            .with_path('/var/log/radius/${logdir}/sqllog.sql')
-            .with_postrotate('kill -HUP `cat /var/run/radiusd/radiusd.pid`')
+            .with_path("#{freeradius_hash[:logpath]}/${logdir}/sqllog.sql")
+            .with_postrotate("kill -HUP `cat /var/run/#{freeradius_hash[:service_name]}/#{freeradius_hash[:service_name]}.pid`")
             .with_rotate('1')
             .with_rotate_every('week')
         end
@@ -98,7 +100,7 @@ describe 'freeradius::sql' do
         end
 
         it do
-          is_expected.to contain_file('/etc/raddb/mods-available/test')
+          is_expected.to contain_file("#{freeradius_hash[:basepath]}/mods-available/test")
             .with_content(%r{^\s+connect_timeout = 3.0})
         end
 
@@ -110,7 +112,7 @@ describe 'freeradius::sql' do
           end
 
           it do
-            is_expected.to contain_file('/etc/raddb/mods-available/test')
+            is_expected.to contain_file("#{freeradius_hash[:basepath]}/mods-available/test")
               .with_content(%r{^\s+connect_timeout = 5.0})
           end
 
