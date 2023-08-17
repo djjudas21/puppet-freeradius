@@ -3,18 +3,18 @@ define freeradius::script (
   String $source,
   Freeradius::Ensure $ensure = present,
 ) {
-  $fr_package  = $::freeradius::params::fr_package
-  $fr_service  = $::freeradius::params::fr_service
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $package_name  = $freeradius::package_name
+  $service_name  = $freeradius::service_name
+  $basepath = $freeradius::basepath
+  $group    = $freeradius::group
 
-  file { "${fr_basepath}/scripts/${name}":
+  file { "${basepath}/scripts/${name}":
     ensure  => $ensure,
     mode    => '0750',
     owner   => 'root',
-    group   => $fr_group,
+    group   => $group,
     source  => $source,
-    require => [File["${fr_basepath}/scripts"], Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    require => [File["${basepath}/scripts"], Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
   }
 }

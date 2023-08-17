@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'freeradius' do
   on_supported_os.each do |os, os_facts|
-    context "on #{os}" do
-      include_context 'redhat_params'
+    freeradius_hash = freeradius_settings_hash(os_facts)
 
+    context "on #{os}" do
       let(:facts) { os_facts }
 
       # Empty params hash by default so we can super().merge
@@ -13,80 +13,80 @@ describe 'freeradius' do
       it do
         is_expected.to contain_file('radiusd.conf')
           .with(
-            'group'  => 'radiusd',
+            'group'  => freeradius_hash[:group],
             'mode'   => '0644',
-            'path'   => '/etc/raddb/radiusd.conf',
-            'notify' => 'Service[radiusd]',
+            'path'   => "#{freeradius_hash[:basepath]}/radiusd.conf",
+            'notify' => "Service[#{freeradius_hash[:service_name]}]",
             'owner'  => 'root',
           )
           .that_requires('Package[freeradius]')
-          .that_requires('Group[radiusd]')
+          .that_requires("Group[#{freeradius_hash[:group]}]")
       end
 
       it do
         [
-          '/etc/raddb/statusclients.d',
-          '/etc/raddb',
-          '/etc/raddb/conf.d',
-          '/etc/raddb/attr.d',
-          '/etc/raddb/users.d',
-          '/etc/raddb/policy.d',
-          '/etc/raddb/dictionary.d',
-          '/etc/raddb/scripts',
-          '/etc/raddb/mods-config',
-          '/etc/raddb/mods-config/attr_filter',
-          '/etc/raddb/mods-config/preprocess',
-          '/etc/raddb/mods-config/sql',
-          '/etc/raddb/sites-available',
-          '/etc/raddb/mods-available',
+          "#{freeradius_hash[:basepath]}/statusclients.d",
+          freeradius_hash[:basepath],
+          "#{freeradius_hash[:basepath]}/conf.d",
+          "#{freeradius_hash[:basepath]}/attr.d",
+          "#{freeradius_hash[:basepath]}/users.d",
+          "#{freeradius_hash[:basepath]}/policy.d",
+          "#{freeradius_hash[:basepath]}/dictionary.d",
+          "#{freeradius_hash[:basepath]}/scripts",
+          "#{freeradius_hash[:basepath]}/mods-config",
+          "#{freeradius_hash[:basepath]}/mods-config/attr_filter",
+          "#{freeradius_hash[:basepath]}/mods-config/preprocess",
+          "#{freeradius_hash[:basepath]}/mods-config/sql",
+          "#{freeradius_hash[:basepath]}/sites-available",
+          "#{freeradius_hash[:basepath]}/mods-available",
         ].each do |file|
           is_expected.to contain_file(file)
             .with(
               'ensure'  => 'directory',
-              'group'   => 'radiusd',
+              'group'   => freeradius_hash[:group],
               'mode'    => '0755',
-              'notify'  => 'Service[radiusd]',
+              'notify'  => "Service[#{freeradius_hash[:service_name]}]",
               'owner'   => 'root',
             )
             .that_requires('Package[freeradius]')
-            .that_requires('Group[radiusd]')
+            .that_requires("Group[#{freeradius_hash[:group]}]")
         end
       end
 
       it do
         [
-          '/etc/raddb/certs',
-          '/etc/raddb/clients.d',
-          '/etc/raddb/listen.d',
-          '/etc/raddb/sites-enabled',
-          '/etc/raddb/instantiate',
+          "#{freeradius_hash[:basepath]}/certs",
+          "#{freeradius_hash[:basepath]}/clients.d",
+          "#{freeradius_hash[:basepath]}/listen.d",
+          "#{freeradius_hash[:basepath]}/sites-enabled",
+          "#{freeradius_hash[:basepath]}/instantiate",
         ].each do |file|
           is_expected.to contain_file(file)
             .with(
               'ensure'  => 'directory',
-              'group'   => 'radiusd',
+              'group'   => freeradius_hash[:group],
               'mode'    => '0755',
-              'notify'  => 'Service[radiusd]',
+              'notify'  => "Service[#{freeradius_hash[:service_name]}]",
               'owner'   => 'root',
               'purge'   => 'true',
               'recurse' => 'true',
             )
             .that_requires('Package[freeradius]')
-            .that_requires('Group[radiusd]')
+            .that_requires("Group[#{freeradius_hash[:group]}]")
         end
       end
 
       it do
-        is_expected.to contain_concat('/etc/raddb/policy.conf')
+        is_expected.to contain_concat("#{freeradius_hash[:basepath]}/policy.conf")
           .with(
-            'group'          => 'radiusd',
+            'group'          => freeradius_hash[:group],
             'mode'           => '0640',
-            'notify'         => 'Service[radiusd]',
+            'notify'         => "Service[#{freeradius_hash[:service_name]}]",
             'owner'          => 'root',
             'ensure_newline' => true,
           )
           .that_requires('Package[freeradius]')
-          .that_requires('Group[radiusd]')
+          .that_requires("Group[#{freeradius_hash[:group]}]")
       end
 
       it do
@@ -94,7 +94,7 @@ describe 'freeradius' do
           .with(
             'content' => 'policy {',
             'order'   => '10',
-            'target'  => '/etc/raddb/policy.conf',
+            'target'  => "#{freeradius_hash[:basepath]}/policy.conf",
           )
       end
 
@@ -103,21 +103,21 @@ describe 'freeradius' do
           .with(
             'content' => '}',
             'order'   => '99',
-            'target'  => '/etc/raddb/policy.conf',
+            'target'  => "#{freeradius_hash[:basepath]}/policy.conf",
           )
       end
 
       it do
-        is_expected.to contain_concat('/etc/raddb/proxy.conf')
+        is_expected.to contain_concat("#{freeradius_hash[:basepath]}/proxy.conf")
           .with(
-            'group'          => 'radiusd',
+            'group'          => freeradius_hash[:group],
             'mode'           => '0640',
-            'notify'         => 'Service[radiusd]',
+            'notify'         => "Service[#{freeradius_hash[:service_name]}]",
             'owner'          => 'root',
             'ensure_newline' => true,
           )
           .that_requires('Package[freeradius]')
-          .that_requires('Group[radiusd]')
+          .that_requires("Group[#{freeradius_hash[:group]}]")
       end
 
       it do
@@ -125,41 +125,41 @@ describe 'freeradius' do
           .with(
             'content' => '# Proxy config',
             'order'   => '05',
-            'target'  => '/etc/raddb/proxy.conf',
+            'target'  => "#{freeradius_hash[:basepath]}/proxy.conf",
           )
       end
 
       it do
-        is_expected.to contain_concat('/etc/raddb/mods-available/attr_filter')
+        is_expected.to contain_concat("#{freeradius_hash[:basepath]}/mods-available/attr_filter")
           .with(
-            'group'          => 'radiusd',
+            'group'          => freeradius_hash[:group],
             'mode'           => '0640',
-            'notify'         => 'Service[radiusd]',
+            'notify'         => "Service[#{freeradius_hash[:service_name]}]",
             'owner'          => 'root',
             'ensure_newline' => true,
           )
           .that_requires('Package[freeradius]')
-          .that_requires('Group[radiusd]')
+          .that_requires("Group[#{freeradius_hash[:group]}]")
       end
 
       it do
         is_expected.to contain_concat__fragment('attr-default')
           .with(
             'order'   => '10',
-            'target'  => '/etc/raddb/mods-available/attr_filter',
+            'target'  => "#{freeradius_hash[:basepath]}/mods-available/attr_filter",
           )
       end
 
       it do
-        is_expected.to contain_concat('/etc/raddb/dictionary')
+        is_expected.to contain_concat("#{freeradius_hash[:basepath]}/dictionary")
           .with(
-            'group'          => 'radiusd',
+            'group'          => freeradius_hash[:group],
             'mode'           => '0644',
             'owner'          => 'root',
             'ensure_newline' => true,
           )
           .that_requires('Package[freeradius]')
-          .that_requires('Group[radiusd]')
+          .that_requires("Group[#{freeradius_hash[:group]}]")
       end
 
       it do
@@ -167,7 +167,7 @@ describe 'freeradius' do
           .with(
             'order'  => '10',
             'source' => 'puppet:///modules/freeradius/dictionary.header',
-            'target' => '/etc/raddb/dictionary',
+            'target' => "#{freeradius_hash[:basepath]}/dictionary",
           )
       end
 
@@ -176,7 +176,7 @@ describe 'freeradius' do
           .with(
             'order'  => '90',
             'source' => 'puppet:///modules/freeradius/dictionary.footer',
-            'target' => '/etc/raddb/dictionary',
+            'target' => "#{freeradius_hash[:basepath]}/dictionary",
           )
       end
 
@@ -189,22 +189,22 @@ describe 'freeradius' do
       end
 
       it do
-        is_expected.to contain_service('radiusd')
+        is_expected.to contain_service(freeradius_hash[:service_name])
           .with(
             'enable'     => 'true',
             'ensure'     => 'running',
             'hasrestart' => 'true',
             'hasstatus'  => 'true',
-            'name'       => 'radiusd',
+            'name'       => freeradius_hash[:service_name],
           )
           .that_requires('Package[freeradius]')
-          .that_requires('User[radiusd]')
+          .that_requires("User[#{freeradius_hash[:user]}]")
           .that_requires('Exec[radiusd-config-test]')
-          .that_requires('File[radiusd.conf]')
+          .that_requires("File[#{freeradius_hash[:basepath]}/radiusd.conf]")
       end
 
       it do
-        is_expected.to contain_user('radiusd')
+        is_expected.to contain_user(freeradius_hash[:user])
           .with(
             'ensure'  => 'present',
             'groups'  => nil,
@@ -220,15 +220,15 @@ describe 'freeradius' do
         end
 
         it do
-          is_expected.to contain_user('radiusd')
+          is_expected.to contain_user(freeradius_hash[:user])
             .with(
-              'groups'  => 'wbpriv',
+              'groups'  => freeradius_hash[:wbpriv_user],
             )
         end
       end
 
       it do
-        is_expected.to contain_group('radiusd')
+        is_expected.to contain_group(freeradius_hash[:group])
           .with(
             'ensure' => 'present',
           )
@@ -252,29 +252,29 @@ describe 'freeradius' do
 
       it do
         [
-          '/var/log/radius',
-          '/var/log/radius/radacct',
+          freeradius_hash[:logpath],
+          "#{freeradius_hash[:logpath]}/radacct",
         ].each do |file|
           is_expected.to contain_file(file)
             .with(
-              'mode'    => '0750',
-              'owner' => 'radiusd',
-              'group' => 'radiusd',
+              'mode'  => '0750',
+              'owner' => freeradius_hash[:user],
+              'group' => freeradius_hash[:group],
             )
             .that_requires('Package[freeradius]')
         end
       end
 
       it do
-        is_expected.to contain_file('/var/log/radius/radius.log')
+        is_expected.to contain_file("#{freeradius_hash[:logpath]}/radius.log")
           .with(
-            'group'   => 'radiusd',
-            'owner'   => 'radiusd',
+            'group'   => freeradius_hash[:group],
+            'owner'   => freeradius_hash[:user],
             'seltype' => 'radiusd_log_t',
           )
           .that_requires('Package[freeradius]')
-          .that_requires('User[radiusd]')
-          .that_requires('Group[radiusd]')
+          .that_requires("User[#{freeradius_hash[:user]}]")
+          .that_requires("Group[#{freeradius_hash[:group]}]")
       end
 
       it do
@@ -283,8 +283,8 @@ describe 'freeradius' do
             'compress'      => 'true',
             'create'        => 'false',
             'missingok'     => 'true',
-            'path'          => '/var/log/radius/radacct/*/*.log',
-            'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+            'path'          => "#{freeradius_hash[:logpath]}/radacct/*/*.log",
+            'postrotate'    => "kill -HUP `cat /var/run/#{freeradius_hash[:service_name]}/#{freeradius_hash[:service_name]}.pid`",
             'rotate'        => '7',
             'rotate_every'  => 'day',
             'sharedscripts' => 'true',
@@ -297,8 +297,8 @@ describe 'freeradius' do
             'compress'      => 'true',
             'create'        => 'true',
             'missingok'     => 'true',
-            'path'          => '/var/log/radius/checkrad.log',
-            'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+            'path'          => "#{freeradius_hash[:logpath]}/checkrad.log",
+            'postrotate'    => "kill -HUP `cat /var/run/#{freeradius_hash[:service_name]}/#{freeradius_hash[:service_name]}.pid`",
             'rotate'        => '1',
             'rotate_every'  => 'week',
             'sharedscripts' => 'true',
@@ -311,8 +311,8 @@ describe 'freeradius' do
             'compress'      => 'true',
             'create'        => 'true',
             'missingok'     => 'true',
-            'path'          => '/var/log/radius/radius*.log',
-            'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
+            'path'          => "#{freeradius_hash[:logpath]}/radius*.log",
+            'postrotate'    => "kill -HUP `cat /var/run/#{freeradius_hash[:service_name]}/#{freeradius_hash[:service_name]}.pid`",
             'rotate'        => '26',
             'rotate_every'  => 'week',
             'sharedscripts' => 'true',
@@ -321,8 +321,8 @@ describe 'freeradius' do
 
       it do
         [
-          '/etc/raddb/certs/dh',
-          '/etc/raddb/certs/random',
+          "#{freeradius_hash[:basepath]}/certs/dh",
+          "#{freeradius_hash[:basepath]}/certs/random",
         ].each do |file|
           is_expected.to contain_file(file)
             .that_requires('Exec[dh]')
@@ -333,21 +333,21 @@ describe 'freeradius' do
       it do
         is_expected.to contain_exec('dh')
           .with(
-            'command' => 'openssl dhparam -out /etc/raddb/certs/dh 1024',
-            'creates' => '/etc/raddb/certs/dh',
+            'command' => "openssl dhparam -out #{freeradius_hash[:basepath]}/certs/dh 1024",
+            'creates' => "#{freeradius_hash[:basepath]}/certs/dh",
             'path'    => '/usr/bin',
           )
-          .that_requires('File[/etc/raddb/certs]')
+          .that_requires("File[#{freeradius_hash[:basepath]}/certs]")
       end
 
       it do
         is_expected.to contain_exec('random')
           .with(
-            'command' => 'dd if=/dev/urandom of=/etc/raddb/certs/random count=10 >/dev/null 2>&1',
-            'creates' => '/etc/raddb/certs/random',
+            'command' => "dd if=/dev/urandom of=#{freeradius_hash[:basepath]}/certs/random count=10 >/dev/null 2>&1",
+            'creates' => "#{freeradius_hash[:basepath]}/certs/random",
             'path'    => '/bin',
           )
-          .that_requires('File[/etc/raddb/certs]')
+          .that_requires("File[#{freeradius_hash[:basepath]}/certs]")
       end
 
       it do
@@ -363,19 +363,19 @@ describe 'freeradius' do
 
       it do
         [
-          '/etc/raddb/clients.conf',
-          '/etc/raddb/sql.conf',
+          "#{freeradius_hash[:basepath]}/clients.conf",
+          "#{freeradius_hash[:basepath]}/sql.conf",
         ].each do |file|
           is_expected.to contain_file(file)
             .with(
               'content' => '# FILE INTENTIONALLY BLANK',
-              'group'   => 'radiusd',
+              'group'   => freeradius_hash[:group],
               'mode'    => '0644',
-              'notify'  => 'Service[radiusd]',
+              'notify'  => "Service[#{freeradius_hash[:service_name]}]",
               'owner'   => 'root',
             )
             .that_requires('Package[freeradius]')
-            .that_requires('Group[radiusd]')
+            .that_requires("Group[#{freeradius_hash[:group]}]")
         end
       end
 
@@ -495,7 +495,7 @@ describe 'freeradius' do
           is_expected.to contain_package('wpa_supplicant')
             .with(
               'ensure' => 'installed',
-              'name'   => 'wpa_supplicant',
+              'name'   => freeradius_hash[:wpa_supplicant_package_name],
             )
         end
       end
@@ -510,7 +510,7 @@ describe 'freeradius' do
         it do
           is_expected.to contain_rsyslog__snippet('12-radiusd-log')
             .with(
-              'content' => %r{^if \$programname == \'radiusd\' then /var/log/radius/radius.log},
+              'content' => %r{^if \$programname == \'radiusd\' then #{freeradius_hash[:logpath]}/radius.log},
             )
         end
       end
@@ -520,8 +520,8 @@ describe 'freeradius' do
         it do
           is_expected.to contain_exec('delete-radius-rpmnew')
             .with(
-              'command' => 'find /etc/raddb -name *.rpmnew -delete',
-              'onlyif'  => 'find /etc/raddb -name *.rpmnew | grep rpmnew',
+              'command' => "find #{freeradius_hash[:basepath]} -name *.rpmnew -delete",
+              'onlyif'  => "find #{freeradius_hash[:basepath]} -name *.rpmnew | grep rpmnew",
               'path'    => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
             )
         end
@@ -529,8 +529,8 @@ describe 'freeradius' do
         it do
           is_expected.to contain_exec('delete-radius-rpmsave')
             .with(
-              'command' => 'find /etc/raddb -name *.rpmsave -delete',
-              'onlyif'  => 'find /etc/raddb -name *.rpmsave | grep rpmsave',
+              'command' => "find #{freeradius_hash[:basepath]} -name *.rpmsave -delete",
+              'onlyif'  => "find #{freeradius_hash[:basepath]} -name *.rpmsave | grep rpmsave",
               'path'    => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
             )
         end

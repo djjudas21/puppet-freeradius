@@ -4,51 +4,12 @@ RSpec.configure do |c|
   end
 end
 
-# Set up freeradius::params with the redhat values, so we have something
-# to test for in the freeradius spec without defining separate tests for
-# every OS
-redhat_params_class = 'class freeradius::params {
-  $fr_basepath = "/etc/raddb"
-  $fr_configdir = "mods-config"
-  $fr_db_dir = "\${localstatedir}/lib/radiusd"
-  $fr_group = "radiusd"
-  $fr_libdir = "/usr/lib64/freeradius"
-  $fr_logpath = "/var/log/radius"
-  $fr_moduleconfigpath = "/etc/raddb/mods-config"
-  $fr_moduledir = "mods-enabled"
-  $fr_modulepath = "/etc/raddb/mods-enabled"
-  $fr_package = "freeradius"
-  $fr_pidfile = "/var/run/radiusd/radiusd.pid"
-  $fr_raddbdir = "\${sysconfdir}/raddb"
-  $fr_service = "radiusd"
-  $fr_service_has_status = true
-  $fr_user = "radiusd"
-  $fr_version = "3"
-  $fr_wbpriv_user = "wbpriv"
-  $fr_wpa_supplicant = "wpa_supplicant"
-  $radacctdir = "\${logdir}/radacct"
-}
-include freeradius::params'
-
-shared_context 'redhat_params' do
-  let(:pre_condition) do
-    [
-      redhat_params_class,
-    ]
-  end
-end
-
 # Set up a default freeradius instance, so we can test other classes which
 # require freeradius to exist first
-#
-# function warning() allows us to test for warnings being raised, by
-# translating it to a notify - though this is not yet working
 shared_context 'freeradius_default' do
   let(:pre_condition) do
     [
-      redhat_params_class,
-      'class { freeradius: }',
-      # 'function warning($message) { notify { "warning_test: ${message}": } }'
+      'class { "freeradius": }',
     ]
   end
 end
@@ -57,30 +18,90 @@ end
 shared_context 'freeradius_with_utils' do
   let(:pre_condition) do
     [
-      'class freeradius {
-        $utils_support = true
-      }
-      include freeradius
-
-      package { "freeradius-utils": }',
+      'class { "freeradius":
+        utils_support => true,
+      }',
     ]
   end
 end
 
-# Some common dependencies for things based on names for redhat systems
-shared_context 'redhat_common_dependencies' do
-  let(:pre_condition) do
-    [
-      redhat_params_class,
-      "package { 'freeradius': }",
-      "group { 'radiusd': }",
-      "service { 'radiusd': }",
-      "file { '/etc/raddb': ensure => directory }",
-      "file { '/etc/raddb/certs': ensure => directory }",
-      "file { '/etc/raddb/clients.d': ensure => directory }",
-      "file { '/etc/raddb/dictionary.d': ensure => directory }",
-      "file { '/etc/raddb/mods-config': ensure => directory }",
-      "file { '/etc/raddb/scripts': ensure => directory }",
-    ]
+def freeradius_settings_hash(os_facts)
+  osfamily        = os_facts[:osfamily]
+  operatingsystem = os_facts[:operatingsystem]
+  freeradius = {}
+  case osfamily
+  when 'Debian'
+    freeradius[:wpa_supplicant_package_name] = 'wpasupplicant'
+    freeradius[:service_name] = case operatingsystem
+                                when 'Ubuntu'
+                                  'radiusd'
+                                else
+                                  'freeradius'
+                                end
+    freeradius[:service_has_status] = true
+    freeradius[:basepath] = case operatingsystem
+                            when 'Ubuntu'
+                              '/etc/raddb'
+                            else
+                              '/etc/freeradius/3.0'
+                            end
+    freeradius[:raddbdir] = case operatingsystem
+                            when 'Ubuntu'
+                              '${sysconfdir}/raddb'
+                            else
+                              '${sysconfdir}/freeradius/3.0'
+                            end
+    freeradius[:logpath] = case operatingsystem
+                           when 'Ubuntu'
+                             '/var/log/radius'
+                           else
+                             '/var/log/freeradius'
+                           end
+    freeradius[:user] = case operatingsystem
+                        when 'Ubuntu'
+                          'radiusd'
+                        else
+                          'freerad'
+                        end
+    freeradius[:group] = case operatingsystem
+                         when 'Ubuntu'
+                           'radiusd'
+                         else
+                           'freerad'
+                         end
+    freeradius[:wbpriv_user] = 'winbindd_priv'
+    freeradius[:libdir] = case operatingsystem
+                          when 'Ubuntu'
+                            '/usr/lib64/freeradius'
+                          else
+                            '/usr/lib/freeradius'
+                          end
+    freeradius[:db_dir] = case operatingsystem
+                          when 'Ubuntu'
+                            '${localstatedir}/lib/radiusd'
+                          else
+                            '${raddbdir}'
+                          end
+    freeradius[:radsniff] = {
+      envfile: '/etc/defaults/radsniff',
+      pidfile: "/var/run/#{freeradius[:service_name]}/radsniff.pid"
+    }
+  else
+    freeradius[:wpa_supplicant_package_name] = 'wpa_supplicant'
+    freeradius[:service_name] = 'radiusd'
+    freeradius[:service_has_status] = false
+    freeradius[:basepath] = '/etc/raddb'
+    freeradius[:raddbdir] = '${sysconfdir}/raddb'
+    freeradius[:logpath] = '/var/log/radius'
+    freeradius[:user] = 'radiusd'
+    freeradius[:group] = 'radiusd'
+    freeradius[:wbpriv_user] = 'wbpriv'
+    freeradius[:libdir] = '/usr/lib64/freeradius'
+    freeradius[:db_dir] = '${localstatedir}/lib/radiusd'
+    freeradius[:radsniff] = {
+      envfile: '/etc/sysconfig/radsniff',
+      pidfile: "/var/run/#{freeradius[:service_name]}/radsniff.pid"
+    }
   end
+  freeradius
 end

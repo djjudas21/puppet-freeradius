@@ -1,0 +1,14 @@
+---
+freeradius::guessversion: '3'
+freeradius::wpa_supplicant_package_name: 'wpasupplicant'
+freeradius::service_name: 'freeradius'
+freeradius::service_has_status: true
+freeradius::basepath: '/etc/freeradius/3.0'
+freeradius::raddbdir: '${sysconfdir}/freeradius/3.0'
+freeradius::logpath: '/var/log/freeradius'
+freeradius::user: 'freerad'
+freeradius::group: 'freerad'
+freeradius::wbpriv_user: 'winbindd_priv'
+freeradius::libdir: '/usr/lib/freeradius'
+freeradius::db_dir: '${raddbdir}'
+freeradius::radsniff::envfile: '/etc/defaults/radsniff'

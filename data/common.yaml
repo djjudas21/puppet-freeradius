@@ -1,0 +1,18 @@
+---
+freeradius::guessversion: '3'
+freeradius::package_name: 'freeradius'
+freeradius::wpa_supplicant_package_name: 'wpa_supplicant'
+freeradius::service_name: 'radiusd'
+freeradius::service_has_status: false
+freeradius::pidfile: "/var/run/%{lookup('freeradius::service_name')}/%{lookup('freeradius::service_name')}.pid"
+freeradius::basepath: '/etc/raddb'
+freeradius::raddbdir: '${sysconfdir}/raddb'
+freeradius::logpath: '/var/log/radius'
+freeradius::user: 'radiusd'
+freeradius::group: 'radiusd'
+freeradius::wbpriv_user: 'wbpriv'
+freeradius::libdir: '/usr/lib64/freeradius'
+freeradius::db_dir: '${localstatedir}/lib/radiusd'
+freeradius::radacctdir: '${logdir}/radacct'
+freeradius::radsniff::envfile: '/etc/sysconfig/radsniff'
+freeradius::radsniff::pidfile: "/var/run/%{lookup('freeradius::service_name')}/radsniff.pid"

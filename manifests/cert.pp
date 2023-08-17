@@ -5,10 +5,10 @@ define freeradius::cert (
   Optional[String] $type     = 'key',
   Freeradius::Ensure $ensure = present,
 ) {
-  $fr_package  = $::freeradius::params::fr_package
-  $fr_service  = $::freeradius::params::fr_service
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $package_name  = $freeradius::package_name
+  $service_name  = $freeradius::service_name
+  $basepath = $freeradius::basepath
+  $group    = $freeradius::group
 
   $permission = $type ? {
     'key'   => '0640',
@@ -16,15 +16,15 @@ define freeradius::cert (
     default => '0644',
   }
 
-  file { "${fr_basepath}/certs/${name}":
+  file { "${basepath}/certs/${name}":
     ensure    => $ensure,
     mode      => $permission,
     owner     => 'root',
-    group     => $fr_group,
+    group     => $group,
     source    => $source,
     content   => $content,
     show_diff => false,
-    require   => [File["${fr_basepath}/certs"], Package[$fr_package], Group[$fr_group]],
-    notify    => Service[$fr_service],
+    require   => [File["${basepath}/certs"], Package[$package_name], Group[$group]],
+    notify    => Service[$service_name],
   }
 }

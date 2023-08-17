@@ -1,16 +1,16 @@
 # Blank unneeded config files to reduce complexity
 define freeradius::blank {
-  $fr_package  = $::freeradius::params::fr_package
-  $fr_service  = $::freeradius::params::fr_service
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $package_name  = $freeradius::package_name
+  $service_name  = $freeradius::service_name
+  $basepath = $freeradius::basepath
+  $group    = $freeradius::group
 
-  file { "${fr_basepath}/${name}":
+  file { "${basepath}/${name}":
     mode    => '0644',
     owner   => 'root',
-    group   => $fr_group,
-    require => [File[$fr_basepath], Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    group   => $group,
+    require => [File[$basepath], Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
     content => @(BLANK/L),
       # This file is intentionally left blank to reduce complexity. \
       Blanking it but leaving it present is safer than deleting it, \

@@ -1,0 +1,9 @@
+---
+freeradius::service_name: 'radiusd'
+freeradius::basepath: '/etc/raddb'
+freeradius::raddbdir: '${sysconfdir}/raddb'
+freeradius::logpath: '/var/log/radius'
+freeradius::user: 'radiusd'
+freeradius::group: 'radiusd'
+freeradius::libdir: '/usr/lib64/freeradius'
+freeradius::db_dir: '${localstatedir}/lib/radiusd'

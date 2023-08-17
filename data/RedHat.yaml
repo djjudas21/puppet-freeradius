@@ -1,0 +1,2 @@
+---
+freeradius::service_has_status: true

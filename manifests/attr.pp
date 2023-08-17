@@ -6,27 +6,27 @@ define freeradius::attr (
   Optional[String] $prefix               = 'filter',
   Optional[Freeradius::Boolean] $relaxed = undef,
 ) {
-  $fr_package          = $::freeradius::params::fr_package
-  $fr_service          = $::freeradius::params::fr_service
-  $fr_basepath         = $::freeradius::params::fr_basepath
-  $fr_group            = $::freeradius::params::fr_group
-  $fr_moduleconfigpath = $::freeradius::params::fr_moduleconfigpath
-  $fr_modulepath       = $::freeradius::params::fr_modulepath
+  $package_name          = $freeradius::package_name
+  $service_name          = $freeradius::service_name
+  $basepath         = $freeradius::basepath
+  $group            = $freeradius::group
+  $moduleconfigpath = $freeradius::moduleconfigpath
+  $modulepath       = $freeradius::modulepath
 
   # Install the attribute filter snippet
-  file { "${fr_moduleconfigpath}/attr_filter/${name}":
+  file { "${moduleconfigpath}/attr_filter/${name}":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
-    group   => $fr_group,
+    group   => $group,
     source  => $source,
-    require => [Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    require => [Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
   }
 
   # Reference all attribute snippets in one file
   concat::fragment { "attr-${name}":
-    target  => "${fr_basepath}/mods-available/attr_filter",
+    target  => "${basepath}/mods-available/attr_filter",
     content => template('freeradius/attr.erb'),
     order   => 20,
   }

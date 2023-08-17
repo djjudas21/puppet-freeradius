@@ -1,5 +1,20 @@
 # Base class to install FreeRADIUS
 class freeradius (
+  String $package_name,
+  String $wpa_supplicant_package_name,
+  String $service_name,
+  Boolean $service_has_status,
+  String $pidfile,
+  String $basepath,
+  String $raddbdir,
+  String $guessversion,
+  String $logpath,
+  String $user,
+  String $group,
+  String $wbpriv_user,
+  String $libdir,
+  String $db_dir,
+  String $radacctdir,
   Boolean $control_socket                                      = false,
   Integer $max_servers                                         = 4096,
   Integer $max_requests                                        = 4096,
@@ -21,11 +36,31 @@ class freeradius (
   Boolean $correct_escapes                                     = true,
   Boolean $manage_logpath                                      = true,
   Optional[String] $package_ensure                             = 'installed',
-  String $radacctdir                                           = $freeradius::params::radacctdir,
-) inherits freeradius::params {
-  if $freeradius::fr_version !~ /^3/ {
+  String $version                                              = pick_default($facts['freeradius_maj_version'], $guessversion),
+) {
+  if $version !~ /^3/ {
     notify { 'This module is only compatible with FreeRADIUS 3.': }
   }
+
+  # Default module dir
+  $moduledir = $version ? {
+    '2'       => 'modules',
+    '3'       => 'mods-enabled',
+    default   => 'modules',
+  }
+
+  # Default module path
+  $modulepath = "${basepath}/${moduledir}"
+
+  # Default module config dir
+  $modconfigdir = $version ? {
+    '2'       => 'conf.d',
+    '3'       => 'mods-config',
+    default   => 'conf.d',
+  }
+
+  # Default module config path
+  $moduleconfigpath = "${basepath}/${modconfigdir}"
 
   # Guess if we are running FreeRADIUS 3.1.x
   if (
@@ -47,62 +82,62 @@ class freeradius (
 
   # Always restart the service after every module operation
   Freeradius::Module {
-    notify => Service[$freeradius::fr_service]
+    notify => Service[$service_name]
   }
 
   file { 'radiusd.conf':
-    name    => "${freeradius::fr_basepath}/radiusd.conf",
+    name    => "${basepath}/radiusd.conf",
     mode    => '0644',
     owner   => 'root',
-    group   => $freeradius::fr_group,
+    group   => $group,
     content => template('freeradius/radiusd.conf.erb'),
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify  => Service[$freeradius::fr_service],
+    require => [Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
   }
 
   # Create various directories
   file { [
-    "${freeradius::fr_basepath}/statusclients.d",
-    $freeradius::fr_basepath,
-    "${freeradius::fr_basepath}/conf.d",
-    "${freeradius::fr_basepath}/attr.d",
-    "${freeradius::fr_basepath}/users.d",
-    "${freeradius::fr_basepath}/policy.d",
-    "${freeradius::fr_basepath}/dictionary.d",
-    "${freeradius::fr_basepath}/scripts",
-    "${freeradius::fr_basepath}/mods-config",
-    "${freeradius::fr_basepath}/mods-config/attr_filter",
-    "${freeradius::fr_basepath}/mods-config/preprocess",
-    "${freeradius::fr_basepath}/mods-config/sql",
-    "${freeradius::fr_basepath}/sites-available",
-    "${freeradius::fr_basepath}/mods-available",
+    "${basepath}/statusclients.d",
+    $basepath,
+    "${basepath}/conf.d",
+    "${basepath}/attr.d",
+    "${basepath}/users.d",
+    "${basepath}/policy.d",
+    "${basepath}/dictionary.d",
+    "${basepath}/scripts",
+    "${basepath}/mods-config",
+    "${basepath}/mods-config/attr_filter",
+    "${basepath}/mods-config/preprocess",
+    "${basepath}/mods-config/sql",
+    "${basepath}/sites-available",
+    "${basepath}/mods-available",
   ]:
     ensure  => directory,
     mode    => '0755',
     owner   => 'root',
-    group   => $freeradius::fr_group,
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify  => Service[$freeradius::fr_service],
+    group   => $group,
+    require => [Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
   }
 
   # Create these directories separately so we can set purge option
   # Anything in these dirs NOT managed by puppet will be removed!
   file { [
-    "${freeradius::fr_basepath}/certs",
-    "${freeradius::fr_basepath}/clients.d",
-    "${freeradius::fr_basepath}/listen.d",
-    "${freeradius::fr_basepath}/sites-enabled",
-    "${freeradius::fr_basepath}/mods-enabled",
-    "${freeradius::fr_basepath}/instantiate",
+    "${basepath}/certs",
+    "${basepath}/clients.d",
+    "${basepath}/listen.d",
+    "${basepath}/sites-enabled",
+    "${basepath}/mods-enabled",
+    "${basepath}/instantiate",
   ]:
     ensure  => directory,
     purge   => true,
     recurse => true,
     mode    => '0755',
     owner   => 'root',
-    group   => $freeradius::fr_group,
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify  => Service[$freeradius::fr_service],
+    group   => $group,
+    require => [Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
   }
 
   # Preserve some stock modules
@@ -142,146 +177,146 @@ class freeradius (
 
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
-  concat { "${freeradius::fr_basepath}/policy.conf":
+  concat { "${basepath}/policy.conf":
     owner          => 'root',
-    group          => $freeradius::fr_group,
+    group          => $group,
     mode           => '0640',
     ensure_newline => true,
-    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify         => Service[$freeradius::fr_service],
+    require        => [Package[$package_name], Group[$group]],
+    notify         => Service[$service_name],
   }
   concat::fragment { 'policy_header':
-    target  => "${freeradius::fr_basepath}/policy.conf",
+    target  => "${basepath}/policy.conf",
     content => 'policy {',
     order   => 10,
   }
   concat::fragment { 'policy_footer':
-    target  => "${freeradius::fr_basepath}/policy.conf",
+    target  => "${basepath}/policy.conf",
     content => '}',
     order   => '99',
   }
 
   # Set up concat template file
-  concat { "${freeradius::fr_basepath}/templates.conf":
+  concat { "${basepath}/templates.conf":
     owner          => 'root',
-    group          => $freeradius::fr_group,
+    group          => $group,
     mode           => '0640',
     ensure_newline => true,
-    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify         => Service[$freeradius::fr_service],
+    require        => [Package[$package_name], Group[$group]],
+    notify         => Service[$service_name],
   }
   concat::fragment { 'template_header':
-    target => "${freeradius::fr_basepath}/templates.conf",
+    target => "${basepath}/templates.conf",
     source => 'puppet:///modules/freeradius/template.header',
     order  => '05',
   }
   concat::fragment { 'template_footer':
-    target  => "${freeradius::fr_basepath}/templates.conf",
+    target  => "${basepath}/templates.conf",
     content => '}',
     order   => '95',
   }
 
   # Set up concat proxy file
-  concat { "${freeradius::fr_basepath}/proxy.conf":
+  concat { "${basepath}/proxy.conf":
     owner          => 'root',
-    group          => $freeradius::fr_group,
+    group          => $group,
     mode           => '0640',
     ensure_newline => true,
-    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify         => Service[$freeradius::fr_service],
+    require        => [Package[$package_name], Group[$group]],
+    notify         => Service[$service_name],
   }
   concat::fragment { 'proxy_header':
-    target  => "${freeradius::fr_basepath}/proxy.conf",
+    target  => "${basepath}/proxy.conf",
     content => '# Proxy config',
     order   => '05',
   }
 
   # Set up attribute filter file
-  concat { "${freeradius::fr_basepath}/mods-available/attr_filter":
+  concat { "${basepath}/mods-available/attr_filter":
     owner          => 'root',
-    group          => $freeradius::fr_group,
+    group          => $group,
     mode           => '0640',
     ensure_newline => true,
-    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify         => Service[$freeradius::fr_service],
+    require        => [Package[$package_name], Group[$group]],
+    notify         => Service[$service_name],
   }
-  file { "${freeradius::fr_modulepath}/attr_filter":
+  file { "${modulepath}/attr_filter":
     ensure => link,
     target => '../mods-available/attr_filter',
-    notify => Service[$freeradius::fr_service],
+    notify => Service[$service_name],
   }
 
   # Install default attribute filters
   concat::fragment { 'attr-default':
-    target  => "${freeradius::fr_basepath}/mods-available/attr_filter",
+    target  => "${basepath}/mods-available/attr_filter",
     content => template('freeradius/attr_default.erb'),
     order   => 10,
   }
 
   # Manage the file permissions for files defined in attr_filter
   file { [
-    "${freeradius::fr_basepath}/mods-config/attr_filter/access_challenge",
-    "${freeradius::fr_basepath}/mods-config/attr_filter/access_reject",
-    "${freeradius::fr_basepath}/mods-config/attr_filter/accounting_response",
-    "${freeradius::fr_basepath}/mods-config/attr_filter/post-proxy",
-    "${freeradius::fr_basepath}/mods-config/attr_filter/pre-proxy",
+    "${basepath}/mods-config/attr_filter/access_challenge",
+    "${basepath}/mods-config/attr_filter/access_reject",
+    "${basepath}/mods-config/attr_filter/accounting_response",
+    "${basepath}/mods-config/attr_filter/post-proxy",
+    "${basepath}/mods-config/attr_filter/pre-proxy",
   ]:
     ensure  => 'present',
     mode    => '0640',
     owner   => 'root',
-    group   => $freeradius::fr_group,
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify  => Service[$freeradius::fr_service],
+    group   => $group,
+    require => [Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
   }
 
   # Install a slightly tweaked stock dictionary that includes
   # our custom dictionaries
-  concat { "${freeradius::fr_basepath}/dictionary":
+  concat { "${basepath}/dictionary":
     owner          => 'root',
-    group          => $freeradius::fr_group,
+    group          => $group,
     mode           => '0644',
     ensure_newline => true,
-    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    require        => [Package[$package_name], Group[$group]],
   }
   concat::fragment { 'dictionary_header':
-    target => "${freeradius::fr_basepath}/dictionary",
+    target => "${basepath}/dictionary",
     source => 'puppet:///modules/freeradius/dictionary.header',
     order  => 10,
   }
   concat::fragment { 'dictionary_footer':
-    target => "${freeradius::fr_basepath}/dictionary",
+    target => "${basepath}/dictionary",
     source => 'puppet:///modules/freeradius/dictionary.footer',
     order  => 90,
   }
 
   # Install a huntgroups file
-  concat { "${freeradius::fr_basepath}/mods-config/preprocess/huntgroups":
+  concat { "${basepath}/mods-config/preprocess/huntgroups":
     owner          => 'root',
-    group          => $freeradius::fr_group,
+    group          => $group,
     mode           => '0640',
     ensure_newline => true,
-    require        => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify         => Service[$freeradius::fr_service],
+    require        => [Package[$package_name], Group[$group]],
+    notify         => Service[$service_name],
   }
   concat::fragment { 'huntgroups_header':
-    target => "${freeradius::fr_basepath}/mods-config/preprocess/huntgroups",
+    target => "${basepath}/mods-config/preprocess/huntgroups",
     source => 'puppet:///modules/freeradius/huntgroups.header',
     order  => 10,
   }
 
   # Fix the permissions on the hints file
-  file { "${freeradius::fr_basepath}/mods-config/preprocess/hints":
+  file { "${basepath}/mods-config/preprocess/hints":
     ensure  => 'present',
     mode    => '0640',
     owner   => 'root',
-    group   => $freeradius::fr_group,
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    group   => $group,
+    require => [Package[$package_name], Group[$group]],
   }
 
   # Install FreeRADIUS packages
   package { 'freeradius':
     ensure => $package_ensure,
-    name   => $freeradius::fr_package,
+    name   => $package_name,
   }
   if $mysql_support {
     package { 'freeradius-mysql':
@@ -321,122 +356,122 @@ class freeradius (
   if $wpa_supplicant {
     package { 'wpa_supplicant':
       ensure => $package_ensure,
-      name   => $freeradius::fr_wpa_supplicant,
+      name   => $wpa_supplicant_package_name,
     }
   }
 
   # radiusd always tests its config before restarting the service, to avoid outage. If the config is not valid, the service
   # won't get restarted, and the puppet run will fail.
-  service { $freeradius::fr_service:
+  service { $service_name:
     ensure     => running,
-    name       => $freeradius::fr_service,
-    require    => [Exec['radiusd-config-test'], File['radiusd.conf'], User[$freeradius::fr_user], Package[$freeradius::fr_package],],
+    name       => $service_name,
+    require    => [Exec['radiusd-config-test'], File['radiusd.conf'], User[$user], Package[$package_name],],
     enable     => true,
-    hasstatus  => $freeradius::fr_service_has_status,
+    hasstatus  => $service_has_status,
     hasrestart => true,
   }
 
   # We don't want to create the radiusd user, just add it to the
   # wbpriv group if the user needs winbind support. We depend on
   # the FreeRADIUS package to be sure that the user has been created
-  $fr_user_group = $winbind_support ? {
-    true    => $freeradius::fr_wbpriv_user,
+  $user_group = $winbind_support ? {
+    true    => $wbpriv_user,
     default => undef,
   }
-  user { $freeradius::fr_user:
+  user { $user:
     ensure  => present,
-    groups  => $fr_user_group,
-    require => Package[$freeradius::fr_package],
+    groups  => $user_group,
+    require => Package[$package_name],
   }
 
   # We don't want to add the radiusd group but it must be defined
   # here so we can depend on it. WE depend on the FreeRADIUS
   # package to be sure that the group has been created.
-  group { $freeradius::fr_group:
+  group { $group:
     ensure  => present,
-    require => Package[$freeradius::fr_package],
+    require => Package[$package_name],
   }
 
   # Syslog rules
   if $syslog == true {
     rsyslog::snippet { '12-radiusd-log':
-      content => "if \$programname == \'radiusd\' then ${freeradius::fr_logpath}/radius.log\n\\&\\~",
+      content => "if \$programname == \'radiusd\' then ${logpath}/radius.log\n\\&\\~",
     }
   }
 
   if $manage_logpath {
     # Make the radius log dir traversable
     file { [
-      $freeradius::fr_logpath,
-      "${freeradius::fr_logpath}/radacct",
+      $logpath,
+      "${logpath}/radacct",
     ]:
-      group   => $freeradius::fr_group,
+      group   => $group,
       mode    => '0750',
-      owner   => $freeradius::fr_user,
-      require => Package[$freeradius::fr_package],
+      owner   => $user,
+      require => Package[$package_name],
     }
 
-    file { "${freeradius::fr_logpath}/radius.log":
-      owner   => $freeradius::fr_user,
-      group   => $freeradius::fr_group,
+    file { "${logpath}/radius.log":
+      owner   => $user,
+      group   => $group,
       seltype => 'radiusd_log_t',
-      require => [Package[$freeradius::fr_package], User[$freeradius::fr_user], Group[$freeradius::fr_group]],
+      require => [Package[$package_name], User[$user], Group[$group]],
     }
   }
 
   logrotate::rule { 'radacct':
-    path          => "${freeradius::fr_logpath}/radacct/*/*.log",
+    path          => "${logpath}/radacct/*/*.log",
     rotate_every  => 'day',
     rotate        => 7,
     create        => false,
     missingok     => true,
     compress      => true,
-    postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
+    postrotate    => "kill -HUP `cat ${pidfile}`",
     sharedscripts => true,
   }
 
   logrotate::rule { 'checkrad':
-    path          => "${freeradius::fr_logpath}/checkrad.log",
+    path          => "${logpath}/checkrad.log",
     rotate_every  => 'week',
     rotate        => 1,
     create        => true,
     missingok     => true,
     compress      => true,
-    postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
+    postrotate    => "kill -HUP `cat ${pidfile}`",
     sharedscripts => true,
   }
 
   logrotate::rule { 'radiusd':
-    path          => "${freeradius::fr_logpath}/radius*.log",
+    path          => "${logpath}/radius*.log",
     rotate_every  => 'week',
     rotate        => 26,
     create        => true,
     missingok     => true,
     compress      => true,
-    postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
+    postrotate    => "kill -HUP `cat ${pidfile}`",
     sharedscripts => true,
   }
 
   # Placeholder resource for dh and random as they are dynamically generated, so they
   # exist in the catalogue and don't get purged
-  file { ["${freeradius::fr_basepath}/certs/dh", "${freeradius::fr_basepath}/certs/random"]:
+  file { ["${basepath}/certs/dh", "${basepath}/certs/random"]:
     require => Exec['dh', 'random'],
   }
 
   # Generate global SSL parameters
   exec { 'dh':
-    command => "openssl dhparam -out ${freeradius::fr_basepath}/certs/dh 1024",
-    creates => "${freeradius::fr_basepath}/certs/dh",
+    command => "openssl dhparam -out ${basepath}/certs/dh 1024",
+    creates => "${basepath}/certs/dh",
     path    => '/usr/bin',
-    require => File["${freeradius::fr_basepath}/certs"],
+    require => File["${basepath}/certs"],
   }
 
   # Generate global SSL parameters
   exec { 'random':
-    command => "dd if=/dev/urandom of=${freeradius::fr_basepath}/certs/random count=10 >/dev/null 2>&1",
-    creates => "${freeradius::fr_basepath}/certs/random",
+    command => "dd if=/dev/urandom of=${basepath}/certs/random count=10 >/dev/null 2>&1",
+    creates => "${basepath}/certs/random",
     path    => '/bin',
-    require => File["${freeradius::fr_basepath}/certs"],
+    require => File["${basepath}/certs"],
   }
 
   # This exec tests the radius config and fails if it's bad
@@ -452,15 +487,15 @@ class freeradius (
   # Blank a couple of default files that will break our config. This is more effective than deleting them
   # as they won't get overwritten when FR is upgraded from RPM, whereas missing files are replaced.
   file { [
-    "${freeradius::fr_basepath}/clients.conf",
-    "${freeradius::fr_basepath}/sql.conf",
+    "${basepath}/clients.conf",
+    "${basepath}/sql.conf",
   ]:
     content => '# FILE INTENTIONALLY BLANK',
     mode    => '0644',
     owner   => 'root',
-    group   => $freeradius::fr_group,
-    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
-    notify  => Service[$freeradius::fr_service],
+    group   => $group,
+    require => [Package[$package_name], Group[$group]],
+    notify  => Service[$service_name],
   }
 
   # Delete *.rpmnew and *.rpmsave files from the radius config dir because
@@ -470,13 +505,13 @@ class freeradius (
   # Only affects RPM-based systems
   if $::osfamily == 'RedHat' {
     exec { 'delete-radius-rpmnew':
-      command => "find ${freeradius::fr_basepath} -name *.rpmnew -delete",
-      onlyif  => "find ${freeradius::fr_basepath} -name *.rpmnew | grep rpmnew",
+      command => "find ${basepath} -name *.rpmnew -delete",
+      onlyif  => "find ${basepath} -name *.rpmnew | grep rpmnew",
       path    => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
     }
     exec { 'delete-radius-rpmsave':
-      command => "find ${freeradius::fr_basepath} -name *.rpmsave -delete",
-      onlyif  => "find ${freeradius::fr_basepath} -name *.rpmsave | grep rpmsave",
+      command => "find ${basepath} -name *.rpmsave -delete",
+      onlyif  => "find ${basepath} -name *.rpmsave | grep rpmsave",
       path    => ['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'],
     }
   }

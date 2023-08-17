@@ -85,13 +85,13 @@ exec_prefix = /usr
 sysconfdir = /etc
 localstatedir = /var
 sbindir = /usr/sbin
-logdir = <%= @fr_logpath %>
-raddbdir = <%= @fr_raddbdir %>
+logdir = <%= @logpath %>
+raddbdir = <%= @raddbdir %>
 radacctdir = <%= @radacctdir %>
 
 #
 #  name of the running server.  See also the "-n" command-line option.
-name = <%= @fr_service %>
+name = <%= @service_name %>
 
 #  Location of config and logfiles.
 confdir = ${raddbdir}
@@ -101,7 +101,7 @@ cadir   = ${confdir}/certs
 run_dir = ${localstatedir}/run/${name}
 
 # Should likely be ${localstatedir}/lib/radiusd
-db_dir = <%= @fr_db_dir %>
+db_dir = <%= @db_dir %>
 
 #
 # libdir: Where to find the rlm_* modules.
@@ -135,7 +135,7 @@ db_dir = <%= @fr_db_dir %>
 #	make
 #	make install
 #
-libdir = <%= @fr_libdir %>
+libdir = <%= @libdir %>
 
 #  pidfile: Where to place the PID of the RADIUS server.
 #
@@ -503,8 +503,8 @@ security {
 	#
 #	user = radius
 #	group = radius
-	user = <%= @fr_user%>
-	group = <%= @fr_group%>
+	user = <%= @user%>
+	group = <%= @group%>
 
 	#  Core dumps are a bad thing.  This should only be set to
 	#  'yes' if you're debugging a problem with the server.
@@ -779,7 +779,7 @@ modules {
 	#  pre/post-proxy, etc.
 	#
 #	$INCLUDE mods-enabled/
-	$INCLUDE <%= @fr_moduledir %>/
+	$INCLUDE <%= @moduledir %>/
 }
 
 # Instantiation
