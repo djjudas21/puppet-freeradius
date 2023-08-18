@@ -2,7 +2,7 @@
 define freeradius::sql (
   Enum['mysql', 'mssql', 'oracle', 'postgresql'] $database,
   Freeradius::Password $password,
-  Variant[Stdlib::Host, Stdlib::IP::Address::Nosubnet] $server                      = 'localhost',
+  Variant[Stdlib::Host, Stdlib::IP::Address] $server                                = 'localhost',
   Optional[String] $login                                                           = 'radius',
   Optional[String] $radius_db                                                       = 'radius',
   Variant[Freeradius::Integer, Enum["\${thread[pool].max_servers}"]] $num_sql_socks = "\${thread[pool].max_servers}",
