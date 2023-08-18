@@ -13,8 +13,6 @@ define freeradius::site (
   Array[String] $post_proxy   = [],
   Array[Hash] $listen         = [],
 ) {
-  $fr_package  = $::freeradius::params::fr_package
-  $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
@@ -31,18 +29,20 @@ define freeradius::site (
     default  => 'link'
   }
 
-  file { "${fr_basepath}/sites-available/${name}":
+  file { "freeradius sites-available/${name}":
     ensure  => $ensure,
+    path    => "${fr_basepath}/sites-available/${name}",
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
     source  => $source,
     content => $manage_content,
-    require => [Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    require => [Package['freeradius'], Group['radiusd']],
+    notify  => Service['radiusd'],
   }
-  file { "${fr_basepath}/sites-enabled/${name}":
+  file { "freeradius sites-enabled/${name}":
     ensure => $ensure_link,
+    path   => "${fr_basepath}/sites-enabled/${name}",
     target => "${fr_basepath}/sites-available/${name}",
   }
 }

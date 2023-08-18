@@ -7,18 +7,17 @@ define freeradius::statusclient (
   Optional[String] $shortname = $name,
   Freeradius::Ensure $ensure  = present,
 ) {
-  $fr_package  = $::freeradius::params::fr_package
-  $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
-  file { "${fr_basepath}/statusclients.d/${name}.conf":
+  file { "freeradius statusclients.d/${name}.conf":
     ensure  => $ensure,
+    path    => "${fr_basepath}/statusclients.d/${name}.conf",
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
     content => template('freeradius/client.conf.erb'),
-    require => [File["${fr_basepath}/clients.d"], Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    require => [File['freeradius clients.d'], Package['freeradius'], Group['radiusd']],
+    notify  => Service['radiusd'],
   }
 }

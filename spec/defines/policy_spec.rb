@@ -12,7 +12,8 @@ describe 'freeradius::policy' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/policy.d/test')
+    is_expected.to contain_file('freeradius policy.d/test')
+      .with_path('/etc/raddb/policy.d/test')
       .with_ensure('present')
       .with_group('radiusd')
       .with_mode('0644')
@@ -24,10 +25,10 @@ describe 'freeradius::policy' do
   end
 
   it do
-    is_expected.to contain_concat__fragment('policy-test')
+    is_expected.to contain_concat__fragment('freeradius policy-test')
       .with_content(%r{\s+\$INCLUDE /etc/raddb/policy.d/test$})
       .with_order('50')
-      .with_target('/etc/raddb/policy.conf')
-      .that_requires('File[/etc/raddb/policy.d/test]')
+      .with_target('freeradius policy.conf')
+      .that_requires('File[freeradius policy.d/test]')
   end
 end

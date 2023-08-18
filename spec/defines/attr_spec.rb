@@ -12,7 +12,8 @@ describe 'freeradius::attr' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/mods-config/attr_filter/test')
+    is_expected.to contain_file('freeradius attr_filter/test')
+      .with_path('/etc/raddb/mods-config/attr_filter/test')
       .that_notifies('Service[radiusd]')
       .that_requires('Group[radiusd]')
       .that_requires('Package[freeradius]')
@@ -24,11 +25,11 @@ describe 'freeradius::attr' do
   end
 
   it do
-    is_expected.to contain_concat__fragment('attr-test')
+    is_expected.to contain_concat__fragment('freeradius attr-test')
       .with_content(%r{^attr_filter filter.test {\n\s+key = "\%{User-Name}"\n\s+filename = \${modconfdir}/\${\.:name}/test\n}})
       .without_content(%r{^\s+relaxed\s+.*$})
       .with_order('20')
-      .with_target('/etc/raddb/mods-available/attr_filter')
+      .with_target('freeradius mods-available/attr_filter')
   end
 
   context 'with relaxed = no' do
@@ -37,7 +38,7 @@ describe 'freeradius::attr' do
     end
 
     it do
-      is_expected.to contain_concat__fragment('attr-test')
+      is_expected.to contain_concat__fragment('freeradius attr-test')
         .with_content(%r{^\s+relaxed\s+=\s+no$})
     end
   end
@@ -48,7 +49,7 @@ describe 'freeradius::attr' do
     end
 
     it do
-      is_expected.to contain_concat__fragment('attr-test')
+      is_expected.to contain_concat__fragment('freeradius attr-test')
         .with_content(%r{^\s+relaxed\s+=\s+yes$})
     end
   end

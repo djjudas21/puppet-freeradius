@@ -13,9 +13,9 @@ describe 'freeradius::realm' do
   end
 
   it do
-    is_expected.to contain_concat__fragment('realm-test')
+    is_expected.to contain_concat__fragment('freeradius realm-test')
       .with_content(%r{^realm test {\n\s+virtual_server = test_virtual_server\n\s+pool = test_pool\n}})
       .with_order('30')
-      .with_target('/etc/raddb/proxy.conf')
+      .with_target('freeradius proxy.conf')
   end
 end

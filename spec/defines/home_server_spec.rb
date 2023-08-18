@@ -16,7 +16,7 @@ describe 'freeradius::home_server' do
     is_expected.to contain_concat__fragment('homeserver-test')
       .with_content(%r{home_server test {\n\s+type = auth\n\s+ipaddr = 1.2.3.4\n\s+port = 1812\n\s+proto = udp\n\s+secret = "test_secret"\n\s+status_check = none\n}\n})
       .with_order('10')
-      .with_target('/etc/raddb/proxy.conf')
+      .with_target('freeradius proxy.conf')
   end
 
   context 'with secret containing a newline' do

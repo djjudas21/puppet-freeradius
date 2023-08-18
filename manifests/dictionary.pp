@@ -5,8 +5,6 @@ define freeradius::dictionary (
   Optional[Integer] $order   = 50,
   Freeradius::Ensure $ensure = 'present',
 ) {
-  $fr_package  = $::freeradius::params::fr_package
-  $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
@@ -15,15 +13,16 @@ define freeradius::dictionary (
   }
 
   # Install dictionary in dictionary.d
-  file { "${fr_basepath}/dictionary.d/dictionary.${name}":
+  file { "freeradius dictionary.d/dictionary.${name}":
     ensure  => $ensure,
+    path    => "${fr_basepath}/dictionary.d/dictionary.${name}",
     mode    => '0644',
     owner   => 'root',
     group   => $fr_group,
     source  => $source,
     content => $content,
-    require => [File["${fr_basepath}/dictionary.d"], Package[$fr_package], Group[$fr_group]],
-    notify  => Service[$fr_service],
+    require => [File['freeradius dictionary.d'], Package['freeradius'], Group['radiusd']],
+    notify  => Service['radiusd'],
   }
 
   # Reference policy.d in the global includes file
@@ -31,10 +30,10 @@ define freeradius::dictionary (
 
   if ($ensure == 'present') {
     concat::fragment { "dictionary.${name}":
-      target  => "${fr_basepath}/dictionary",
+      target  => 'freeradius dictionary',
       content => "\$INCLUDE ${fr_basepath}/dictionary.d/dictionary.${name}",
       order   => $order,
-      require => File["${fr_basepath}/dictionary.d/dictionary.${name}"],
+      require => File["freeradius dictionary.d/dictionary.${name}"],
     }
   }
 }

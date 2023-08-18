@@ -27,7 +27,8 @@ describe 'freeradius::module::ldap' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/mods-available/test')
+    is_expected.to contain_file('freeradius mods-available/test')
+      .with_path('/etc/raddb/mods-available/test')
       .with_content(%r{^ldap test \{\n})
       .with_content(%r{^\s+server = 'localhost'\n})
       .with_content(%r{^\s+identity = 'cn=root,dc=example,dc=com'\n})
@@ -45,7 +46,8 @@ describe 'freeradius::module::ldap' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/mods-enabled/test')
+    is_expected.to contain_file('freeradius mods-enabled/test')
+      .with_path('/etc/raddb/mods-enabled/test')
       .with_ensure('link')
       .with_target('../mods-available/test')
   end
@@ -64,7 +66,7 @@ describe 'freeradius::module::ldap' do
     end
 
     it do
-      is_expected.to contain_file('/etc/raddb/mods-available/test')
+      is_expected.to contain_file('freeradius mods-available/test')
         .with_content(%r{^\s+connect_timeout = 3.0})
         .with_content(%r{^\s+use_referral_credentials = no})
         .without_content(%r{^\s+session_tracking = .*})
@@ -80,7 +82,7 @@ describe 'freeradius::module::ldap' do
       end
 
       it do
-        is_expected.to contain_file('/etc/raddb/mods-available/test')
+        is_expected.to contain_file('freeradius mods-available/test')
           .with_content(%r{^\s+connect_timeout = 5.0})
           .with_content(%r{^\s+use_referral_credentials = yes})
           .with_content(%r{^\s+session_tracking = yes})
@@ -159,7 +161,7 @@ describe 'freeradius::module::ldap' do
     end
 
     it do
-      is_expected.to contain_file('/etc/raddb/mods-available/test')
+      is_expected.to contain_file('freeradius mods-available/test')
         .with_content(%r{^\s+update \{\n\s+control:Password-With-Header	\+= 'userPassword'\n\s+reply:Framed-IP-Address := 'radiusFramedIPAddress'\n\s+\}\n})
     end
   end

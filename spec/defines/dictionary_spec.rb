@@ -12,14 +12,15 @@ describe 'freeradius::dictionary' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/dictionary.d/dictionary.test')
+    is_expected.to contain_file('freeradius dictionary.d/dictionary.test')
+      .with_path('/etc/raddb/dictionary.d/dictionary.test')
       .with_ensure('present')
       .with_group('radiusd')
       .with_mode('0644')
       .with_owner('root')
       .with_source('puppet:///modules/test/path/to/dict')
       .that_notifies('Service[radiusd]')
-      .that_requires('File[/etc/raddb/dictionary.d]')
+      .that_requires('File[freeradius dictionary.d]')
       .that_requires('Package[freeradius]')
       .that_requires('Group[radiusd]')
   end
@@ -28,7 +29,7 @@ describe 'freeradius::dictionary' do
     is_expected.to contain_concat__fragment('dictionary.test')
       .with_content(%r{^\$INCLUDE /etc/raddb/dictionary\.d/dictionary\.test$})
       .with_order('50')
-      .with_target('/etc/raddb/dictionary')
-      .that_requires('File[/etc/raddb/dictionary.d/dictionary.test]')
+      .with_target('freeradius dictionary')
+      .that_requires('File[freeradius dictionary.d/dictionary.test]')
   end
 end
