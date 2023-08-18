@@ -391,6 +391,18 @@ describe 'freeradius' do
         end
       end
 
+      it do
+        if ['rocky-8-x86_64', 'centos-8-x86_64', 'redhat-8-x86_64', 'almalinux-8-x86_64'].include? os
+          is_expected.to contain_systemd__dropin_file('freeradius remove bootstrap')
+            .with_ensure('present')
+            .with_filename('remove_bootstrap.conf')
+            .with_unit('radiusd.service')
+            .with_content(%r{^ExecStartPre=$})
+        else
+          is_expected.not_to contain_systemd__dropin_file('freeradius remove bootstrap')
+        end
+      end
+
       context 'with mysql' do
         let(:params) do
           super().merge(
