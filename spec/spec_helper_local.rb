@@ -84,3 +84,5 @@ shared_context 'redhat_common_dependencies' do
     ]
   end
 end
+
+require 'puppetlabs_spec_helper/puppetlabs_spec_helper'
