@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Run unit tests
       uses: puppets-epic-show-theatre/action-pdk-test-unit@v1
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Run PDK validate
       uses: puppets-epic-show-theatre/action-pdk-validate@v1
