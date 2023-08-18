@@ -43,6 +43,6 @@ define freeradius::site (
   file { "freeradius sites-enabled/${name}":
     ensure => $ensure_link,
     path   => "${fr_basepath}/sites-enabled/${name}",
-    target => "${fr_basepath}/sites-available/${name}",
+    target => "../sites-available/${name}",
   }
 }
