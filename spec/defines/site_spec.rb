@@ -29,6 +29,6 @@ describe 'freeradius::site' do
     is_expected.to contain_file('freeradius sites-enabled/test')
       .with_path('/etc/raddb/sites-enabled/test')
       .with_ensure('link')
-      .with_target('/etc/raddb/sites-available/test')
+      .with_target('../sites-available/test')
   end
 end
