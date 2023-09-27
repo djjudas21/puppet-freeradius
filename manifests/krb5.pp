@@ -1,4 +1,20 @@
-# Configure Kerberos support for FreeRADIUS
+# @summary Configure Kerberos support for FreeRADIUS
+#
+# @param keytab
+#   Full path to the Kerberos keytab file
+# @param principal
+#   Name of the service principal
+# @param start
+#   Connections to create during module instantiation. If the server cannot create specified number of
+#   connections during instantiation it will exit. Set to 0 to allow the server to start without the
+#   directory being available.
+# @param min
+#   Minimum number of connections to keep open.
+# @param max
+#   Maximum number of connections.
+# @param spare
+#   Spare connections to be left idle.
+# @param ensure
 define freeradius::krb5 (
   String $keytab,
   String $principal,
@@ -8,9 +24,9 @@ define freeradius::krb5 (
   Freeradius::Integer  $spare = "\${thread[pool].max_spare_servers}",
   Freeradius::Ensure $ensure  = 'present',
 ) {
-  $fr_modulepath       = $::freeradius::params::fr_modulepath
-  $fr_basepath         = $::freeradius::params::fr_basepath
-  $fr_group            = $::freeradius::params::fr_group
+  $fr_modulepath       = $freeradius::params::fr_modulepath
+  $fr_basepath         = $freeradius::params::fr_basepath
+  $fr_group            = $freeradius::params::fr_group
 
   # Generate a module config
   file { "freeradius mods-available/${name}":

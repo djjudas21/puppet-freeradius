@@ -1,14 +1,24 @@
 # @summary configure and run radsniff
 #
-# @param envfile path to the environment file, used by the systemd unit
-# @param options commandline options passed to radsniff when it runs
-# @param
+# Configures and runs the RADSNIFF service. It requires freeradius-utils to be installed, so will fail if `utils_support` is not enabled on
+# the `freeradius` class.
+#
+# Note: This is only supported on RedHat like systems at present.
+#
+# @see https://freeradius.org/radiusd/man/radsniff.html
+#
+# @param envfile
+#   path to the environment file, used by the systemd unit
+# @param options
+#   commandline options passed to radsniff when it runs
+# @param pidfile
+#   path of the pidfile to be used
 class freeradius::radsniff (
   Optional[String] $envfile = undef,
-  String $options = '',
+  String $options = '', # lint:ignore:params_empty_string_assignment
   Optional[String] $pidfile = undef,
 ) inherits freeradius::params {
-  unless $::freeradius::utils_support {
+  unless $freeradius::utils_support {
     fail('freeradius::radsniff requires freeradius have utils_support enabled')
   }
 

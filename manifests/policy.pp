@@ -1,11 +1,17 @@
-# Install FreeRADIUS policies
+# @summary Install FreeRADIUS policies
+#
+# Install a policy from a flat file.
+#
+# @param source
+# @param order
+# @param ensure
 define freeradius::policy (
   Optional[String] $source,
   Optional[Integer] $order   = 50,
   Freeradius::Ensure $ensure = present,
 ) {
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_basepath = $freeradius::params::fr_basepath
+  $fr_group    = $freeradius::params::fr_group
 
   # Install policy in policy.d
   file { "freeradius policy.d/${name}":

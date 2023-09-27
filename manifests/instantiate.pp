@@ -1,9 +1,16 @@
-# Instantiate a module in global config
+# @summary Instantiate a module in global config
+#
+# Instantiate a module that is not automatically instantiated.
+#
+# @example
+#   freeradius::instantiate { 'mymodule': }
+#
+# @param ensure
 define freeradius::instantiate (
   Freeradius::Ensure $ensure = present,
 ) {
-  $fr_basepath = $::freeradius::params::fr_basepath
-  $fr_group    = $::freeradius::params::fr_group
+  $fr_basepath = $freeradius::params::fr_basepath
+  $fr_group    = $freeradius::params::fr_group
 
   file { "freeradius instantiate/${name}":
     ensure  => $ensure,

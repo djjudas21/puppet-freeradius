@@ -1,3 +1,9 @@
 ---
 spec/spec_helper.rb:
   mock_with: ":rspec"
+
+Gemfile:
+  optional:
+    ':development':
+      - gem: 'puppet-strings'  # needed since pdk has no auto reference for it
+        version: '>= 3.0.1'
