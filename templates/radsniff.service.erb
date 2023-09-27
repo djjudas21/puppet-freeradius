@@ -5,9 +5,9 @@ After=radiusd.target
 
 [Service]
 Type=forking
-PIDFile=<%=scope['::freeradius::radsniff::final_pidfile']%>
-EnvironmentFile=<%=scope['::freeradius::radsniff::final_envfile']%>
-ExecStart=/usr/bin/radsniff -P <%=scope['::freeradius::radsniff::final_pidfile']%> -d <%=scope['::freeradius::radsniff::fr_basepath']%> $RADSNIFF_OPTIONS
+PIDFile=<%= @pidfile %>
+EnvironmentFile=<%= @envfile %>
+ExecStart=/usr/bin/radsniff -P <%= @pidfile %> -d <%= @fr_basepath %> $RADSNIFF_OPTIONS
 
 [Install]
 WantedBy=multi-user.target
