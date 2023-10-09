@@ -75,12 +75,12 @@ shared_context 'redhat_common_dependencies' do
       "package { 'freeradius': }",
       "group { 'radiusd': }",
       "service { 'radiusd': }",
-      "file { '/etc/raddb': ensure => directory }",
-      "file { '/etc/raddb/certs': ensure => directory }",
-      "file { '/etc/raddb/clients.d': ensure => directory }",
-      "file { '/etc/raddb/dictionary.d': ensure => directory }",
-      "file { '/etc/raddb/mods-config': ensure => directory }",
-      "file { '/etc/raddb/scripts': ensure => directory }",
+      "file { 'freeradius raddb': ensure => directory, path => '/etc/raddb/raddb' }",
+      "file { 'freeradius certs': ensure => directory, path => '/etc/raddb/certs' }",
+      "file { 'freeradius clients.d': ensure => directory, path => '/etc/raddb/clients.d' }",
+      "file { 'freeradius dictionary.d': ensure => directory, path => '/etc/raddb/dictionary.d' }",
+      "file { 'freeradius mods-config': ensure => directory, path => '/etc/raddb/mods-config' }",
+      "file { 'freeradius scripts': ensure => directory, path => '/etc/raddb/scripts' }",
     ]
   end
 end

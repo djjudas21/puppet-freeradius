@@ -9,12 +9,8 @@ define freeradius::module::detail (
   String $header                                   = '%t',
   Optional[Freeradius::Boolean] $locking           = undef,
   Optional[Freeradius::Boolean] $log_packet_header = undef,
-  Array[String] $suppress                          = [],
+  Optional[Array[String]] $suppress                = [],
 ) {
-  if $suppress {
-    validate_array($suppress)
-  }
-
   freeradius::module { "detail.${name}":
     ensure  => $ensure,
     content => template('freeradius/detail.erb'),

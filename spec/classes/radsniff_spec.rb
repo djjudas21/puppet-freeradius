@@ -52,7 +52,8 @@ describe 'freeradius::radsniff' do
       case os_facts[:osfamily]
       when 'RedHat'
         it do
-          is_expected.to contain_file('/etc/sysconfig/radsniff')
+          is_expected.to contain_file('freeradius radsniff envfile')
+            .with_path('/etc/sysconfig/radsniff')
             .with_content(%r{RADSNIFF_OPTIONS="radsniff cmd \\"line\\" options"})
             .that_notifies('Service[radsniff]')
             .that_requires('Package[freeradius-utils]')
@@ -67,7 +68,8 @@ describe 'freeradius::radsniff' do
         end
       when 'Debian'
         it do
-          is_expected.to contain_file('/etc/defaults/radsniff')
+          is_expected.to contain_file('freeradius radsniff envfile')
+            .with_path('/etc/defaults/radsniff')
             .with_content(%r{RADSNIFF_OPTIONS="radsniff cmd \\"line\\" options"})
             .that_notifies('Service[radsniff]')
             .that_requires('Package[freeradius-utils]')
@@ -104,7 +106,8 @@ describe 'freeradius::radsniff' do
         end
 
         it do
-          is_expected.to contain_file('/test/env/file')
+          is_expected.to contain_file('freeradius radsniff envfile')
+            .with_path('/test/env/file')
             .with_content(%r{RADSNIFF_OPTIONS="radsniff cmd \\"line\\" options"})
             .that_notifies('Service[radsniff]')
             .that_requires('Package[freeradius-utils]')

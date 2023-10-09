@@ -12,7 +12,8 @@ describe 'freeradius::site' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/sites-available/test')
+    is_expected.to contain_file('freeradius sites-available/test')
+      .with_path('/etc/raddb/sites-available/test')
       .with_content(nil)
       .with_ensure('present')
       .with_group('radiusd')
@@ -25,7 +26,8 @@ describe 'freeradius::site' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/sites-enabled/test')
+    is_expected.to contain_file('freeradius sites-enabled/test')
+      .with_path('/etc/raddb/sites-enabled/test')
       .with_ensure('link')
       .with_target('/etc/raddb/sites-available/test')
   end

@@ -14,9 +14,10 @@ describe 'freeradius::cert' do
     end
 
     it do
-      is_expected.to contain_file('/etc/raddb/certs/test')
+      is_expected.to contain_file('freeradius certs/test')
+        .with_path('/etc/raddb/certs/test')
         .that_notifies('Service[radiusd]')
-        .that_requires('File[/etc/raddb/certs]')
+        .that_requires('File[freeradius certs]')
         .that_requires('Group[radiusd]')
         .that_requires('Package[freeradius]')
         .with_content(%r{test data})
@@ -39,9 +40,9 @@ describe 'freeradius::cert' do
     end
 
     it do
-      is_expected.to contain_file('/etc/raddb/certs/test')
+      is_expected.to contain_file('freeradius certs/test')
         .that_notifies('Service[radiusd]')
-        .that_requires('File[/etc/raddb/certs]')
+        .that_requires('File[freeradius certs]')
         .that_requires('Group[radiusd]')
         .that_requires('Package[freeradius]')
         .with_content(nil)

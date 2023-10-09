@@ -8,9 +8,10 @@ describe 'freeradius::blank' do
   let(:params) { {} }
 
   it do
-    is_expected.to contain_file('/etc/raddb/test')
+    is_expected.to contain_file('freeradius test')
+      .with_path('/etc/raddb/test')
       .that_notifies('Service[radiusd]')
-      .that_requires('File[/etc/raddb]')
+      .that_requires('File[freeradius raddb]')
       .that_requires('Group[radiusd]')
       .that_requires('Package[freeradius]')
       .with_content(%r{^# This file is intentionally left blank .*})

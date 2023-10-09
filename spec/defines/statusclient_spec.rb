@@ -13,7 +13,8 @@ describe 'freeradius::statusclient' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/statusclients.d/test.conf')
+    is_expected.to contain_file('freeradius statusclients.d/test.conf')
+      .with_path('/etc/raddb/statusclients.d/test.conf')
       .with_content(%r{^client test {\n\s+ipaddr = 1.2.3.4\n\s+shortname = test\n\s+secret = "test_secret"\n}\n})
       .with_ensure('present')
       .with_group('radiusd')
@@ -22,7 +23,7 @@ describe 'freeradius::statusclient' do
       .that_notifies('Service[radiusd]')
       .that_requires('Package[freeradius]')
       .that_requires('Group[radiusd]')
-      .that_requires('File[/etc/raddb/clients.d]')
+      .that_requires('File[freeradius clients.d]')
   end
 
   context 'with secret containing a newline' do

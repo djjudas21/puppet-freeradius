@@ -22,7 +22,8 @@ describe 'freeradius::sql' do
       end
 
       it do
-        is_expected.to contain_file('/etc/raddb/mods-available/test')
+        is_expected.to contain_file('freeradius mods-available/test')
+          .with_path('/etc/raddb/mods-available/test')
           .with_content(%r{^sql test \{\n})
           .with_content(%r{^\s+dialect = "postgresql"$})
           .with_content(%r{^\s+server = "localhost"$})
@@ -42,7 +43,8 @@ describe 'freeradius::sql' do
       end
 
       it do
-        is_expected.to contain_file('/etc/raddb/mods-enabled/test')
+        is_expected.to contain_file('freeradius mods-enabled/test')
+          .with_path('/etc/raddb/mods-enabled/test')
           .with_ensure('link')
           .with_target('../mods-available/test')
       end
@@ -55,7 +57,7 @@ describe 'freeradius::sql' do
         end
 
         it do
-          is_expected.to contain_file('/etc/raddb/mods-available/test')
+          is_expected.to contain_file('freeradius mods-available/test')
             .with_content(%r{^\s+logfile = \${logdir}/sqllog.sql$})
         end
 
@@ -98,7 +100,7 @@ describe 'freeradius::sql' do
         end
 
         it do
-          is_expected.to contain_file('/etc/raddb/mods-available/test')
+          is_expected.to contain_file('freeradius mods-available/test')
             .with_content(%r{^\s+connect_timeout = 3.0})
         end
 
@@ -110,7 +112,7 @@ describe 'freeradius::sql' do
           end
 
           it do
-            is_expected.to contain_file('/etc/raddb/mods-available/test')
+            is_expected.to contain_file('freeradius mods-available/test')
               .with_content(%r{^\s+connect_timeout = 5.0})
           end
 

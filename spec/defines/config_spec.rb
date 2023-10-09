@@ -12,7 +12,8 @@ describe 'freeradius::config' do
   end
 
   it do
-    is_expected.to contain_file('/etc/raddb/mods-config/test')
+    is_expected.to contain_file('freeradius mods-config/test')
+      .with_path('/etc/raddb/mods-config/test')
       .with_content('test content')
       .with_ensure('present')
       .with_group('radiusd')

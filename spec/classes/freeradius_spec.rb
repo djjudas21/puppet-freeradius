@@ -11,7 +11,7 @@ describe 'freeradius' do
       let(:params) { {} }
 
       it do
-        is_expected.to contain_file('radiusd.conf')
+        is_expected.to contain_file('freeradius radiusd.conf')
           .with(
             'group'  => 'radiusd',
             'mode'   => '0644',
@@ -24,23 +24,24 @@ describe 'freeradius' do
       end
 
       it do
-        [
-          '/etc/raddb/statusclients.d',
-          '/etc/raddb',
-          '/etc/raddb/conf.d',
-          '/etc/raddb/attr.d',
-          '/etc/raddb/users.d',
-          '/etc/raddb/policy.d',
-          '/etc/raddb/dictionary.d',
-          '/etc/raddb/scripts',
-          '/etc/raddb/mods-config',
-          '/etc/raddb/mods-config/attr_filter',
-          '/etc/raddb/mods-config/preprocess',
-          '/etc/raddb/mods-config/sql',
-          '/etc/raddb/sites-available',
-          '/etc/raddb/mods-available',
-        ].each do |file|
-          is_expected.to contain_file(file)
+        {
+          'freeradius statusclients.d': '/etc/raddb/statusclients.d',
+          'freeradius raddb': '/etc/raddb',
+          'freeradius conf.d': '/etc/raddb/conf.d',
+          'freeradius attr.d': '/etc/raddb/attr.d',
+          'freeradius users.d': '/etc/raddb/users.d',
+          'freeradius policy.d': '/etc/raddb/policy.d',
+          'freeradius dictionary.d': '/etc/raddb/dictionary.d',
+          'freeradius scripts': '/etc/raddb/scripts',
+          'freeradius mods-config': '/etc/raddb/mods-config',
+          'freeradius mods-config/attr_filter': '/etc/raddb/mods-config/attr_filter',
+          'freeradius mods-config/preprocess': '/etc/raddb/mods-config/preprocess',
+          'freeradius mods-config/sql': '/etc/raddb/mods-config/sql',
+          'freeradius sites-available': '/etc/raddb/sites-available',
+          'freeradius mods-available': '/etc/raddb/mods-available',
+        }.each do |name, path|
+          is_expected.to contain_file(name)
+            .with_path(path)
             .with(
               'ensure'  => 'directory',
               'group'   => 'radiusd',
@@ -54,14 +55,15 @@ describe 'freeradius' do
       end
 
       it do
-        [
-          '/etc/raddb/certs',
-          '/etc/raddb/clients.d',
-          '/etc/raddb/listen.d',
-          '/etc/raddb/sites-enabled',
-          '/etc/raddb/instantiate',
-        ].each do |file|
-          is_expected.to contain_file(file)
+        {
+          'freeradius certs': '/etc/raddb/certs',
+          'freeradius clients.d': '/etc/raddb/clients.d',
+          'freeradius listen.d': '/etc/raddb/listen.d',
+          'freeradius sites-enabled': '/etc/raddb/sites-enabled',
+          'freeradius instantiate': '/etc/raddb/instantiate',
+        }.each do |name, path|
+          is_expected.to contain_file(name)
+            .with_path(path)
             .with(
               'ensure'  => 'directory',
               'group'   => 'radiusd',
@@ -77,7 +79,8 @@ describe 'freeradius' do
       end
 
       it do
-        is_expected.to contain_concat('/etc/raddb/policy.conf')
+        is_expected.to contain_concat('freeradius policy.conf')
+          .with_path('/etc/raddb/policy.conf')
           .with(
             'group'          => 'radiusd',
             'mode'           => '0640',
@@ -94,7 +97,7 @@ describe 'freeradius' do
           .with(
             'content' => 'policy {',
             'order'   => '10',
-            'target'  => '/etc/raddb/policy.conf',
+            'target'  => 'freeradius policy.conf',
           )
       end
 
@@ -103,12 +106,13 @@ describe 'freeradius' do
           .with(
             'content' => '}',
             'order'   => '99',
-            'target'  => '/etc/raddb/policy.conf',
+            'target'  => 'freeradius policy.conf',
           )
       end
 
       it do
-        is_expected.to contain_concat('/etc/raddb/proxy.conf')
+        is_expected.to contain_concat('freeradius proxy.conf')
+          .with_path('/etc/raddb/proxy.conf')
           .with(
             'group'          => 'radiusd',
             'mode'           => '0640',
@@ -125,12 +129,13 @@ describe 'freeradius' do
           .with(
             'content' => '# Proxy config',
             'order'   => '05',
-            'target'  => '/etc/raddb/proxy.conf',
+            'target'  => 'freeradius proxy.conf',
           )
       end
 
       it do
-        is_expected.to contain_concat('/etc/raddb/mods-available/attr_filter')
+        is_expected.to contain_concat('freeradius mods-available/attr_filter')
+          .with_path('/etc/raddb/mods-available/attr_filter')
           .with(
             'group'          => 'radiusd',
             'mode'           => '0640',
@@ -146,12 +151,13 @@ describe 'freeradius' do
         is_expected.to contain_concat__fragment('attr-default')
           .with(
             'order'   => '10',
-            'target'  => '/etc/raddb/mods-available/attr_filter',
+            'target'  => 'freeradius mods-available/attr_filter',
           )
       end
 
       it do
-        is_expected.to contain_concat('/etc/raddb/dictionary')
+        is_expected.to contain_concat('freeradius dictionary')
+          .with_path('/etc/raddb/dictionary')
           .with(
             'group'          => 'radiusd',
             'mode'           => '0644',
@@ -163,20 +169,20 @@ describe 'freeradius' do
       end
 
       it do
-        is_expected.to contain_concat__fragment('dictionary_header')
+        is_expected.to contain_concat__fragment('freeradius dictionary_header')
           .with(
             'order'  => '10',
             'source' => 'puppet:///modules/freeradius/dictionary.header',
-            'target' => '/etc/raddb/dictionary',
+            'target' => 'freeradius dictionary',
           )
       end
 
       it do
-        is_expected.to contain_concat__fragment('dictionary_footer')
+        is_expected.to contain_concat__fragment('freeradius dictionary_footer')
           .with(
             'order'  => '90',
             'source' => 'puppet:///modules/freeradius/dictionary.footer',
-            'target' => '/etc/raddb/dictionary',
+            'target' => 'freeradius dictionary',
           )
       end
 
@@ -200,7 +206,7 @@ describe 'freeradius' do
           .that_requires('Package[freeradius]')
           .that_requires('User[radiusd]')
           .that_requires('Exec[radiusd-config-test]')
-          .that_requires('File[radiusd.conf]')
+          .that_requires('File[freeradius radiusd.conf]')
       end
 
       it do
@@ -221,6 +227,7 @@ describe 'freeradius' do
 
         it do
           is_expected.to contain_user('radiusd')
+            .with_name('radiusd')
             .with(
               'groups'  => 'wbpriv',
             )
@@ -229,6 +236,7 @@ describe 'freeradius' do
 
       it do
         is_expected.to contain_group('radiusd')
+          .with_name('radiusd')
           .with(
             'ensure' => 'present',
           )
@@ -251,11 +259,12 @@ describe 'freeradius' do
       end
 
       it do
-        [
-          '/var/log/radius',
-          '/var/log/radius/radacct',
-        ].each do |file|
-          is_expected.to contain_file(file)
+        {
+          'freeradius logdir': '/var/log/radius',
+          'freeradius logdir/radacct': '/var/log/radius/radacct',
+        }.each do |name, path|
+          is_expected.to contain_file(name)
+            .with_path(path)
             .with(
               'mode'    => '0750',
               'owner' => 'radiusd',
@@ -266,7 +275,8 @@ describe 'freeradius' do
       end
 
       it do
-        is_expected.to contain_file('/var/log/radius/radius.log')
+        is_expected.to contain_file('freeradius radius.log')
+          .with_path('/var/log/radius/radius.log')
           .with(
             'group'   => 'radiusd',
             'owner'   => 'radiusd',
@@ -320,34 +330,35 @@ describe 'freeradius' do
       end
 
       it do
-        [
-          '/etc/raddb/certs/dh',
-          '/etc/raddb/certs/random',
-        ].each do |file|
-          is_expected.to contain_file(file)
-            .that_requires('Exec[dh]')
-            .that_requires('Exec[random]')
+        {
+          'freeradius certs/dh': '/etc/raddb/certs/dh',
+          'freeradius certs/random': '/etc/raddb/certs/random',
+        }.each do |name, path|
+          is_expected.to contain_file(name)
+            .with_path(path)
+            .that_requires('Exec[freeradius dh]')
+            .that_requires('Exec[freeradius random]')
         end
       end
 
       it do
-        is_expected.to contain_exec('dh')
+        is_expected.to contain_exec('freeradius dh')
           .with(
             'command' => 'openssl dhparam -out /etc/raddb/certs/dh 1024',
             'creates' => '/etc/raddb/certs/dh',
             'path'    => '/usr/bin',
           )
-          .that_requires('File[/etc/raddb/certs]')
+          .that_requires('File[freeradius certs]')
       end
 
       it do
-        is_expected.to contain_exec('random')
+        is_expected.to contain_exec('freeradius random')
           .with(
             'command' => 'dd if=/dev/urandom of=/etc/raddb/certs/random count=10 >/dev/null 2>&1',
             'creates' => '/etc/raddb/certs/random',
             'path'    => '/bin',
           )
-          .that_requires('File[/etc/raddb/certs]')
+          .that_requires('File[freeradius certs]')
       end
 
       it do
@@ -362,11 +373,12 @@ describe 'freeradius' do
       end
 
       it do
-        [
-          '/etc/raddb/clients.conf',
-          '/etc/raddb/sql.conf',
-        ].each do |file|
-          is_expected.to contain_file(file)
+        {
+          'freeradius clients.conf': '/etc/raddb/clients.conf',
+          'freeradius sql.conf': '/etc/raddb/sql.conf',
+        }.each do |name, path|
+          is_expected.to contain_file(name)
+            .with_path(path)
             .with(
               'content' => '# FILE INTENTIONALLY BLANK',
               'group'   => 'radiusd',
@@ -379,6 +391,18 @@ describe 'freeradius' do
         end
       end
 
+      it do
+        if ['rocky-8-x86_64', 'centos-8-x86_64', 'redhat-8-x86_64', 'almalinux-8-x86_64'].include? os
+          is_expected.to contain_systemd__dropin_file('freeradius remove bootstrap')
+            .with_ensure('present')
+            .with_filename('remove_bootstrap.conf')
+            .with_unit('radiusd.service')
+            .with_content(%r{^ExecStartPre=$})
+        else
+          is_expected.not_to contain_systemd__dropin_file('freeradius remove bootstrap')
+        end
+      end
+
       context 'with mysql' do
         let(:params) do
           super().merge(
@@ -388,6 +412,7 @@ describe 'freeradius' do
 
         it do
           is_expected.to contain_package('freeradius-mysql')
+            .with_name('freeradius-mysql')
             .with(
               'ensure' => 'installed',
             )
@@ -403,6 +428,7 @@ describe 'freeradius' do
 
         it do
           is_expected.to contain_package('freeradius-postgresql')
+            .with_name('freeradius-postgresql')
             .with(
               'ensure' => 'installed',
             )
@@ -418,6 +444,7 @@ describe 'freeradius' do
 
         it do
           is_expected.to contain_package('freeradius-perl')
+            .with_name('freeradius-perl')
             .with(
               'ensure' => 'installed',
             )
@@ -433,6 +460,7 @@ describe 'freeradius' do
 
         it do
           is_expected.to contain_package('freeradius-utils')
+            .with_name('freeradius-utils')
             .with(
               'ensure' => 'installed',
             )
@@ -448,6 +476,7 @@ describe 'freeradius' do
 
         it do
           is_expected.to contain_package('freeradius-ldap')
+            .with_name('freeradius-ldap')
             .with(
               'ensure' => 'installed',
             )
@@ -463,6 +492,7 @@ describe 'freeradius' do
 
         it do
           is_expected.to contain_package('freeradius-dhcp')
+            .with_name('freeradius-dhcp')
             .with(
               'ensure' => 'installed',
             )
@@ -478,6 +508,7 @@ describe 'freeradius' do
 
         it do
           is_expected.to contain_package('freeradius-krb5')
+            .with_name('freeradius-krb5')
             .with(
               'ensure' => 'installed',
             )
@@ -493,9 +524,9 @@ describe 'freeradius' do
 
         it do
           is_expected.to contain_package('wpa_supplicant')
+            .with_name('wpa_supplicant')
             .with(
               'ensure' => 'installed',
-              'name'   => 'wpa_supplicant',
             )
         end
       end
