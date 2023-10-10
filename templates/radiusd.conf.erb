@@ -725,8 +725,11 @@ thread pool {
 #  snmptraps.  Note that you MUST also configure the full path
 #  to the "snmptrap" command in the "trigger.conf" file.
 #
+<%- if @snmp_trigger -%>
 $INCLUDE trigger.conf
-
+<%- else -%>
+#$INCLUDE trigger.conf
+<%- end -%>
 # MODULE CONFIGURATION
 #
 #  The names and configuration of each module is located in this section.

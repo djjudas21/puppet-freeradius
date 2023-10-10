@@ -1,8 +1,9 @@
 # Configure FreeRADIUS SNMP trap triggers
-define freeradius::trigger (
-  Optional[String] $trap_community = 'public',
-  Optional[String] $trap_dest = '127.0.0.1',
-  Freeradius::Ensure $ensure = present,
+class freeradius::trigger (
+  String $trigger_cmd = '/bin/echo',
+  String $trap_community = 'public',
+  String $trap_dest = '127.0.0.1',
+  #Freeradius::Ensure $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
   $fr_service  = $::freeradius::params::fr_service

@@ -22,6 +22,10 @@ class freeradius (
   Boolean $manage_logpath                                      = true,
   Optional[String] $package_ensure                             = 'installed',
   String $radacctdir                                           = $freeradius::params::radacctdir,
+  Boolean $snmp_trigger                                        = false,
+  String $trigger_cmd                                          = $freeradius::params::fr_trigger_cmd,
+  String $trap_community                                       = $freeradius::params::fr_trigger_snmp_comm_string,
+  String $trap_dest                                            = $freeradius::params::fr_trigger_snmp_trap_dest,
 ) inherits freeradius::params {
   if $freeradius::fr_version !~ /^3/ {
     notify { 'This module is only compatible with FreeRADIUS 3.': }
@@ -56,6 +60,17 @@ class freeradius (
     owner   => 'root',
     group   => $freeradius::fr_group,
     content => template('freeradius/radiusd.conf.erb'),
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service['radiusd'],
+  }
+
+  # Replace the default trigger.conf file 
+  file { "${freeradius::fr_basepath}/trigger.conf":
+    ensure  => $ensure,
+    mode    => '0644',
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    content => template('freeradius/trigger.conf.erb'),
     require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
     notify  => Service['radiusd'],
   }

@@ -188,4 +188,9 @@ class freeradius::params {
 
   # Default radsniff pid file location
   $fr_radsniff_pidfile = "/var/run/${fr_service}/radsniff.pid"
+
+  # Default trigger configuration
+  $fr_trigger_cmd = '/bin/echo'
+  $fr_trigger_snmp_comm_string = 'public'
+  $fr_trigger_snmp_trap_dest = '127.0.0.1'
 }

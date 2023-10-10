@@ -71,11 +71,8 @@ snmp {
                 #  You can disable traps by changing the command to
                 #  "/bin/echo".
                 #
-                <%- if @ensure = 'present' -%>
-                cmd = "/usr/bin/snmptrap -v2c"
-                <%- else -%>
-                cmd = "/bin/echo"
-                <%- end -%>
+                #cmd = "/usr/bin/snmptrap -v2c"
+                cmd = "<%= @trigger_cmd %>%"
 
                 #
                 #  Community string
