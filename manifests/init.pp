@@ -66,7 +66,7 @@ class freeradius (
 
   # Replace the default trigger.conf file 
   file { "${freeradius::fr_basepath}/trigger.conf":
-    ensure  => $ensure,
+    ensure  => file,
     mode    => '0644',
     owner   => 'root',
     group   => $freeradius::fr_group,
