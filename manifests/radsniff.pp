@@ -36,8 +36,7 @@ class freeradius::radsniff (
 
   $escaped_cmd = $options.regsubst('"','\\\\"','G')
 
-  file { 'freeradius radsniff envfile':
-    path    => $final_envfile,
+  file { $final_envfile:
     content => @("SYSCONFIG"),
       RADSNIFF_OPTIONS="${escaped_cmd}"
       | SYSCONFIG

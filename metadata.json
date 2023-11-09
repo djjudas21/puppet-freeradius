@@ -10,11 +10,11 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">=4.25.0 <10.0.0"
+      "version_requirement": ">=4.0.0 <7.0.0"
     },
     {
       "name": "puppetlabs/firewall",
-      "version_requirement": ">=1.0.0 <7.0.0"
+      "version_requirement": ">=1.0.0 <3.0.0"
     },
     {
       "name": "saz/rsyslog",
@@ -22,15 +22,15 @@
     },
     {
       "name": "puppet/logrotate",
-      "version_requirement": ">=1.4.0 <8.0.0"
+      "version_requirement": ">=1.4.0 <4.0.0"
     },
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">=1.0.0 <10.0.0"
+      "version_requirement": ">=1.0.0 <7.0.0"
     },
     {
-      "name": "puppet/systemd",
-      "version_requirement": ">=3.0.0 <6.0.0"
+      "name": "camptocamp/systemd",
+      "version_requirement": ">=2.0.0 <3.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -92,10 +92,10 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">=7.0.0 <9.0.0"
+      "version_requirement": ">=4.0.0 <7.0.0"
     }
   ],
-  "pdk-version": "3.0.0",
-  "template-url": "pdk-default#3.0.0",
-  "template-ref": "tags/3.0.0-0-g056e50d"
+  "pdk-version": "2.6.1",
+  "template-url": "pdk-default#2.7.1",
+  "template-ref": "tags/2.7.1-0-g9a16c87"
 }

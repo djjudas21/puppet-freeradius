@@ -5,4 +5,4 @@ fixtures:
     logrotate: "puppet/logrotate"
     rsyslog: "saz/rsyslog"
     stdlib: "puppetlabs/stdlib"
-    systemd: "puppet/systemd"
+    systemd: "camptocamp/systemd"

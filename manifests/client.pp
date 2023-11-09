@@ -37,18 +37,19 @@ define freeradius::client (
   Variant[Array, Hash, String] $attributes           = [],
   Optional[String] $huntgroups                       = undef,
 ) {
+  $fr_package  = $::freeradius::params::fr_package
+  $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
-  file { "freeradius clients.d/${shortname}.conf":
+  file { "${fr_basepath}/clients.d/${shortname}.conf":
     ensure  => $ensure,
-    path    => "${fr_basepath}/clients.d/${shortname}.conf",
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,
     content => template('freeradius/client.conf.erb'),
-    require => [File['freeradius clients.d'], Group['radiusd']],
-    notify  => Service['radiusd'],
+    require => [File["${fr_basepath}/clients.d"], Group[$fr_group]],
+    notify  => Service[$fr_service],
   }
 
   if ($firewall and $ensure == 'present') {
@@ -60,14 +61,14 @@ define freeradius::client (
 
     if $port {
       if $ip {
-        firewall { "100 ${name} ${port_description} v4":
+        firewall { "100 ${shortname} ${port_description} v4":
           proto  => 'udp',
           dport  => $port,
           action => 'accept',
           source => $ip,
         }
       } elsif $ip6 {
-        firewall { "100 ${name} ${port_description} v6":
+        firewall { "100 ${shortname} ${port_description} v6":
           proto    => 'udp',
           dport    => $port,
           action   => 'accept',
@@ -82,7 +83,7 @@ define freeradius::client (
 
   if $huntgroups {
     $huntgroups.each |$index, $huntgroup| {
-      freeradius::huntgroup { "huntgroup.client.${name}.${index}":
+      freeradius::huntgroup { "huntgroup.client.${shortname}.${index}":
         * => $huntgroup
       }
     }

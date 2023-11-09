@@ -11,13 +11,13 @@ jobs:
     steps:
     - name: Get latest tag
       id: vars
-      run: echo "{tag}=${GITHUB_REF:10}" >> $GITHUB_OUTPUT
+      run: echo ::set-output name=tag::${GITHUB_REF:10}
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
       with:
         ref: ${{ steps.vars.outputs.tag }}
     - name: Build and publish module
-      uses: barnumbirr/action-forge-publish@v2
+      uses: barnumbirr/action-forge-publish@v2.8.0
       env:
        FORGE_API_KEY: ${{ secrets.FORGE_API_KEY }}
        REPOSITORY_URL: https://forgeapi.puppet.com/v3/releases

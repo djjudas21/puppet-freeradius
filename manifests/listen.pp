@@ -13,6 +13,8 @@ define freeradius::listen (
   Integer $lifetime                                         = 0,
   Integer $idle_timeout                                     = 30,
 ) {
+  $fr_package  = $::freeradius::params::fr_package
+  $fr_service  = $::freeradius::params::fr_service
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
@@ -29,17 +31,16 @@ define freeradius::listen (
     fail('Only one of ip or ip6 can be used')
   }
 
-  file { "freeradius listen.d/${name}.conf":
+  file { "${fr_basepath}/listen.d/${name}.conf":
     ensure  => $ensure,
-    path    => "${fr_basepath}/listen.d/${name}.conf",
     owner   => 'root',
     group   => $fr_group,
     mode    => '0640',
     content => template('freeradius/listen.erb'),
     require => [
-      File['freeradius listen.d'],
-      Group['radiusd'],
+      File["${fr_basepath}/listen.d"],
+      Group[$fr_group],
     ],
-    notify  => Service['radiusd'],
+    notify  => Service[$fr_service],
   }
 }

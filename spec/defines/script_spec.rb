@@ -12,8 +12,7 @@ describe 'freeradius::script' do
   end
 
   it do
-    is_expected.to contain_file('freeradius scripts/test')
-      .with_path('/etc/raddb/scripts/test')
+    is_expected.to contain_file('/etc/raddb/scripts/test')
       .with_ensure('present')
       .with_group('radiusd')
       .with_mode('0750')
@@ -22,6 +21,6 @@ describe 'freeradius::script' do
       .that_notifies('Service[radiusd]')
       .that_requires('Package[freeradius]')
       .that_requires('Group[radiusd]')
-      .that_requires('File[freeradius scripts]')
+      .that_requires('File[/etc/raddb/scripts]')
   end
 end

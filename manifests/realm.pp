@@ -7,9 +7,11 @@ define freeradius::realm (
   Optional[Boolean] $nostrip       = false,
   Optional[Integer] $order         = 30,
 ) {
+  $fr_basepath = $::freeradius::params::fr_basepath
+
   # Configure config fragment for this realm
-  concat::fragment { "freeradius realm-${name}":
-    target  => 'freeradius proxy.conf',
+  concat::fragment { "realm-${name}":
+    target  => "${fr_basepath}/proxy.conf",
     content => template('freeradius/realm.erb'),
     order   => $order,
   }

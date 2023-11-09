@@ -20,9 +20,11 @@ define freeradius::home_server (
   Optional[String] $virtual_server                       = undef,
   Optional[Integer] $zombie_period                       = undef,
 ) {
+  $fr_basepath = $::freeradius::params::fr_basepath
+
   # Configure config fragment for this home server
   concat::fragment { "homeserver-${name}":
-    target  => 'freeradius proxy.conf',
+    target  => "${fr_basepath}/proxy.conf",
     content => template('freeradius/home_server.erb'),
     order   => 10,
   }
