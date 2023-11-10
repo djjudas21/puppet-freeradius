@@ -22,7 +22,7 @@ class freeradius (
   Boolean $manage_logpath                                      = true,
   Optional[String] $package_ensure                             = 'installed',
   String $radacctdir                                           = $freeradius::params::radacctdir,
-  Array $snmp_traps                                            = [],
+  Array $snmp_traps                                            = ['home_server_alive'],
 ) inherits freeradius::params {
   if $freeradius::fr_version !~ /^3/ {
     notify { 'This module is only compatible with FreeRADIUS 3.': }
