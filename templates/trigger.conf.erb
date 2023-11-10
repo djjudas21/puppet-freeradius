@@ -120,8 +120,8 @@ trigger {
         #
         server {
                 # the server has just started
-                <% unless @snmp_traps.include?('home_server_alive') %># <% end %>
-                start = "${snmptrap}::serverStart"
+                <% unless @snmp_traps.include?('home_server_alive') %>
+                # <% end %>start = "${snmptrap}::serverStart"
                 
 
 
