@@ -25,7 +25,7 @@ class freeradius (
   String $snmp_traps_enable                                    = 'disable',
   String $snmp_traps_community                                 = 'public',
   String $snmp_traps_dest                                      = '127.0.0.1',
-  Array $snmp_traps                                            = undef,
+  Array $snmp_traps_list                                       = [],
 ) inherits freeradius::params {
   if $freeradius::fr_version !~ /^3/ {
     notify { 'This module is only compatible with FreeRADIUS 3.': }
@@ -161,7 +161,7 @@ class freeradius (
       preserve => true,
     }
   }
-  if empty($snmp_traps) {
+  if empty($snmp_traps_list) {
     $snmp_traps = [
       'server_start',
       'server_stop',
@@ -187,6 +187,8 @@ class freeradius (
       'server_sql_module_connection_fail',
       'server_sql_module_hup',
     ]
+  } else {
+    $snmp_traps = $snmp_traps_list
   }
   # Add trigger.conf snmp trap configuration 
   file { "${freeradius::fr_basepath}/trigger.conf":
