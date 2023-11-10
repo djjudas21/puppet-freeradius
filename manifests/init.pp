@@ -158,6 +158,16 @@ class freeradius (
     }
   }
 
+  # Add trigger.conf snmp trap configuration 
+  file { "${freeradius::fr_basepath}/trigger.conf":
+    ensure  => file,
+    mode    => '0644',
+    owner   => 'root',
+    group   => $freeradius::fr_group,
+    content => template('freeradius/trigger.conf.erb'),
+    require => [Package[$freeradius::fr_package], Group[$freeradius::fr_group]],
+    notify  => Service['radiusd'],
+  }
   # Set up concat policy file, as there is only one global policy
   # We also add standard header and footer
   concat { 'freeradius policy.conf':
