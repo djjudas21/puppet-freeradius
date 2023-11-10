@@ -71,7 +71,7 @@ snmp {
                 #  You can disable traps by changing the command to
                 #  "/bin/echo".
                 #
-                <%- if @snmp_traps_enable = 'enable' -%>
+                <%- if @snmp_traps_enable == 'enable' -%>
                 cmd = "/usr/bin/snmptrap -v2c"
                 <%- else -%>
                 cmd = "/bin/echo"
