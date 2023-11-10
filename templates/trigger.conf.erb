@@ -71,7 +71,7 @@ snmp {
                 #  You can disable traps by changing the command to
                 #  "/bin/echo".
                 #
-                <%- if @ensure = 'present' -%>
+                <%- if @snmp_traps_enable = 'enable' -%>
                 cmd = "/usr/bin/snmptrap -v2c"
                 <%- else -%>
                 cmd = "/bin/echo"
@@ -80,12 +80,12 @@ snmp {
                 #
                 #  Community string
                 #
-                community = "<%= @trap_community %>"
+                community = "<%= @snmp_traps_community %>"
 
                 #
                 #  Agent configuration.
                 #
-                agent = "<%= @trap_dest %> ''"
+                agent = "<%= @snmp_traps_dest %> ''"
         }
 }
 

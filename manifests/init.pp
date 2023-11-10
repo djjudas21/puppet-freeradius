@@ -22,6 +22,9 @@ class freeradius (
   Boolean $manage_logpath                                      = true,
   Optional[String] $package_ensure                             = 'installed',
   String $radacctdir                                           = $freeradius::params::radacctdir,
+  String $snmp_traps_enable                                    = 'disable',
+  String $snmp_traps_community                                 = 'public',
+  String $snmp_traps_dest                                      = '127.0.0.1',
   Array $snmp_traps                                            = [],
 ) inherits freeradius::params {
   if $freeradius::fr_version !~ /^3/ {
