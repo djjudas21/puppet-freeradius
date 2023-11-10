@@ -25,7 +25,7 @@ class freeradius (
   String $snmp_traps_enable                                    = 'disable',
   String $snmp_traps_community                                 = 'public',
   String $snmp_traps_dest                                      = '127.0.0.1',
-  Array $snmp_traps                                            = [],
+  Array $snmp_traps                                            = undef,
 ) inherits freeradius::params {
   if $freeradius::fr_version !~ /^3/ {
     notify { 'This module is only compatible with FreeRADIUS 3.': }
