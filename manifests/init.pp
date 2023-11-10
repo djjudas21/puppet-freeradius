@@ -22,7 +22,7 @@ class freeradius (
   Boolean $manage_logpath                                      = true,
   Optional[String] $package_ensure                             = 'installed',
   String $radacctdir                                           = $freeradius::params::radacctdir,
-  Array $snmp_traps                                            = ['home_server_alive'],
+  Array $snmp_traps                                            = [],
 ) inherits freeradius::params {
   if $freeradius::fr_version !~ /^3/ {
     notify { 'This module is only compatible with FreeRADIUS 3.': }
@@ -158,7 +158,33 @@ class freeradius (
       preserve => true,
     }
   }
-
+  if empty($snmp_traps) {
+    $snmp_traps = [
+      'server_start',
+      'server_stop',
+      'server_max_requests',
+      'server_client_add',
+      'server_signal_hup',
+      'server_signal_term',
+      'server_thread_start',
+      'server_thread_stop',
+      'server_thread_Unresponsive',
+      'server_thread_max_threads',
+      'home_server_alive',
+      'home_server_zombie',
+      'home_server_dead',
+      'home_server_pool_normal',
+      'home_server_pool_fallback',
+      'server_files_module_hup',
+      'server_ldap_module_connection_up',
+      'server_ldap_module_connection_down',
+      'server_ldap_module_hup',
+      'server_sql_module_connection_up',
+      'server_sql_module_connection_close',
+      'server_sql_module_connection_fail',
+      'server_sql_module_hup',
+    ]
+  }
   # Add trigger.conf snmp trap configuration 
   file { "${freeradius::fr_basepath}/trigger.conf":
     ensure  => file,

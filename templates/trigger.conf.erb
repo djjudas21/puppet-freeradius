@@ -120,22 +120,25 @@ trigger {
         #
         server {
                 # the server has just started
-                <% unless @snmp_traps.include?('home_server_alive') %>
+                <% unless @snmp_traps.include?('server_start') %>
                 # <% end %>start = "${snmptrap}::serverStart"
                 
 
 
                 # the server is about to stop
-                stop = "${snmptrap}::serverStop"
+                <% unless @snmp_traps.include?('server_stop') %>
+                # <% end %>stop = "${snmptrap}::serverStop"
 
                 # The "max_requests" condition has been reached.
                 # This will trigger only once per 60 seconds.
-                max_requests = "${snmptrap}::serverMaxRequests"
+                <% unless @snmp_traps.include?('server_max_requests') %>
+                # <% end %>max_requests = "${snmptrap}::serverMaxRequests"
 
                 # For events related to clients
                 client {
                         #  Added a new dynamic client
-                        add = "/path/to/file %{Packet-Src-IP-Address}"
+                        <% unless @snmp_traps.include?('server_client_add') %>
+                        # <% end %>add = "/path/to/file %{Packet-Src-IP-Address}"
 
                         #  There is no event for when dynamic clients expire
                 }
@@ -143,26 +146,32 @@ trigger {
                 # Events related to signals received.
                 signal {
                         # a HUP signal
-                        hup = "${snmptrap}::signalHup"
+                        <% unless @snmp_traps.include?('server_signal_hup') %>
+                        # <% end %>hup = "${snmptrap}::signalHup"
 
                         # a TERM signal
-                        term = "${snmptrap}::signalTerm"
+                        <% unless @snmp_traps.include?('server_signal_term') %>
+                        # <% end %>term = "${snmptrap}::signalTerm"
                 }
 
 
                 # Events related to the thread pool
                 thread {
-                       # A new thread has been started
-                       start = "${snmptrap}::threadStart"
+                        # A new thread has been started
+                        <% unless @snmp_traps.include?('server_thread_start') %>
+                        # <% end %>start = "${snmptrap}::threadStart"
 
-                       # an existing thread has been stopped
-                       stop = "${snmptrap}::threadStop"
+                        # an existing thread has been stopped
+                        <% unless @snmp_traps.include?('server_thread_stop') %>
+                        # <% end %>stop = "${snmptrap}::threadStop"
 
-                       # an existing thread is unresponsive
-                       unresponsive = "${snmptrap}::threadUnresponsive"
+                        # an existing thread is unresponsive
+                        <% unless @snmp_traps.include?('server_thread_Unresponsive') %>
+                        # <% end %>unresponsive = "${snmptrap}::threadUnresponsive"
 
-                       # the "max_threads" limit has been reached
-                       max_threads = "${snmptrap}::threadMaxThreads"
+                        # the "max_threads" limit has been reached
+                        <% unless @snmp_traps.include?('server_thread_max_threads') %>
+                        # <% end %>max_threads = "${snmptrap}::threadMaxThreads"
                 }
         }
 
@@ -173,13 +182,16 @@ trigger {
                 args = "radiusAuthServerAddress a %{proxy-request:Packet-Dst-IP-Address} radiusAuthClientServerPortNumber i %{proxy-request:Packet-Dst-Port} radiusAuthServIdent s '%{home_server:instance}'"
 
                 # The home server has been marked "alive"
-                alive = "${snmptrap}::homeServerAlive ${args}"
+                <% unless @snmp_traps.include?('home_server_alive') %>
+                # <% end %>salive = "${snmptrap}::homeServerAlive ${args}"
 
                 # The home server has been marked "zombie"
-                zombie = "${snmptrap}::homeServerZombie ${args}"
+                <% unless @snmp_traps.include?('home_server_zombie') %>
+                # <% end %>szombie = "${snmptrap}::homeServerZombie ${args}"
 
                 # The home server has been marked "dead"
-                dead = "${snmptrap}::homeServerDead ${args}"
+                <% unless @snmp_traps.include?('home_server_dead') %>
+                # <% end %>sdead = "${snmptrap}::homeServerDead ${args}"
         }
 
         # When a pool of home servers changes state.
@@ -189,10 +201,12 @@ trigger {
 
                 # It has reverted to "normal" mode, where at least one
                 # home server is alive.
-                normal = "${snmptrap}::homeServerPoolNormal ${args}"
+                <% unless @snmp_traps.include?('home_server_pool_normal') %>
+                # <% end %>snormal = "${snmptrap}::homeServerPoolNormal ${args}"
 
                 # It is in "fallback" mode, with all home servers "dead"
-                fallback = "${snmptrap}::homeServerPoolFallback ${args}"
+                <% unless @snmp_traps.include?('home_server_pool_fallback') %>
+                # <% end %>fallback = "${snmptrap}::homeServerPoolFallback ${args}"
         }
 
         #  Triggers for specific modules.  These are NOT in the module
@@ -209,7 +223,8 @@ trigger {
                         args = "radiusdModuleName s files ${..args}"
 
                         # The module has been HUP'd via radmin
-                        hup = "${snmptrap}::serverModuleHup ${args}"
+                        <% unless @snmp_traps.include?('server_files_module_hup') %>
+                        # <% end %>hup = "${snmptrap}::serverModuleHup ${args}"
 
                         # Note that "hup" can be used for every module
                         # which can be HUP'd via radmin
@@ -224,13 +239,16 @@ trigger {
                         args = "radiusdModuleName s ldap ${..args}"
 
                         # A new connection to the DB has been opened
-                        open = "${snmptrap}::serverModuleConnectionUp ${args}"
+                        <% unless @snmp_traps.include?('server_ldap_module_connection_up') %>
+                        # <% end %>open = "${snmptrap}::serverModuleConnectionUp ${args}"
 
                         # A connection to the DB has been closed
-                        close = "${snmptrap}::serverModuleConnectionDown ${args}"
+                        <% unless @snmp_traps.include?('server_ldap_module_connection_down') %>
+                        # <% end %>close = "${snmptrap}::serverModuleConnectionDown ${args}"
 
                         # The module has been HUP'd via radmin
-                        hup = "${snmptrap}::serverModuleHup ${args}"
+                        <% unless @snmp_traps.include?('server_ldap_module_hup') %>
+                        # <% end %>hup = "${snmptrap}::serverModuleHup ${args}"
                 }
 
                 # The SQL module
@@ -239,16 +257,20 @@ trigger {
                         args = "radiusdModuleName s sql ${..args}"
 
                         # A new connection to the DB has been opened
-                        open = "${snmptrap}::serverModuleConnectionUp ${args}"
+                        <% unless @snmp_traps.include?('server_sql_module_connection_up') %>
+                        # <% end %>open = "${snmptrap}::serverModuleConnectionUp ${args}"
 
                         # A connection to the DB has been closed
-                        close = "${snmptrap}::serverModuleConnectionDown ${args}"
+                        <% unless @snmp_traps.include?('server_sql_module_connection_close') %>
+                        # <% end %>close = "${snmptrap}::serverModuleConnectionDown ${args}"
 
                         # Failed to open a new connection to the DB
-                        fail = "${snmptrap}::serverModuleConnectionFail ${args}"
+                        <% unless @snmp_traps.include?('server_sql_module_connection_fail') %>
+                        # <% end %>fail = "${snmptrap}::serverModuleConnectionFail ${args}"
 
                         # The module has been HUP'd via radmin
-                        hup = "${snmptrap}::serverModuleHup ${args}"
+                        <% unless @snmp_traps.include?('server_sql_module_hup') %>
+                        # <% end %>hup = "${snmptrap}::serverModuleHup ${args}"
                 }
 
                 # You can also use connection pool's start/stop/open/close triggers
