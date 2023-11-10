@@ -183,15 +183,15 @@ trigger {
 
                 # The home server has been marked "alive"
                 <% unless @snmp_traps.include?('home_server_alive') %>
-                # <% end %>salive = "${snmptrap}::homeServerAlive ${args}"
+                # <% end %>alive = "${snmptrap}::homeServerAlive ${args}"
 
                 # The home server has been marked "zombie"
                 <% unless @snmp_traps.include?('home_server_zombie') %>
-                # <% end %>szombie = "${snmptrap}::homeServerZombie ${args}"
+                # <% end %>zombie = "${snmptrap}::homeServerZombie ${args}"
 
                 # The home server has been marked "dead"
                 <% unless @snmp_traps.include?('home_server_dead') %>
-                # <% end %>sdead = "${snmptrap}::homeServerDead ${args}"
+                # <% end %>dead = "${snmptrap}::homeServerDead ${args}"
         }
 
         # When a pool of home servers changes state.
@@ -202,7 +202,7 @@ trigger {
                 # It has reverted to "normal" mode, where at least one
                 # home server is alive.
                 <% unless @snmp_traps.include?('home_server_pool_normal') %>
-                # <% end %>snormal = "${snmptrap}::homeServerPoolNormal ${args}"
+                # <% end %>normal = "${snmptrap}::homeServerPoolNormal ${args}"
 
                 # It is in "fallback" mode, with all home servers "dead"
                 <% unless @snmp_traps.include?('home_server_pool_fallback') %>
