@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'freeradius::radsniff' do
   on_supported_os.each do |os, os_facts|
     include_context 'freeradius_with_utils'
-
     context "on #{os}" do
       let(:facts) { os_facts }
 

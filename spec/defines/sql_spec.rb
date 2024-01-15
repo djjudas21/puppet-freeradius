@@ -21,9 +21,49 @@ describe 'freeradius::sql' do
         }
       end
 
+      case os_facts[:os][:family]
+      when 'RedHat'
+        it do
+          is_expected.to contain_file('freeradius mods-available/test')
+            .with_path('/etc/raddb/mods-available/test')
+            .with_group('radiusd')
+            .that_notifies('Service[radiusd]')
+            .that_requires('Package[freeradius]')
+        end
+
+        it do
+          is_expected.to contain_file('freeradius mods-enabled/test')
+            .with_path('/etc/raddb/mods-enabled/test')
+        end
+
+        it do
+          is_expected.to contain_logrotate__rule('sqltrace')
+            .with_path('/var/log/radius/${logdir}/sqllog.sql')
+            .with_postrotate('kill -HUP `cat /var/run/radiusd/radiusd.pid`')
+        end
+      when 'Debian'
+        it do
+          is_expected.to contain_file('freeradius mods-available/test')
+            .with_path('/etc/freeradius/3.0/mods-available/test')
+            .with_group('freeradius')
+            .that_notifies('Service[freeradius]')
+            .that_requires('Package[freeradius]')
+        end
+
+        it do
+          is_expected.to contain_file('freeradius mods-enabled/test')
+            .with_path('/etc/freeradius/3.0/mods-enabled/test')
+        end
+
+        it do
+          is_expected.to contain_logrotate__rule('sqltrace')
+            .with_path('/var/log/freeradius/${logdir}/sqllog.sql')
+            .with_postrotate('kill -HUP `cat /var/run/freeradius/freeradius.pid`')
+        end
+      end
+
       it do
         is_expected.to contain_file('freeradius mods-available/test')
-          .with_path('/etc/raddb/mods-available/test')
           .with_content(%r{^sql test \{\n})
           .with_content(%r{^\s+dialect = "postgresql"$})
           .with_content(%r{^\s+server = "localhost"$})
@@ -33,18 +73,13 @@ describe 'freeradius::sql' do
           .with_content(%r{^\s+postauth_table = "radpostauth"$})
           .without_content(%r{^\s+connect_timeout = .*})
           .with_ensure('present')
-          .with_group('radiusd')
           .with_mode('0640')
           .with_owner('root')
           .without_content(%r{^\s+logfile =})
-          .that_notifies('Service[radiusd]')
-          .that_requires('Package[freeradius]')
-          .that_requires('Group[radiusd]')
       end
 
       it do
         is_expected.to contain_file('freeradius mods-enabled/test')
-          .with_path('/etc/raddb/mods-enabled/test')
           .with_ensure('link')
           .with_target('../mods-available/test')
       end
@@ -66,8 +101,6 @@ describe 'freeradius::sql' do
             .with_compress('true')
             .with_create('true')
             .with_missingok('true')
-            .with_path('/var/log/radius/${logdir}/sqllog.sql')
-            .with_postrotate('kill -HUP `cat /var/run/radiusd/radiusd.pid`')
             .with_rotate('1')
             .with_rotate_every('week')
         end

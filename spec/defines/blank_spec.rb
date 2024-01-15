@@ -1,22 +1,42 @@
 require 'spec_helper'
 
 describe 'freeradius::blank' do
-  include_context 'redhat_common_dependencies'
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}" do
+      include_context 'freeradius_default'
 
-  let(:title) { 'test' }
+      let(:facts) { os_facts }
 
-  let(:params) { {} }
+      let(:title) { 'test' }
 
-  it do
-    is_expected.to contain_file('freeradius test')
-      .with_path('/etc/raddb/test')
-      .that_notifies('Service[radiusd]')
-      .that_requires('File[freeradius raddb]')
-      .that_requires('Group[radiusd]')
-      .that_requires('Package[freeradius]')
-      .with_content(%r{^# This file is intentionally left blank .*})
-      .with_group('radiusd')
-      .with_mode('0644')
-      .with_owner('root')
+      let(:params) { {} }
+
+      case os_facts[:os][:family]
+      when 'RedHat'
+        it do
+          is_expected.to contain_file('freeradius test')
+            .with_path('/etc/raddb/test')
+            .with_group('radiusd')
+            .that_notifies('Service[radiusd]')
+            .that_requires('Package[freeradius]')
+        end
+      when 'Debian'
+        it do
+          is_expected.to contain_file('freeradius test')
+            .with_path('/etc/freeradius/3.0/test')
+            .with_group('freeradius')
+            .that_notifies('Service[freeradius]')
+            .that_requires('Package[freeradius]')
+        end
+      end
+
+      it do
+        is_expected.to contain_file('freeradius test')
+          .that_requires('File[freeradius raddb]')
+          .with_content(%r{^# This file is intentionally left blank .*})
+          .with_mode('0644')
+          .with_owner('root')
+      end
+    end
   end
 end

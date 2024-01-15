@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'freeradius::control_socket' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
-      include_context 'redhat_params'
       include_context 'freeradius_default'
 
       let(:facts) { os_facts }
