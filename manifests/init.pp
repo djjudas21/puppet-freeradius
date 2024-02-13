@@ -429,7 +429,7 @@ class freeradius (
     }
   }
 
-  if $manage_logpath {
+  if $manage_logrotate {
     logrotate::rule { 'radacct':
       path          => "${freeradius::fr_logpath}/radacct/*/*.log",
       rotate_every  => 'day',
