@@ -20,7 +20,7 @@ class freeradius (
   Boolean $preserve_mods                                       = true,
   Boolean $correct_escapes                                     = true,
   Boolean $manage_logpath                                      = true,
-  Boolean $manage_logrotate                                    = true,
+  Boolean $manage_logrotate                                    = $freeradius::params::manage_logrotate,
   Optional[String] $package_ensure                             = 'installed',
   String $radacctdir                                           = $freeradius::params::radacctdir,
 ) inherits freeradius::params {
