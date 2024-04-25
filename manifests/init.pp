@@ -17,6 +17,7 @@ class freeradius (
   Boolean $syslog                                              = false,
   String $syslog_facility                                      = 'daemon',
   Freeradius::Boolean $log_auth                                = 'no',
+  Freeradius::Boolean $allow_vulnerable_ssl                    = 'yes',
   Boolean $preserve_mods                                       = true,
   Boolean $correct_escapes                                     = true,
   Boolean $manage_logpath                                      = true,

@@ -138,6 +138,9 @@ Add a syslog rule (using the `saz/rsyslog` module). Default: `false`.
 ##### `log_auth`
 Log authentication requests (yes/no). Default: `no`.
 
+##### `allow_vulnerable_openssl`
+Allow the server to start with versions of OpenSSL known to have critical vulnerabilities. (yes/no). Default: `yes`.
+
 ##### `package_ensure`
 Choose whether the package is just installed and left (`installed`), or updated every Puppet run (`latest`). Default: `installed`
 
