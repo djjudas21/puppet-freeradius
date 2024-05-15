@@ -61,17 +61,18 @@ define freeradius::client (
     if $port {
       if $ip {
         firewall { "100 ${name} ${port_description} v4":
-          proto  => 'udp',
-          dport  => $port,
-          action => 'accept',
-          source => $ip,
+          proto    => 'udp',
+          dport    => $port,
+          jump     => 'ACCEPT',
+          protocol => 'IPv4',
+          source   => $ip,
         }
       } elsif $ip6 {
         firewall { "100 ${name} ${port_description} v6":
           proto    => 'udp',
           dport    => $port,
-          action   => 'accept',
-          provider => 'ip6tables',
+          jump     => 'ACCEPT',
+          protocol => 'IPv6',
           source   => $ip6,
         }
       }

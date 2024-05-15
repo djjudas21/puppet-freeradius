@@ -85,8 +85,9 @@ describe 'freeradius::client' do
         is_expected.to contain_firewall('100 test 1234 v4')
           .with_proto('udp')
           .with_dport(1234)
-          .with_action('accept')
+          .with_jump('ACCEPT')
           .with_source('1.2.3.4')
+          .with_protocol('IPv4')
       end
 
       context 'with ipv6' do
@@ -102,9 +103,9 @@ describe 'freeradius::client' do
           is_expected.to contain_firewall('100 test 1234 v6')
             .with_proto('udp')
             .with_dport(1234)
-            .with_action('accept')
+            .with_jump('ACCEPT')
             .with_source('2001:db8::100')
-            .with_provider('ip6tables')
+            .with_protocol('IPv6')
         end
       end
     end
@@ -120,7 +121,7 @@ describe 'freeradius::client' do
         is_expected.to contain_firewall('100 test 1234,4321 v4')
           .with_proto('udp')
           .with_dport([1234, 4321])
-          .with_action('accept')
+          .with_jump('ACCEPT')
           .with_source('1.2.3.4')
       end
 
@@ -137,9 +138,9 @@ describe 'freeradius::client' do
           is_expected.to contain_firewall('100 test 1234,4321 v6')
             .with_proto('udp')
             .with_dport([1234, 4321])
-            .with_action('accept')
+            .with_jump('ACCEPT')
             .with_source('2001:db8::100')
-            .with_provider('ip6tables')
+            .with_protocol('IPv6')
         end
       end
     end
