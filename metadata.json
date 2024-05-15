@@ -1,6 +1,6 @@
 {
   "name": "jgazeley-freeradius",
-  "version": "3.9.2",
+  "version": "4.0.0",
   "author": "jgazeley",
   "summary": "Install and configure FreeRADIUS",
   "license": "Apache-2.0",

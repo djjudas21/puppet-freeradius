@@ -1,5 +1,7 @@
 ## Changelog
 
+Please refer to the [GitHub releases page](https://github.com/djjudas21/puppet-freeradius/releases) for the changelog for 4.0.0 and onwards
+
 ### 3.9.2
   * Bugfix: Restart FreeRADIUS after any huntgroups modification
 
