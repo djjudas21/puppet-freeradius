@@ -21,6 +21,7 @@ class freeradius (
   Boolean $preserve_mods                                       = true,
   Boolean $correct_escapes                                     = true,
   Boolean $manage_logpath                                      = true,
+  Boolean $manage_logrotate                                    = $freeradius::params::manage_logrotate,
   Optional[String] $package_ensure                             = 'installed',
   String $radacctdir                                           = $freeradius::params::radacctdir,
   String $snmp_traps_enable                                    = 'disable',
@@ -471,37 +472,39 @@ class freeradius (
     }
   }
 
-  logrotate::rule { 'radacct':
-    path          => "${freeradius::fr_logpath}/radacct/*/*.log",
-    rotate_every  => 'day',
-    rotate        => 7,
-    create        => false,
-    missingok     => true,
-    compress      => true,
-    postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
-    sharedscripts => true,
-  }
+  if $manage_logrotate {
+    logrotate::rule { 'radacct':
+      path          => "${freeradius::fr_logpath}/radacct/*/*.log",
+      rotate_every  => 'day',
+      rotate        => 7,
+      create        => false,
+      missingok     => true,
+      compress      => true,
+      postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
+      sharedscripts => true,
+    }
 
-  logrotate::rule { 'checkrad':
-    path          => "${freeradius::fr_logpath}/checkrad.log",
-    rotate_every  => 'week',
-    rotate        => 1,
-    create        => true,
-    missingok     => true,
-    compress      => true,
-    postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
-    sharedscripts => true,
-  }
+    logrotate::rule { 'checkrad':
+      path          => "${freeradius::fr_logpath}/checkrad.log",
+      rotate_every  => 'week',
+      rotate        => 1,
+      create        => true,
+      missingok     => true,
+      compress      => true,
+      postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
+      sharedscripts => true,
+    }
 
-  logrotate::rule { 'radiusd':
-    path          => "${freeradius::fr_logpath}/radius*.log",
-    rotate_every  => 'week',
-    rotate        => 26,
-    create        => true,
-    missingok     => true,
-    compress      => true,
-    postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
-    sharedscripts => true,
+    logrotate::rule { 'radiusd':
+      path          => "${freeradius::fr_logpath}/radius*.log",
+      rotate_every  => 'week',
+      rotate        => 26,
+      create        => true,
+      missingok     => true,
+      compress      => true,
+      postrotate    => "kill -HUP `cat ${freeradius::fr_pidfile}`",
+      sharedscripts => true,
+    }
   }
 
   # Placeholder resource for dh and random as they are dynamically generated, so they
