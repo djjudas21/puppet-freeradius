@@ -170,7 +170,7 @@ The shared secret for the status server. Required.
 The port to listen for status requests on. Default: `18121`
 
 ##### `listen`
-The address to listen on. Defaults to listen on all addresses but you could set this to `$::ipaddress` or `127.0.0.1`.  Default: `*`
+The address to listen on. Defaults to listen on all addresses but you could set this to `$facts['networking]['ip']` or `127.0.0.1`.  Default: `*`
 
 ```puppet
   # Enable status server

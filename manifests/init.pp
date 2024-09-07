@@ -566,7 +566,7 @@ class freeradius (
   # This should be fixed in FreeRADIUS 2.2.0
   # http://lists.freeradius.org/pipermail/freeradius-users/2012-October/063232.html
   # Only affects RPM-based systems
-  if $::osfamily == 'RedHat' {
+  if $facts['os']['family'] == 'RedHat' {
     exec { 'delete-radius-rpmnew':
       command => "find ${freeradius::fr_basepath} -name *.rpmnew -delete",
       onlyif  => "find ${freeradius::fr_basepath} -name *.rpmnew | grep rpmnew",
