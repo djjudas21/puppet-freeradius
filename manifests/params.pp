@@ -1,9 +1,9 @@
 # Default parameters for freeradius
 class freeradius::params {
   # Make an educated guess which version of FR we are running, based on the OS
-  case $::operatingsystem {
+  case $facts['os']['name'] {
     /RedHat|CentOS|Rocky|AlmaLinux/: {
-      $fr_guessversion = $::operatingsystemmajrelease ? {
+      $fr_guessversion = $facts['os']['release']['major'] ? {
         5       => '2',
         6       => '2',
         7       => '3',
@@ -13,7 +13,7 @@ class freeradius::params {
       }
     }
     'Debian': {
-      $fr_guessversion = $::operatingsystemmajrelease ? {
+      $fr_guessversion = $facts['os']['release']['major'] ? {
         6       => '2',
         7       => '2',
         8       => '2',
@@ -22,7 +22,7 @@ class freeradius::params {
       }
     }
     'Fedora': {
-      $fr_guessversion = $::operatingsystemmajrelease ? {
+      $fr_guessversion = $facts['os']['release']['major'] ? {
         21      => '3',
         22      => '3',
         23      => '3',
@@ -30,7 +30,7 @@ class freeradius::params {
       }
     }
     'Ubuntu': {
-      $fr_guessversion = $::operatingsystemmajrelease ? {
+      $fr_guessversion = $facts['os']['release']['major'] ? {
         '14.04' => '2',
         '14.10' => '2',
         '15.04' => '2',
@@ -43,7 +43,7 @@ class freeradius::params {
       }
     }
     default: {
-      fail("OS ${::operatingsystem} is not supported")
+      fail("OS ${facts['os']['name']} is not supported")
     }
   }
 
@@ -55,28 +55,28 @@ class freeradius::params {
   }
 
   # Name of FreeRADIUS package
-  $fr_package = $::osfamily ? {
+  $fr_package = $facts['os']['family'] ? {
     'RedHat' => 'freeradius',
     'Debian' => 'freeradius',
     default  => 'freeradius',
   }
 
   # Name of wpa_supplicant package
-  $fr_wpa_supplicant = $::osfamily ? {
+  $fr_wpa_supplicant = $facts['os']['family'] ? {
     'RedHat' => 'wpa_supplicant',
     'Debian' => 'wpasupplicant',
     default  => 'wpa_supplicant',
   }
 
   # Name of FreeRADIUS service
-  $fr_service = $::osfamily ? {
+  $fr_service = $facts['os']['family'] ? {
     'RedHat' => 'radiusd',
     'Debian' => 'freeradius',
     default  => 'radiusd',
   }
 
   # Whether the FreeRADIUS init.d startup script has a status setting or not
-  $fr_service_has_status = $::osfamily ? {
+  $fr_service_has_status = $facts['os']['family'] ? {
     'RedHat' => true,
     'Debian' => true,
     default  => false,
@@ -86,13 +86,13 @@ class freeradius::params {
   $fr_pidfile = "/var/run/${fr_service}/${fr_service}.pid"
 
   # Default base path for FreeRADIUS configs
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       $fr_basepath = '/etc/raddb'
       $fr_raddbdir = "\${sysconfdir}/raddb"
     }
     'Debian': {
-      $fr_basepath = $::operatingsystemmajrelease ? {
+      $fr_basepath = facts['os']['release']['major'] ? {
         '9'          => '/etc/freeradius/3.0',
         '10'         => '/etc/freeradius/3.0',
         '11'         => '/etc/freeradius/3.0',
@@ -103,7 +103,7 @@ class freeradius::params {
         '24.04'      => '/etc/freeradius/3.0',
         default      => '/etc/freeradius',
       }
-      $fr_raddbdir = $::operatingsystemmajrelease ? {
+      $fr_raddbdir = facts['os']['release']['major'] ? {
         '9'          => "\${sysconfdir}/freeradius/3.0",
         '10'         => "\${sysconfdir}/freeradius/3.0",
         '11'         => "\${sysconfdir}/freeradius/3.0",
@@ -142,40 +142,40 @@ class freeradius::params {
   $fr_moduleconfigpath = "${fr_basepath}/${fr_modconfigdir}"
 
   # Path for FreeRADIUS logs
-  $fr_logpath = $::osfamily ? {
+  $fr_logpath = $facts['os']['family'] ? {
     'RedHat' => '/var/log/radius',
     'Debian' => '/var/log/freeradius',
     default  => '/var/log/radius',
   }
 
   # FreeRADIUS user
-  $fr_user = $::osfamily ? {
+  $fr_user = $facts['os']['family'] ? {
     'RedHat' => 'radiusd',
     'Debian' => 'freerad',
     default  => 'radiusd',
   }
 
   # FreeRADIUS group
-  $fr_group = $::osfamily ? {
+  $fr_group = $facts['os']['family'] ? {
     'RedHat' => 'radiusd',
     'Debian' => 'freerad',
     default  => 'radiusd',
   }
 
   # Privileged winbind user
-  $fr_wbpriv_user = $::osfamily ? {
+  $fr_wbpriv_user = $facts['os']['family'] ? {
     'RedHat' => 'wbpriv',
     'Debian' => 'winbindd_priv',
     default  => 'wbpriv',
   }
 
-  $fr_libdir = $::osfamily ? {
+  $fr_libdir = $facts['os']['family'] ? {
     'RedHat' => '/usr/lib64/freeradius',
     'Debian' => '/usr/lib/freeradius',
     default  => '/usr/lib64/freeradius',
   }
 
-  $fr_db_dir = $::osfamily ? {
+  $fr_db_dir = $facts['os']['family'] ? {
     'Debian' => "\${raddbdir}",
     default  => "\${localstatedir}/lib/radiusd",
   }
@@ -183,7 +183,7 @@ class freeradius::params {
   $radacctdir = "\${logdir}/radacct"
 
   # Default radsniff environment file location
-  $fr_radsniff_envfile = $::osfamily ? {
+  $fr_radsniff_envfile = $facts['os']['family'] ? {
     'RedHat' => '/etc/sysconfig/radsniff',
     'Debian' => '/etc/defaults/radsniff',
     default  => undef,
