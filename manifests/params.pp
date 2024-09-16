@@ -38,6 +38,7 @@ class freeradius::params {
         '18.04' => '3',
         '20.04' => '3',
         '22.04' => '3',
+        '24.04' => '3',
         default => '2',
       }
     }
@@ -99,6 +100,7 @@ class freeradius::params {
         '18.04'      => '/etc/freeradius/3.0',
         '20.04'      => '/etc/freeradius/3.0',
         '22.04'      => '/etc/freeradius/3.0',
+        '24.04'      => '/etc/freeradius/3.0',
         default      => '/etc/freeradius',
       }
       $fr_raddbdir = facts['os']['release']['major'] ? {
@@ -109,6 +111,7 @@ class freeradius::params {
         '18.04'      => "\${sysconfdir}/freeradius/3.0",
         '20.04'      => "\${sysconfdir}/freeradius/3.0",
         '22.04'      => "\${sysconfdir}/freeradius/3.0",
+        '24.04'      => "\${sysconfdir}/freeradius/3.0",
         default      => "\${sysconfdir}/freeradius",
       }
     }
