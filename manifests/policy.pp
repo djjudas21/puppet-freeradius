@@ -1,7 +1,7 @@
 # Install FreeRADIUS policies
 define freeradius::policy (
-  Optional[String] $source,
-  Optional[String] $content,
+  Optional[String] $source = undef,
+  Optional[String] $content = undef,
   Optional[Integer] $order   = 50,
   Freeradius::Ensure $ensure = present,
 ) {
