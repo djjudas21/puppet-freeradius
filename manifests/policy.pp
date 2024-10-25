@@ -1,6 +1,7 @@
 # Install FreeRADIUS policies
 define freeradius::policy (
   Optional[String] $source,
+  Optional[String] $content,
   Optional[Integer] $order   = 50,
   Freeradius::Ensure $ensure = present,
 ) {
@@ -15,6 +16,7 @@ define freeradius::policy (
     owner   => 'root',
     group   => $fr_group,
     source  => $source,
+    content => $content,
     require => [Package['freeradius'], Group['radiusd']],
     notify  => Service['radiusd'],
   }
