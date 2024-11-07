@@ -110,6 +110,7 @@ class freeradius (
       path    => $path,
       purge   => true,
       recurse => true,
+      force   => true,
       mode    => '0755',
       owner   => 'root',
       group   => $freeradius::fr_group,
