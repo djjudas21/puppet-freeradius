@@ -27,6 +27,7 @@ define freeradius::module::ldap (
   Optional[Freeradius::Boolean] $group_cacheable_name                 = undef,
   Optional[Freeradius::Boolean] $group_cacheable_dn                   = undef,
   Optional[String] $group_cache_attribute                             = undef,
+  Optional[Freeradius::Boolean] $group_allow_dangling_ref             = undef,
   Optional[String] $group_attribute                                   = undef,
   Optional[String] $profile_filter                                    = undef,
   Optional[String] $profile_default                                   = undef,
