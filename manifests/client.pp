@@ -40,9 +40,9 @@ define freeradius::client (
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
-  file { "freeradius clients.d/${shortname}.conf":
+  file { "freeradius clients.d/${name}.conf":
     ensure  => $ensure,
-    path    => "${fr_basepath}/clients.d/${shortname}.conf",
+    path    => "${fr_basepath}/clients.d/${name}.conf",
     mode    => '0640',
     owner   => 'root',
     group   => $fr_group,

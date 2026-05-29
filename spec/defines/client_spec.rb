@@ -14,8 +14,8 @@ describe 'freeradius::client' do
   end
 
   it do
-    is_expected.to contain_file('freeradius clients.d/test_short.conf')
-      .with_path('/etc/raddb/clients.d/test_short.conf')
+    is_expected.to contain_file('freeradius clients.d/test.conf')
+      .with_path('/etc/raddb/clients.d/test.conf')
       .with_content(%r{^client test_short {\n\s+ipaddr = 1.2.3.4\n\s+proto = \*\n\s+shortname = test_short\n\s+secret = "secret_value"\n\s+require_message_authenticator = no\n}\n})
       .with_ensure('present')
       .with_group('radiusd')
@@ -58,7 +58,7 @@ describe 'freeradius::client' do
     end
 
     it do
-      is_expected.to contain_file('freeradius clients.d/test_short.conf')
+      is_expected.to contain_file('freeradius clients.d/test.conf')
         .with_content(%r{^\s+password = "foo bar"$})
     end
   end
