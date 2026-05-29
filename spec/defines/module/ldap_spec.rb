@@ -11,6 +11,7 @@ describe 'freeradius::module::ldap' do
       password: 'test password',
       basedn: 'dc=example,dc=com',
       server: ['localhost'],
+      group_allow_dangling_ref: 'yes',
     }
   end
 
@@ -35,6 +36,7 @@ describe 'freeradius::module::ldap' do
       .with_content(%r{^\s+password = 'test password'\n})
       .with_content(%r{^\s+base_dn = 'dc=example,dc=com'\n})
       .with_content(%r{^\s+update \{\n})
+      .with_content(%r{^\s+allow_dangling_group_ref = 'yes'\n})
       .without_content(%r{^\s+connect_timeout = .*})
       .with_ensure('present')
       .with_group('radiusd')
