@@ -31,7 +31,7 @@ group :development do
   gem "pry", '~> 0.10',                          require: false
   gem "simplecov-console", '~> 0.5',             require: false
   gem "puppet-debugger", '~> 1.0',               require: false
-  gem "rubocop", '= 1.87.0',                     require: false
+  gem "rubocop", '= 1.88.0',                     require: false
   gem "rubocop-performance", '= 1.26.1',         require: false
   gem "rubocop-rspec", '= 2.31.0',               require: false
   gem "rb-readline", '= 0.5.5',                  require: false, platforms: [:mswin, :mingw, :x64_mingw]
