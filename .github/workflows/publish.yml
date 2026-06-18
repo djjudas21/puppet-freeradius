@@ -12,7 +12,7 @@ jobs:
       id: vars
       run: echo "{tag}=${GITHUB_REF:10}" >> $GITHUB_OUTPUT
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         ref: ${{ steps.vars.outputs.tag }}
     - name: Build and publish module
