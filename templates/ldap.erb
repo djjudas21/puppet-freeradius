@@ -423,6 +423,9 @@ ldap <%= @name %> {
 		#  When set to 'yes', this option ignores invalid DN
 		#  references.
 #		allow_dangling_group_ref = 'no'
+<%- if @group_allow_dangling_ref -%>
+		allow_dangling_group_ref = '<%= @group_allow_dangling_ref %>'
+<%- end -%>
 	}
 
 	#
